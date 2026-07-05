@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No Mundo de Vicente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navy:        #1A3560;
+      --navy-btn:    #1B2E6B;
+      --laranja:     #E8792A;
+      --amarelo:     #F5C440;
+      --amarelo-btn: #F5C440;
+      --verde-menta: #E4F4EC;
+      --amarelo-claro: #FFF8E6;
+      --azul-hero:   #EAF3FB;
+      --cinza-feat:  #F4F6F9;
+      --branco:      #FFFFFF;
+      --texto:       #1A3560;
+      --texto-leve:  #5A6A82;
+      --teal:        #1E7F6E;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--texto);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ── HEADER ── */
+    header {
+      background: white;
+      border-bottom: 1px solid #EDF0F5;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+    }
+    body { padding-top: 76px; }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 76px;
+    }
+
+    .logo img { height: 72px; width: auto; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    nav a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--navy);
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+    }
+    nav a:hover { color: var(--laranja); }
+    nav a.ativo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    .nav-fale {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-btn);
+      color: white !important;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .nav-fale:hover { background: #0F2050; transform: translateY(-1px); }
+    .nav-fale svg { width: 16px; height: 16px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #EAF3FB 0%, #F5F9FF 50%, #EEF6F1 100%);
+      padding: 0 40px 0;
+      overflow: hidden;
+      position: relative;
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: stretch;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      min-height: calc(100vh - 76px);
+    }
+
+    .hero-text {
+      flex: 1;
+      padding: 72px 0;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amarelo-btn);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-hero:hover { background: #e5b530; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,196,64,0.4); }
+
+    .hero-image {
+      flex: 0 0 48%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      align-self: stretch;
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 95%;
+      max-width: 560px;
+      height: auto;
+      object-fit: contain;
+      object-position: bottom center;
+      filter: drop-shadow(0 16px 32px rgba(0,0,0,0.10));
+    }
+
+    .hero-deco {
+      position: absolute;
+      pointer-events: none;
+    }
+    .hero-deco.estrela1 { top: 10%; right: 60%; font-size: 1.5rem; opacity: 0.6; }
+    .hero-deco.estrela2 { top: 20%; right: 15%; font-size: 1rem; opacity: 0.5; color: var(--amarelo); }
+    .hero-deco.estrela3 { bottom: 30%; left: 5%; font-size: 1.2rem; opacity: 0.4; color: var(--laranja); }
+
+    /* ── SOBRE NÓS (overlay) ── */
+    .sobre-nos-overlay {
+      position: fixed;
+      top: 76px;
+      left: 0; right: 0; bottom: 0;
+      z-index: 200;
+      background: linear-gradient(135deg, #EAF3FB 0%, #F5F9FF 60%, #EEF6F1 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .sobre-nos-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sobre-nos-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 40px 80px;
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: center;
+      gap: 72px;
+      position: relative;
+    }
+
+    .sobre-nos-fechar {
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      background: none;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 8px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sobre-nos-fechar:hover { background: var(--navy); color: white; }
+
+    .sobre-nos-image {
+      flex: 0 0 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sobre-nos-image img {
+      width: 320px;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.1));
+    }
+
+    .sobre-nos-texto {
+      flex: 1;
+    }
+
+    .sobre-nos-texto h2 {
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 28px;
+      line-height: 1.25;
+    }
+
+    .sobre-nos-texto p {
+      font-size: 0.97rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .sobre-nos-texto p:last-child { margin-bottom: 0; }
+
+    .sobre-nos-destaque {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem !important;
+      color: var(--navy) !important;
+      margin-top: 24px !important;
+    }
+
+    .sobre-nos-frase {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.3rem !important;
+      color: var(--laranja) !important;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      background: var(--cinza-feat);
+      padding: 64px 40px;
+    }
+
+    .features-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.09); }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+    .fi-verde  { background: #D4EFDF; }
+    .fi-azul   { background: #D3E9F9; }
+    .fi-rosa   { background: #FAD7D7; }
+    .fi-amarelo { background: #FDF3CC; }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--texto-leve);
+      line-height: 1.6;
+    }
+
+    /* ── LIVROS ── */
+    .livros {
+      background: white;
+      padding: 80px 40px;
+    }
+
+    .livros-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 64px;
+      align-items: flex-start;
+    }
+
+    .livros-texto {
+      flex: 0 0 260px;
+    }
+
+    .secao-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .secao-tag .tag-star { color: var(--amarelo); font-size: 1.2rem; }
+
+    .livros-texto p {
+      font-size: 0.92rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .btn-navy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 12px 26px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-navy:hover { background: #0F2050; transform: translateY(-2px); }
+
+    .livros-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .livro-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .livro-card:hover { transform: translateY(-4px); }
+
+    .livro-capa {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .livro-capa-titulo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 0.9rem;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      line-height: 1.3;
+      z-index: 1;
+    }
+
+    .capa-1 { background: linear-gradient(135deg, #2BA08A, #1A7A65); }
+    .capa-2 { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
+    .capa-3 { background: linear-gradient(135deg, #8D6E4A, #5D4037); }
+    .capa-4 { background: linear-gradient(135deg, #1976D2, #0D47A1); }
+
+    .livro-card h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--navy);
+      line-height: 1.35;
+    }
+    .livro-card p {
+      font-size: 0.8rem;
+      color: var(--texto-leve);
+      line-height: 1.5;
+    }
+
+    /* ── TODOS OS LIVROS (overlay) ── */
+    .todos-livros-overlay {
+      position: fixed;
+      top: 76px;
+      left: 0; right: 0; bottom: 0;
+      z-index: 200;
+      background: linear-gradient(135deg, #EAF3FB 0%, #F5F9FF 60%, #EEF6F1 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+    }
+    .todos-livros-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .todos-livros-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 40px 80px;
+      position: relative;
+    }
+
+    .todos-livros-fechar {
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      background: none;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 8px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .todos-livros-fechar:hover { background: var(--navy); color: white; }
+
+    .todos-livros-titulo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .todos-livros-subtitulo {
+      font-size: 0.97rem;
+      color: var(--texto-leve);
+      margin-bottom: 52px;
+    }
+
+    .todos-livros-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .tl-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+    }
+
+    .tl-capa {
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.14);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tl-capa:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 48px rgba(0,0,0,0.2); }
+
+    .tl-capa img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .tl-capa-placeholder {
+      aspect-ratio: 3/4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+      background: #D8E0EA;
+    }
+
+    .tl-breve-tag {
+      background: white;
+      color: #7A8AA0;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 50px;
+    }
+
+    .tl-capa-placeholder span.titulo-placeholder {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #9AACBF;
+      line-height: 1.35;
+    }
+
+    .tl-card h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--navy);
+      line-height: 1.35;
+    }
+
+    .tl-card-breve h4 { color: #9AACBF; }
+    .tl-card-breve .tl-capa { opacity: 0.5; cursor: default; pointer-events: none; }
+
+    @media (max-width: 768px) {
+      .todos-livros-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    }
+
+    /* ── LIVRO DETALHE (overlay) ── */
+    .livro-detalhe-overlay {
+      position: fixed;
+      top: 76px;
+      left: 0; right: 0; bottom: 0;
+      z-index: 200;
+      background: linear-gradient(135deg, #EAF3FB 0%, #F5F9FF 60%, #EEF6F1 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+    }
+    .livro-detalhe-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .livro-detalhe-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 72px 40px 80px;
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: flex-start;
+      gap: 64px;
+      position: relative;
+    }
+
+    .livro-detalhe-fechar {
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      background: none;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 8px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .livro-detalhe-fechar:hover { background: var(--navy); color: white; }
+
+    .livro-detalhe-capa {
+      flex: 0 0 300px;
+      position: sticky;
+      top: 24px;
+    }
+    .livro-detalhe-capa img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 20px 56px rgba(0,0,0,0.18);
+    }
+
+    .livro-detalhe-info {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .livro-detalhe-autor {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+
+    .livro-detalhe-info h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .livro-detalhe-ilustrador {
+      font-size: 0.85rem;
+      color: var(--texto-leve);
+      margin-bottom: 28px;
+    }
+
+    .livro-detalhe-divider {
+      height: 2px;
+      background: linear-gradient(90deg, var(--amarelo), transparent);
+      border: none;
+      margin-bottom: 28px;
+      border-radius: 2px;
+    }
+
+    .livro-detalhe-info p {
+      font-size: 0.97rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .livro-detalhe-acoes {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .btn-comprar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amarelo-btn);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-comprar:hover { background: #e5b530; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,196,64,0.4); }
+
+    /* card em breve */
+    .livro-card-breve {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .livro-card-breve .livro-capa {
+      background: #D8E0EA !important;
+      position: relative;
+    }
+    .livro-capa-breve-tag {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      color: #7A8AA0;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+    .livro-card-breve .livro-capa-titulo {
+      color: #9AACBF;
+      text-shadow: none;
+      margin-top: 24px;
+    }
+    .livro-card-breve h4 { color: #9AACBF; }
+    .livro-card-breve p  { color: #B0BDCA; }
+
+    /* card com imagem real */
+    .livro-capa-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+    .livro-card-clicavel { cursor: pointer; }
+    .livro-card-clicavel .livro-capa {
+      padding: 0;
+      overflow: hidden;
+      aspect-ratio: unset;
+      height: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+
+    /* ── ENTREVISTAS ── */
+    .entrevistas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 460px;
+    }
+
+    .entrev-painel {
+      padding: 60px 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ep-esq { background: var(--verde-menta); }
+    .ep-dir { background: var(--amarelo-claro); }
+
+    .entrev-painel h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .entrev-painel > p {
+      font-size: 0.92rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+      max-width: 380px;
+    }
+
+    .btn-teal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+    .btn-teal:hover { background: #155F51; transform: translateY(-1px); }
+
+    .btn-amarelo-solid {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--amarelo-btn);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+    .btn-amarelo-solid:hover { background: #e5b530; transform: translateY(-1px); }
+
+    /* Card entrevista em destaque */
+    .entrev-destaque-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      margin-top: 8px;
+    }
+
+    .entrev-foto {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #D4EFDF, #A8D5B8);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .entrev-destaque-info {
+      flex: 1;
+    }
+
+    .entrev-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .entrev-destaque-info h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+
+    .entrev-destaque-info p {
+      font-size: 0.8rem;
+      color: var(--texto-leve);
+      line-height: 1.5;
+    }
+
+    /* Vicente quote */
+    .vicente-image-wrap {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 180px;
+      opacity: 0.85;
+    }
+    .vicente-image-wrap img {
+      width: 100%;
+    }
+
+    .vicente-quote {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-top: 8px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .vicente-quote blockquote {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .vicente-quote cite {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ── NEWSLETTER ── */
+    .newsletter {
+      background: linear-gradient(135deg, #C9E4F5 0%, #D8EEF7 40%, #C5DDED 100%);
+      padding: 72px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .newsletter p {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-newsletter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-btn);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-newsletter:hover { background: #0F2050; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,46,107,0.3); }
+
+    .newsletter-deco {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .nl-aviao { top: 20%; right: 8%; font-size: 2.5rem; transform: rotate(-20deg); }
+    .nl-estrela1 { bottom: 25%; left: 6%; font-size: 1.5rem; color: var(--amarelo); }
+    .nl-estrela2 { top: 15%; left: 15%; font-size: 1rem; color: var(--navy); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: white;
+      border-top: 1px solid #EDF0F5;
+      padding: 32px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #EDF0F5;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo img { height: 48px; }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .footer-nav a {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--texto-leve);
+      padding: 0 16px;
+      border-right: 1px solid #D8DDE6;
+      transition: color 0.2s;
+    }
+    .footer-nav a:last-child { border-right: none; }
+    .footer-nav a:hover { color: var(--navy); }
+
+    .footer-social {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cinza-feat);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--navy); color: white; transform: translateY(-2px); }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #9AA5B8;
+    }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 1024px) {
+      .livros-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .entrevistas { grid-template-columns: 1fr; }
+      .livros-inner { flex-direction: column; }
+      .livros-texto { flex: none; width: 100%; }
+      .livros-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-image { flex: 0 0 380px; }
+      .hero-text h1 { font-size: 2.2rem; }
+      .footer-top { flex-direction: column; align-items: flex-start; }
+      .footer-nav { flex-wrap: wrap; }
+      .sobre-nos-overlay .sobre-nos-inner { flex-direction: column; text-align: center; gap: 40px; padding-top: 80px; }
+      .sobre-nos-image { flex: none; }
+      .sobre-nos-frase { text-align: center; }
+    }
+
+    @media (max-width: 680px) {
+      .header-inner { padding: 0 20px; }
+      nav { display: none; }
+      .hero { padding: 0 20px; min-height: auto; }
+      .hero-inner { flex-direction: column; align-items: flex-start; min-height: auto; padding: 48px 0; gap: 0; }
+      .hero-text { padding: 0 0 32px; }
+      .hero-image { flex: none; width: 100%; align-self: auto; }
+      .hero-image img { width: 100%; height: auto; }
+      .hero-text h1 { font-size: 1.9rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .livros { padding: 60px 20px; }
+      .livros-grid { grid-template-columns: repeat(2, 1fr); }
+      .entrev-painel { padding: 40px 28px; }
+      .newsletter { padding: 56px 24px; }
+      .newsletter h2 { font-size: 1.5rem; }
+      .footer-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-inner">
+    <a href="#inicio" class="logo">
+      <img src="Imagens/02bzAnders (1).png" alt="No Mundo de Vicente">
+    </a>
+    <nav>
+      <a href="#inicio" class="ativo">Início</a>
+      <a href="#sobre">Sobre o Projeto</a>
+      <a href="#livros">Livros</a>
+      <a href="#entrevistas">Entrevistas</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#blog">Blog</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="#contato" class="nav-fale">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+      </svg>
+      Fale Conosco
+    </a>
+  </div>
+</header>
+
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Histórias que inspiram, acolhem e transformam.</h1>
+      <p>Um lugar onde perguntas viram histórias, descobertas ganham vida e a imaginação encontra espaço para crescer.</p>
+      <p>Por meio dos livros, atividades, jogos e conteúdos educativos, criamos experiências que aproximam crianças, famílias, educadores e profissionais, fortalecendo vínculos e despertando novas formas de aprender e sonhar.</p>
+      <p>Explore nosso universo e descubra como cada história pode abrir portas para conversas, reflexões, grandes aventuras e diversão.</p>
+      <button class="btn-hero" onclick="abrirSobre()">Sobre Nós</button>
+    </div>
+    <div class="hero-image">
+      <img src="Imagens/vicente_emocoes.png" alt="Vicente">
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SOBRE NÓS (overlay) ═══ -->
+<div id="sobre-overlay" class="sobre-nos-overlay">
+  <div class="sobre-nos-inner">
+    <button class="sobre-nos-fechar" onclick="fecharSobre()">✕ Voltar</button>
+    <div class="sobre-nos-image">
+      <img src="Imagens/Vicente_No_Foguete.png" alt="Vicente no foguete">
+    </div>
+    <div class="sobre-nos-texto">
+      <h2>Sobre o Projeto</h2>
+      <p>O projeto No Mundo de Vicente nasceu dentro da nossa casa, entre histórias, perguntas, descobertas e muita imaginação.</p>
+      <p>Somos uma família neurodivergente que aprendeu a olhar para as diferenças com amor, curiosidade e respeito. Entender o funcionamento de cada um, o que encanta, o que desafia, o que acalma e o que inspira, foi um dos pontos de partida para criar este projeto.</p>
+      <p>Vicente sempre foi apaixonado por histórias. Desde pequeno, inventava mundos, personagens e aventuras nas brincadeiras em família. Aos poucos, percebemos que essas histórias carregavam algo especial: emoção, humor, criatividade e aprendizados que mereciam ser compartilhados.</p>
+      <p>Foi o próprio Vicente quem escolheu o nome "No Mundo de Vicente". Mais do que a inspiração para os livros, ele se tornou o grande incentivador para abrirmos as portas desse universo e convidarmos outras famílias a fazerem parte dele.</p>
+      <p>Ao longo dessa jornada, aprendemos que cada criança enxerga, sente e descobre o mundo à sua maneira. E acreditamos que é justamente essa singularidade que torna a infância tão rica, fascinante e cheia de possibilidades.</p>
+      <p>Hoje, cada livro, jogo, atividade e projeto que nasce aqui tem o propósito de acolher a infância, estimular a imaginação, fortalecer vínculos e celebrar os diferentes jeitos de aprender, sentir e existir.</p>
+      <p class="sobre-nos-destaque">Porque acreditamos que toda criança merece ouvir uma mensagem simples, mas poderosa:</p>
+      <p class="sobre-nos-frase">O seu mundo importa.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FEATURES ═══ -->
+<section class="features">
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-verde">📗</div>
+      <h3>Livros que acolhem e ensinam</h3>
+      <p>Histórias que falam sobre emoções, imaginação, neurodivergência e autoconhecimento.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-azul">💬</div>
+      <h3>Conteúdo com especialistas</h3>
+      <p>Entrevistas, artigos e reflexões sobre desenvolvimento infantil, educação e muito mais.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-rosa">❤️</div>
+      <h3>Para famílias, educadores e crianças</h3>
+      <p>Um espaço de apoio, inspiração e troca para quem acredita no poder da infância.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-amarelo">💡</div>
+      <h3>Recursos para aprender brincando</h3>
+      <p>Atividades, jogos e materiais para estimular a curiosidade e o aprendizado.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ LIVROS ═══ -->
+<section class="livros" id="livros">
+  <div class="livros-inner">
+    <div class="livros-texto">
+      <h2 class="secao-tag">Nossos livros <span class="tag-star">★</span></h2>
+      <p>Cada história foi criada com carinho para conversar sobre temas importantes da infância de forma leve, divertida e significativa.</p>
+      <button class="btn-navy" onclick="abrirTodosLivros()">Conheça todos os livros →</button>
+    </div>
+
+    <div class="livros-grid">
+      <div class="livro-card livro-card-clicavel" onclick="abrirLivro('entendendo')">
+        <div class="livro-capa">
+          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa do livro Entendendo Como Sou" class="livro-capa-img">
+        </div>
+        <h4>Entendendo Como Sou</h4>
+        <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
+      </div>
+      <div class="livro-card livro-card-breve">
+        <div class="livro-capa capa-2">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
+        </div>
+        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
+        <p>Imaginação, curiosidade e descobertas que transformam o mundo.</p>
+      </div>
+      <div class="livro-card livro-card-breve">
+        <div class="livro-capa capa-3">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">A Casa dos Três Ventos</span>
+        </div>
+        <h4>A Casa dos Três Ventos</h4>
+        <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
+      </div>
+      <div class="livro-card livro-card-breve">
+        <div class="livro-capa capa-4">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">A Saudade do Papai</span>
+        </div>
+        <h4>A Saudade do Papai</h4>
+        <p>Saudade, amor e conexão que atravessam distâncias.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ ENTREVISTAS ═══ -->
+<section class="entrevistas" id="entrevistas">
+
+  <!-- Painel esquerdo — verde menta -->
+  <div class="entrev-painel ep-esq">
+    <h2>Entrevistas que inspiram <span>♡</span></h2>
+    <p>Conversas com especialistas, educadores e pessoas que fazem a diferença na vida de muitas crianças.</p>
+    <a href="#entrevistas" class="btn-teal">Ver entrevistas →</a>
+
+    <div class="entrev-destaque-card">
+      <div class="entrev-foto">👩</div>
+      <div class="entrev-destaque-info">
+        <p class="entrev-label">Entrevista da semana</p>
+        <h4>Conversas sobre infância com Fernanda Tavares</h4>
+        <p>Psicopedagoga, mãe atípica e autora do prefácio de "Vicente, os Bichinhos e o Poder da Imaginação".</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Painel direito — amarelo claro -->
+  <div class="entrev-painel ep-dir">
+    <h2>O que estão dizendo sobre nossas histórias <span style="color:var(--amarelo)">★</span></h2>
+    <div class="vicente-quote">
+      <blockquote>"Tenho muitas perguntas e uma imaginação do tamanho do céu!"</blockquote>
+      <cite>– Vicente</cite>
+    </div>
+
+    <div class="vicente-image-wrap">
+      <img src="Imagens/Vicente_Pensativo.png" alt="Vicente pensativo">
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ NEWSLETTER ═══ -->
+<section class="newsletter">
+  <span class="newsletter-deco nl-aviao">✈</span>
+  <span class="newsletter-deco nl-estrela1">✦</span>
+  <span class="newsletter-deco nl-estrela2">★</span>
+
+  <div class="newsletter-inner">
+    <h2>Vamos juntos explorar o mundo?</h2>
+    <p>Acompanhe novidades, conteúdos e lançamentos do No Mundo de Vicente.</p>
+    <button class="btn-newsletter">
+      Quero receber novidades ♡
+    </button>
+  </div>
+</section>
+
+
+<!-- ═══ TODOS OS LIVROS (overlay) ═══ -->
+<div id="todos-livros-overlay" class="todos-livros-overlay">
+  <div class="todos-livros-inner">
+    <button class="todos-livros-fechar" onclick="fecharTodosLivros()">✕ Voltar</button>
+
+    <h2 class="todos-livros-titulo">Nossos livros</h2>
+    <p class="todos-livros-subtitulo">Histórias criadas com carinho para conversar sobre temas importantes da infância.</p>
+
+    <div class="todos-livros-grid">
+
+      <!-- Entendendo Como Sou — lançado -->
+      <div class="tl-card">
+        <div class="tl-capa" onclick="fecharTodosLivros(); abrirLivro('entendendo')">
+          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Entendendo Como Sou">
+        </div>
+        <h4>Entendendo Como Sou</h4>
+      </div>
+
+      <!-- Vicente, os Bichinhos — em breve -->
+      <div class="tl-card tl-card-breve">
+        <div class="tl-capa">
+          <div class="tl-capa-placeholder">
+            <span class="tl-breve-tag">Em breve</span>
+            <span class="titulo-placeholder">Vicente, os Bichinhos e o Poder da Imaginação</span>
+          </div>
+        </div>
+        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
+      </div>
+
+      <!-- A Casa dos Três Ventos — em breve -->
+      <div class="tl-card tl-card-breve">
+        <div class="tl-capa">
+          <div class="tl-capa-placeholder">
+            <span class="tl-breve-tag">Em breve</span>
+            <span class="titulo-placeholder">A Casa dos Três Ventos</span>
+          </div>
+        </div>
+        <h4>A Casa dos Três Ventos</h4>
+      </div>
+
+      <!-- A Saudade do Papai — em breve -->
+      <div class="tl-card tl-card-breve">
+        <div class="tl-capa">
+          <div class="tl-capa-placeholder">
+            <span class="tl-breve-tag">Em breve</span>
+            <span class="titulo-placeholder">A Saudade do Papai</span>
+          </div>
+        </div>
+        <h4>A Saudade do Papai</h4>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ LIVRO DETALHE — Entendendo Como Sou ═══ -->
+<div id="livro-entendendo" class="livro-detalhe-overlay">
+  <div class="livro-detalhe-inner">
+    <button class="livro-detalhe-fechar" onclick="fecharLivro()">✕ Voltar</button>
+
+    <div class="livro-detalhe-capa">
+      <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Entendendo Como Sou">
+    </div>
+
+    <div class="livro-detalhe-info">
+      <p class="livro-detalhe-autor">Camila Vieira</p>
+      <h2>Entendendo Como Sou</h2>
+      <p class="livro-detalhe-ilustrador">Ilustrado por Renata Gabane</p>
+      <hr class="livro-detalhe-divider">
+
+      <p>Cada criança tem seu próprio jeito de pensar, sentir, aprender e se relacionar com o mundo.</p>
+      <p>Em <em>Entendendo Como Sou</em>, Vicente convida o leitor para uma jornada de autoconhecimento, mostrando que compreender a si mesmo é um passo importante para desenvolver autoestima, fortalecer a confiança e reconhecer suas próprias qualidades.</p>
+      <p>Ao mesmo tempo, a história nos lembra que cada pessoa possui características, desafios e potencialidades únicas, incentivando a empatia, o respeito às diferenças e a valorização da individualidade.</p>
+      <p>Porque conhecer quem somos também nos ajuda a compreender melhor o outro.</p>
+      <p><strong>Inclui materiais complementares:</strong></p>
+      <p>📖 Ficha de leitura para aprofundar a experiência da história.</p>
+      <p>🧩 Jogo da Memória da Conexão, um recurso lúdico que trabalha emoções, autoconhecimento, empatia e conexão, podendo ser utilizado por famílias, educadores e profissionais.</p>
+
+      <div class="livro-detalhe-acoes">
+        <a href="#" class="btn-comprar">🛒 Comprar o livro</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer id="contato">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="#" class="footer-logo">
+        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente">
+      </a>
+
+      <nav class="footer-nav">
+        <a href="#sobre">Sobre o Projeto</a>
+        <a href="#livros">Livros</a>
+        <a href="#entrevistas">Entrevistas</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#blog">Blog</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2024 No Mundo de Vicente. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>
+
+<script>
+  function abrirSobre() {
+    document.getElementById('sobre-overlay').classList.add('ativo');
+  }
+  function fecharSobre() {
+    document.getElementById('sobre-overlay').classList.remove('ativo');
+  }
+
+  function abrirLivro(id) {
+    document.getElementById('livro-' + id).classList.add('ativo');
+  }
+  function fecharLivro() {
+    document.querySelectorAll('.livro-detalhe-overlay').forEach(function(el) {
+      el.classList.remove('ativo');
+    });
+  }
+
+  function abrirTodosLivros() {
+    document.getElementById('todos-livros-overlay').classList.add('ativo');
+  }
+  function fecharTodosLivros() {
+    document.getElementById('todos-livros-overlay').classList.remove('ativo');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      fecharSobre();
+      fecharLivro();
+      fecharTodosLivros();
+    }
+  });
+</script>
+</body>
+</html>
