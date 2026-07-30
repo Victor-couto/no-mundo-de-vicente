@@ -22,6 +22,11 @@
   <meta property="twitter:image" content="Imagens/02bzAnders (1).png">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Estilos e Lógica do Carrinho de Compras -->
+  <link rel="stylesheet" href="carrinho.css">
+  <script src="carrinho.js" defer></script>
+  
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -1519,22 +1524,34 @@
       <a href="#inicio" class="ativo">Início</a>
       <a href="#sobre" onclick="abrirSobre(); return false;">Sobre o Projeto</a>
       <a href="#livros">Livros</a>
+      <a href="vendas.html" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
       <a href="#entrevistas">Entrevistas</a>
       <a href="#recursos">Recursos</a>
       <a href="#blog">Blog</a>
       <a href="#contato">Contato</a>
     </nav>
-    <a href="#contato" class="nav-fale">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
-      </svg>
-      Fale Conosco
-    </a>
-    <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenuMobile()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <div class="header-actions">
+      <a href="#contato" class="nav-fale">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+        </svg>
+        Fale Conosco
+      </a>
+      
+      <!-- Ícone de Carrinho no Menu -->
+      <button class="menu-carrinho-btn" onclick="abrirCarrinho()" aria-label="Abrir carrinho de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="carrinho-badge" style="display: none;">0</span>
+      </button>
+
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenuMobile()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -1544,6 +1561,7 @@
   <a href="#inicio" class="ativo" onclick="toggleMenuMobile()">Início</a>
   <a href="#sobre" onclick="toggleMenuMobile(); abrirSobre(); return false;">Sobre o Projeto</a>
   <a href="#livros" onclick="toggleMenuMobile()">Livros</a>
+  <a href="vendas.html" onclick="toggleMenuMobile()" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
   <a href="#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
   <a href="#recursos" onclick="toggleMenuMobile()">Recursos</a>
   <a href="#blog" onclick="toggleMenuMobile()">Blog</a>
@@ -1835,7 +1853,9 @@
       <p>🧩 Jogo da Memória da Conexão, um recurso lúdico que trabalha emoções, autoconhecimento, empatia e conexão, podendo ser utilizado por famílias, educadores e profissionais.</p>
 
       <div class="livro-detalhe-acoes">
-        <a href="#" class="btn-comprar" aria-label="Comprar o livro Entendendo Como Sou">🛒 Comprar o livro</a>
+        <button onclick="adicionarAoCarrinho('entendendo-como-sou', 'Entendendo Como Sou', 49.90, 'Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg')" class="btn-comprar" aria-label="Adicionar o livro Entendendo Como Sou ao carrinho" style="border: none; cursor: pointer;">
+          🛒 Adicionar ao Carrinho
+        </button>
       </div>
     </div>
   </div>
@@ -1853,6 +1873,7 @@
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
         <a href="#sobre" onclick="abrirSobre(); return false;">Sobre o Projeto</a>
         <a href="#livros">Livros</a>
+        <a href="vendas.html">Comprar Livro</a>
         <a href="#entrevistas">Entrevistas</a>
         <a href="#recursos">Recursos</a>
         <a href="#blog">Blog</a>
@@ -1978,7 +1999,35 @@
     elementosRevelar.forEach(function(el) {
       revealObserver.observe(el);
     });
+
+    // Detectar hash na URL e abrir modais específicos (ex: vindo da página de vendas)
+    if (window.location.hash === '#sobre') {
+      setTimeout(abrirSobre, 300);
+    }
   });
 </script>
+
+<!-- ═══ GAVETA LATERAL DO CARRINHO ═══ -->
+<div class="carrinho-overlay">
+  <div class="carrinho-drawer">
+    <div class="carrinho-header">
+      <h3>🛒 Seu Carrinho</h3>
+      <button class="carrinho-fechar">✕ Voltar</button>
+    </div>
+    <div id="carrinho-itens-lista" class="carrinho-itens-lista">
+      <!-- Itens do carrinho -->
+    </div>
+    <div class="carrinho-footer">
+      <div class="carrinho-subtotal">
+        <span class="label">Total:</span>
+        <span class="valor">R$ <span id="carrinho-total-val">0,00</span></span>
+      </div>
+      <button onclick="finalizarCompraCarrinho()" class="btn-finalizar-compra">
+        💳 Finalizar Compra
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

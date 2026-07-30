@@ -1,0 +1,314 @@
+/* ── ESTILOS DO CARRINHO DE COMPRAS (GAVETA LATERAL) ── */
+
+/* Overlay de fundo */
+.carrinho-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 53, 96, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carrinho-overlay.ativo {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Gaveta Lateral */
+.carrinho-drawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  bottom: 0;
+  width: 400px;
+  max-width: 100%;
+  background: white;
+  box-shadow: -10px 0 36px rgba(26, 53, 96, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carrinho-overlay.ativo .carrinho-drawer {
+  right: 0;
+}
+
+/* Cabeçalho do Carrinho */
+.carrinho-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(26, 53, 96, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.carrinho-header h3 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carrinho-fechar {
+  background: var(--cinza-feat);
+  border: none;
+  color: var(--navy);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.carrinho-fechar:hover {
+  background: var(--navy);
+  color: white;
+}
+
+/* Lista de Itens */
+.carrinho-itens-lista {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(26, 53, 96, 0.15) transparent;
+}
+
+/* Carrinho Vazio */
+.carrinho-vazio {
+  text-align: center;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--texto-mutado);
+  height: 100%;
+}
+.carrinho-vazio-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+/* Item Individual */
+.carrinho-item {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(26, 53, 96, 0.05);
+}
+
+.carrinho-item-img {
+  width: 64px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(26, 53, 96, 0.1);
+  border: 1px solid rgba(26, 53, 96, 0.05);
+}
+
+.carrinho-item-info {
+  flex: 1;
+}
+
+.carrinho-item-titulo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.carrinho-item-preco {
+  font-size: 0.9rem;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Controles de Quantidade */
+.carrinho-item-acoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.qtd-seletor {
+  display: flex;
+  align-items: center;
+  background: var(--cinza-feat);
+  border-radius: var(--radius-round);
+  padding: 4px;
+}
+
+.qtd-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: var(--navy);
+  font-weight: 900;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(26, 53, 96, 0.05);
+}
+.qtd-btn:hover {
+  background: var(--navy);
+  color: white;
+}
+
+.qtd-num {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0 12px;
+  min-width: 32px;
+  text-align: center;
+  color: var(--navy);
+}
+
+.btn-remover-item {
+  background: transparent;
+  border: none;
+  color: var(--texto-mutado);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-remover-item:hover {
+  color: #c0392b;
+}
+
+/* Rodapé do Carrinho (Total e CTA) */
+.carrinho-footer {
+  padding: 24px;
+  border-top: 1px solid rgba(26, 53, 96, 0.08);
+  background: var(--cinza-feat);
+}
+
+.carrinho-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.carrinho-subtotal span.label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--navy);
+}
+
+.carrinho-subtotal span.valor {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--laranja);
+}
+
+.btn-finalizar-compra {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--amarelo-btn);
+  color: var(--navy);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  padding: 16px 24px;
+  border-radius: var(--radius-round);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+}
+.btn-finalizar-compra:hover {
+  background: #e5b530;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Ícone de Carrinho no Menu com contador */
+.menu-carrinho-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--navy);
+  transition: var(--transition);
+  border-radius: 50%;
+}
+.menu-carrinho-btn:hover {
+  background: rgba(26, 53, 96, 0.05);
+  color: var(--laranja);
+}
+.menu-carrinho-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.carrinho-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--laranja);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Mobile responsive drawer */
+@media (max-width: 450px) {
+  .carrinho-drawer {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+/* Container de ações no cabeçalho (Carrinho + Fale Conosco + Hambúrguer) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+

@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprar Livro Entendendo Como Sou | No Mundo de Vicente</title>
+  <meta name="description" content="Garanta seu exemplar de 'Entendendo Como Sou'. Um livro lúdico para ajudar crianças a compreenderem suas emoções, com Jogo da Memória e Ficha de Leitura inclusos. Compra segura pelo Mercado Livre.">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- SDK do Mercado Pago V2 -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  
+  <!-- Estilos e Lógica do Carrinho de Compras -->
+  <link rel="stylesheet" href="carrinho.css">
+  <script src="carrinho.js" defer></script>
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navy:          #1A3560;
+      --navy-btn:      #1B2E6B;
+      --laranja:       #E8792A;
+      --amarelo:       #F5C440;
+      --amarelo-btn:   #F5C440;
+      --verde-menta:   #E4F4EC;
+      --amarelo-claro: #FFF8E6;
+      --azul-hero:     #EAF3FB;
+      --cinza-feat:    #F4F6F9;
+      --branco:        #FFFFFF;
+      --texto:         #1A3560;
+      --texto-leve:    #40506A;
+      --texto-mutado:  #5D6F88;
+      --teal:          #1E7F6E;
+      
+      --shadow-sm:     0 2px 8px rgba(26, 53, 96, 0.05);
+      --shadow-md:     0 8px 24px rgba(26, 53, 96, 0.08);
+      --shadow-lg:     0 16px 36px rgba(26, 53, 96, 0.12);
+      --shadow-xl:     0 24px 48px rgba(26, 53, 96, 0.18);
+      
+      --radius-sm:     8px;
+      --radius-md:     16px;
+      --radius-lg:     24px;
+      --radius-xl:     32px;
+      --radius-round:  50px;
+      
+      --transition:    all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--texto);
+      line-height: 1.6;
+      background: #fff;
+      padding-top: 76px;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ── HEADER ── */
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 53, 96, 0.08);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      transition: var(--transition);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 76px;
+    }
+
+    .logo img { height: 72px; width: auto; transition: var(--transition); }
+    .logo:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    nav a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--navy);
+      transition: var(--transition);
+      position: relative;
+      padding: 6px 2px;
+      border-radius: var(--radius-sm);
+    }
+    nav a:hover { color: var(--laranja); }
+    nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+    nav a.ativo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 3px;
+      background: var(--laranja);
+      border-radius: 2px;
+    }
+
+    .nav-fale {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-btn);
+      color: white !important;
+      padding: 10px 24px;
+      border-radius: var(--radius-round);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-fale:hover { background: #0F2050; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .nav-fale:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+    .nav-fale svg { width: 16px; height: 16px; }
+
+    /* Menu Toggle (Mobile) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 26px;
+      height: 18px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 310;
+    }
+    .menu-toggle span {
+      width: 100%;
+      height: 3px;
+      background-color: var(--navy);
+      border-radius: 3px;
+      transition: var(--transition);
+      transform-origin: left center;
+    }
+    .menu-toggle:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; }
+    
+    .menu-toggle.ativo span:nth-child(1) {
+      transform: rotate(45deg);
+      background-color: var(--laranja);
+    }
+    .menu-toggle.ativo span:nth-child(2) {
+      width: 0%;
+      opacity: 0;
+    }
+    .menu-toggle.ativo span:nth-child(3) {
+      transform: rotate(-45deg);
+      background-color: var(--laranja);
+    }
+
+    /* Menu Mobile */
+    .nav-mobile-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(26, 53, 96, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 290;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+    .nav-mobile-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .nav-mobile-content {
+      position: fixed;
+      top: 76px; right: -300px; bottom: 0;
+      width: 280px;
+      background: white;
+      box-shadow: var(--shadow-xl);
+      z-index: 295;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: var(--transition);
+      overflow-y: auto;
+    }
+    .nav-mobile-content.ativo {
+      right: 0;
+    }
+    .nav-mobile-content a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--navy);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+    .nav-mobile-content a:hover, .nav-mobile-content a.ativo {
+      background: var(--azul-hero);
+      color: var(--laranja);
+    }
+
+    /* ── HERO VENDAS ── */
+    .vendas-hero {
+      background: linear-gradient(135deg, #EAF3FB 0%, #F2EAFA 60%, #FFF5D6 100%);
+      padding: 60px 40px;
+      overflow: hidden;
+      position: relative;
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: center;
+    }
+
+    .vendas-hero-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .vendas-hero-text {
+      flex: 1.2;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tag-lancamento {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 6px 16px;
+      border-radius: var(--radius-round);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .vendas-hero-text h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .vendas-hero-text h1 span.destaque-laranja {
+      color: var(--laranja);
+    }
+
+    .vendas-hero-text p {
+      font-size: 1.05rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    /* Bloco de Preço e CTA */
+    .compra-box {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(26, 53, 96, 0.06);
+      max-width: 520px;
+      margin-top: 28px;
+    }
+
+    .preco-container {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .preco-de {
+      font-size: 1.05rem;
+      color: var(--texto-mutado);
+      text-decoration: line-through;
+    }
+
+    .preco-por {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .preco-info {
+      font-size: 0.85rem;
+      color: var(--teal);
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-comprar-ml {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--amarelo-btn);
+      color: var(--navy);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      padding: 18px 36px;
+      border-radius: var(--radius-round);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: var(--transition);
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+    .btn-comprar-ml:hover {
+      background: #e5b530;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(245,196,64,0.45);
+    }
+    .btn-comprar-ml:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+
+    .selos-seguranca {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #EDF0F5;
+      gap: 12px;
+    }
+
+    .selo-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--texto-leve);
+      font-weight: 600;
+    }
+    .selo-item span.selo-icon {
+      font-size: 1.1rem;
+    }
+
+    .vendas-hero-image {
+      flex: 0.8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Mockup 3D Real do Livro */
+    .livro-3d-container {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 380px;
+    }
+    .livro-3d {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-md);
+      box-shadow: -15px 20px 40px rgba(26, 53, 96, 0.22);
+      transform: rotateY(-12deg) rotateX(5deg);
+      transition: var(--transition);
+      animation: float 6s ease-in-out infinite;
+    }
+    .livro-3d:hover {
+      transform: rotateY(-5deg) rotateX(2deg) scale(1.03);
+      box-shadow: -20px 25px 50px rgba(26, 53, 96, 0.28);
+    }
+
+    /* ── BENEFÍCIOS DO LIVRO ── */
+    .beneficios {
+      background: var(--cinza-feat);
+      padding: 80px 40px;
+    }
+
+    .secao-titulo-vendas {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 52px;
+    }
+    .secao-titulo-vendas h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .secao-titulo-vendas p {
+      color: var(--texto-leve);
+      font-size: 1.05rem;
+    }
+
+    .beneficios-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .beneficio-card {
+      background: white;
+      border-radius: 20px 24px 20px 28px / 24px 20px 28px 20px;
+      padding: 44px 32px;
+      border: 2px solid rgba(26, 53, 96, 0.04);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .beneficio-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+      border-color: rgba(26, 53, 96, 0.1);
+    }
+
+    .beneficio-icon-box {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+    }
+    .bib-laranja { background: rgba(232, 121, 42, 0.1); color: var(--laranja); }
+    .bib-azul    { background: rgba(26, 53, 96, 0.08); color: var(--navy); }
+    .bib-verde   { background: rgba(30, 127, 110, 0.1); color: var(--teal); }
+
+    .beneficio-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+    .beneficio-card p {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+    }
+
+    /* ── DETALHES DO CONTEÚDO (MATERIAIS INCLUSOS) ── */
+    .materiais-inclusos {
+      background: white;
+      padding: 100px 40px;
+    }
+
+    .materiais-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .materiais-images {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .img-secundarias {
+      display: flex;
+      gap: 20px;
+    }
+
+    .material-img-wrapper {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(26, 53, 96, 0.08);
+      transition: var(--transition);
+    }
+    .material-img-wrapper:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .materiais-texto {
+      flex: 1;
+    }
+
+    .materiais-texto h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 24px;
+      line-height: 1.25;
+    }
+
+    .materiais-texto p {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .material-lista {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .material-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .material-check {
+      background: var(--verde-menta);
+      color: var(--teal);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .material-info h4 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .material-info p {
+      font-size: 0.92rem;
+      color: var(--texto-leve);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* ── DEPOIMENTOS ── */
+    .depoimentos-section {
+      background: var(--azul-hero);
+      padding: 80px 40px;
+    }
+
+    .depoimentos-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .depoimento-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 36px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(26, 53, 96, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .estrelas-avaliacao {
+      color: var(--amarelo);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .depoimento-card p {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .autor-depoimento {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .autor-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #D8E0EA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .autor-nome h4 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .autor-nome span {
+      font-size: 0.78rem;
+      color: var(--texto-mutado);
+    }
+
+    /* ── FAQ SEÇÃO ── */
+    .faq-section {
+      background: white;
+      padding: 100px 40px;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      border: 1px solid rgba(26, 53, 96, 0.08);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .faq-pergunta {
+      width: 100%;
+      background: white;
+      border: none;
+      padding: 22px 28px;
+      text-align: left;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--navy);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+    .faq-pergunta:hover {
+      background: var(--cinza-feat);
+    }
+    .faq-pergunta::after {
+      content: '▼';
+      font-size: 0.8rem;
+      color: var(--laranja);
+      transition: transform 0.3s;
+    }
+    .faq-item.ativo .faq-pergunta::after {
+      transform: rotate(-180deg);
+    }
+
+    .faq-resposta {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: white;
+    }
+
+    .faq-resposta-inner {
+      padding: 0 28px 24px;
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+    }
+
+    /* ── CTA FINAL ── */
+    .cta-final {
+      background: linear-gradient(135deg, #1A3560 0%, #152642 100%);
+      color: white;
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-final-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    .cta-final h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .cta-final p {
+      font-size: 1.05rem;
+      color: #C5DDED;
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .cta-final .btn-comprar-ml {
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    .cta-final .selo-item {
+      color: #A3BFD9;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: white;
+      border-top: 1px solid #EDF0F5;
+      padding: 32px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #EDF0F5;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo img { height: 48px; }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .footer-nav a {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--texto-leve);
+      padding: 0 16px;
+      border-right: 1px solid #D8DDE6;
+      transition: color 0.2s;
+    }
+    .footer-nav a:last-child { border-right: none; }
+    .footer-nav a:hover { color: var(--navy); }
+
+    .footer-social {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cinza-feat);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--navy); color: white; transform: translateY(-2px); }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #9AA5B8;
+    }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 1024px) {
+      .vendas-hero-inner { gap: 40px; }
+      .vendas-hero-text h1 { font-size: 2.5rem; }
+      .beneficios-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .materiais-inner { flex-direction: column; gap: 48px; }
+      .depoimentos-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    }
+
+    @media (max-width: 850px) {
+      nav { display: none; }
+      .header-inner .nav-fale { display: none; }
+      .menu-toggle { display: flex; }
+      
+      .vendas-hero-inner { flex-direction: column; text-align: center; align-items: center; padding: 40px 0; }
+      .vendas-hero-text { display: flex; flex-direction: column; align-items: center; }
+      .compra-box { width: 100%; }
+      .vendas-hero-image { width: 100%; max-width: 300px; margin-top: 32px; }
+      
+      .beneficios-grid { grid-template-columns: 1fr; }
+      .depoimentos-grid { grid-template-columns: 1fr; }
+      
+      .footer-top { flex-direction: column; align-items: center; text-align: center; }
+      .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
+      .footer-nav a { border-right: none; }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner { padding: 0 20px; }
+      .vendas-hero { padding: 40px 20px; }
+      .vendas-hero-text h1 { font-size: 2rem; }
+      .compra-box { padding: 20px; }
+      .preco-por { font-size: 1.8rem; }
+      .btn-comprar-ml { font-size: 1.05rem; padding: 14px 20px; }
+      .beneficios { padding: 60px 20px; }
+      .materiais-inclusos { padding: 60px 20px; }
+      .depoimentos-section { padding: 60px 20px; }
+      .faq-section { padding: 60px 20px; }
+      .faq-pergunta { padding: 16px 20px; font-size: 0.95rem; }
+      .cta-final { padding: 60px 20px; }
+      .footer-nav { display: none; }
+    }
+
+    /* Animações */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes float {
+      0% { transform: rotateY(-12deg) rotateX(5deg) translateY(0px); }
+      50% { transform: rotateY(-12deg) rotateX(5deg) translateY(-10px); }
+      100% { transform: rotateY(-12deg) rotateX(5deg) translateY(0px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html#inicio" class="logo" aria-label="Voltar para a página inicial">
+      <img src="Imagens/02bzAnders (1).png" alt="Logo No Mundo de Vicente" height="72">
+    </a>
+    <nav>
+      <a href="index.html#inicio">Início</a>
+      <a href="index.html#sobre">Sobre o Projeto</a>
+      <a href="index.html#livros">Livros</a>
+      <a href="#detalhes" class="ativo">O Livro</a>
+      <a href="index.html#entrevistas">Entrevistas</a>
+      <a href="index.html#recursos">Recursos</a>
+      <a href="index.html#blog">Blog</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <div class="header-actions">
+      <a href="index.html#contato" class="nav-fale">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+        </svg>
+        Fale Conosco
+      </a>
+      
+      <!-- Ícone de Carrinho no Menu -->
+      <button class="menu-carrinho-btn" onclick="abrirCarrinho()" aria-label="Abrir carrinho de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="carrinho-badge" style="display: none;">0</span>
+      </button>
+
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenuMobile()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menu Mobile Sidebar -->
+<div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="toggleMenuMobile()"></div>
+<div class="nav-mobile-content" id="nav-mobile-content">
+  <a href="index.html#inicio" onclick="toggleMenuMobile()">Início</a>
+  <a href="index.html#sobre" onclick="toggleMenuMobile()">Sobre o Projeto</a>
+  <a href="index.html#livros" onclick="toggleMenuMobile()">Livros</a>
+  <a href="#detalhes" class="ativo" onclick="toggleMenuMobile()">O Livro</a>
+  <a href="index.html#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
+  <a href="index.html#recursos" onclick="toggleMenuMobile()">Recursos</a>
+  <a href="index.html#blog" onclick="toggleMenuMobile()">Blog</a>
+  <a href="index.html#contato" onclick="toggleMenuMobile()">Contato</a>
+  <a href="index.html#contato" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+    </svg>
+    Fale Conosco
+  </a>
+</div>
+
+<!-- ═══ HERO VENDAS ═══ -->
+<section class="vendas-hero" id="detalhes">
+  <div class="vendas-hero-inner">
+    <div class="vendas-hero-text">
+      <span class="tag-lancamento">Estoque Disponível</span>
+      <h1>Ajude seu filho a descobrir que o <span class="destaque-laranja">seu mundo importa</span>.</h1>
+      <p>O livro <strong>"Entendendo Como Sou"</strong> convida as crianças para uma jornada de autoconhecimento e descoberta, mostrando de forma lúdica que cada um de nós pensa, sente e aprende de maneiras únicas.</p>
+      
+      <!-- Caixa de Compra -->
+      <div class="compra-box">
+        <div class="preco-container">
+          <span class="preco-de">De R$ 59,90</span>
+          <span class="preco-por">R$ 49,90</span>
+        </div>
+        <div class="preco-info">
+          <span>🚚 Frete e envio calculados diretamente no Mercado Livre</span>
+        </div>
+        
+        <!-- BOTÃO DE ADICIONAR AO CARRINHO -->
+        <button onclick="adicionarAoCarrinho('entendendo-como-sou', 'Entendendo Como Sou', 49.90, 'Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg')" class="btn-comprar-ml" aria-label="Adicionar o livro Entendendo Como Sou ao carrinho">
+          🛒 Adicionar ao Carrinho
+        </button>
+        
+        <div class="selos-seguranca">
+          <div class="selo-item">
+            <span class="selo-icon">🛡️</span>
+            <span>Compra Segura</span>
+          </div>
+          <div class="selo-item">
+            <span class="selo-icon">📦</span>
+            <span>Estoque Próprio</span>
+          </div>
+          <div class="selo-item">
+            <span class="selo-icon">⚡</span>
+            <span>Envio Rápido</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vendas-hero-image">
+      <div class="livro-3d-container">
+        <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-3d" width="380" height="507" fetchpriority="high">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BENEFÍCIOS DO LIVRO ═══ -->
+<section class="beneficios">
+  <div class="secao-titulo-vendas reveal">
+    <h2>Por que ler este livro com as crianças?</h2>
+    <p>Histórias são pontes para conversas sinceras. Descubra os temas trabalhados na obra:</p>
+  </div>
+  
+  <div class="beneficios-grid">
+    <div class="beneficio-card reveal">
+      <div class="beneficio-icon-box bib-laranja">❤️</div>
+      <h3>Autoestima e Confiança</h3>
+      <p>Ensina as crianças a reconhecerem suas próprias qualidades, fortalecendo a autoestima e celebrando suas pequenas e grandes conquistas.</p>
+    </div>
+    <div class="beneficio-card reveal delay-100">
+      <div class="beneficio-icon-box bib-azul">🧠</div>
+      <h3>Inteligência Emocional</h3>
+      <p>Facilita a identificação de sentimentos como alegria, medo, raiva e saudade, promovendo a autorregulação e a expressão emocional saudável.</p>
+    </div>
+    <div class="beneficio-card reveal delay-200">
+      <div class="beneficio-icon-box bib-verde">🧩</div>
+      <h3>Acolhimento Neurodivergente</h3>
+      <p>Escrito a partir da vivência de uma família atípica, o livro estimula a empatia e o respeito pelo ritmo e jeito de cada um ser.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MATERIAIS INCLUSOS ═══ -->
+<section class="materiais-inclusos">
+  <div class="materiais-inner">
+    <div class="materiais-images reveal">
+      <div class="material-img-wrapper" style="max-width: 500px;">
+        <!-- Imagem do Vicente emoções para ilustrar atividades -->
+        <img src="Imagens/vicente_emocoes.png" alt="Expressões de sentimentos lúdicos ilustrados" width="500" height="375" loading="lazy">
+      </div>
+      <div class="img-secundarias">
+        <div class="material-img-wrapper" style="max-width: 240px;">
+          <!-- Imagem lúdica de cérebro estrela -->
+          <img src="Imagens/Cérebro.png" alt="Ilustração lúdica de cérebro" width="240" height="240" loading="lazy">
+        </div>
+        <div class="material-img-wrapper" style="max-width: 240px;">
+          <!-- Imagem de Vicente pensativo -->
+          <img src="Imagens/Vicente_Pensativo.png" alt="Vicente curioso pensando" width="240" height="308" loading="lazy">
+        </div>
+      </div>
+    </div>
+    
+    <div class="materiais-texto reveal delay-100">
+      <h2>Muito mais do que um livro: Uma experiência lúdica completa</h2>
+      <p>Sabemos que o aprendizado infantil acontece pela interação e pela brincadeira. Por isso, ao adquirir o livro físico, você também recebe recursos desenvolvidos para prolongar a experiência da história:</p>
+      
+      <div class="material-lista">
+        <div class="material-item">
+          <div class="material-check">✓</div>
+          <div class="material-info">
+            <h4>Ficha de Leitura Pedagógica</h4>
+            <p>Um material interativo complementar para ajudar famílias, terapeutas e educadores a aprofundarem os temas do livro através de perguntas e reflexões com a criança.</p>
+          </div>
+        </div>
+        
+        <div class="material-item">
+          <div class="material-check">✓</div>
+          <div class="material-info">
+            <h4>Jogo da Memória da Conexão</h4>
+            <p>Um jogo físico focado em conectar pais, educadores e crianças através de atividades divertidas e lúdicas sobre sentimentos, autoconhecimento e empatia.</p>
+          </div>
+        </div>
+
+        <div class="material-item">
+          <div class="material-check">✓</div>
+          <div class="material-info">
+            <h4>Páginas Coloridas e Alta Qualidade</h4>
+            <p>Capa resistente, papel offset de excelente gramatura, ideal para ser manuseado por mãos pequenas repetidas vezes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEPOIMENTOS ═══ -->
+<section class="depoimentos-section">
+  <div class="secao-titulo-vendas reveal">
+    <h2>Quem já leu, recomenda!</h2>
+    <p>Veja o carinho de quem abriu as portas para o Mundo de Vicente:</p>
+  </div>
+  
+  <div class="depoimentos-grid">
+    <div class="depoimento-card reveal">
+      <div class="estrelas-avaliacao">★★★★★</div>
+      <p>"O livro trouxe conversas incríveis aqui em casa. Meu filho se identificou muito com o Vicente e começou a explicar como ele sente as coisas."</p>
+      <div class="autor-depoimento">
+        <div class="autor-avatar">👩</div>
+        <div class="autor-nome">
+          <h4>Mariana S.</h4>
+          <span>Mãe do Leo (6 anos)</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="depoimento-card reveal delay-100">
+      <div class="estrelas-avaliacao">★★★★★</div>
+      <p>"Como psicopedagoga, recomendo fortemente. O Jogo da Memória da Conexão é maravilhoso para usar em consultório e estreitar vínculos emocionais."</p>
+      <div class="autor-depoimento">
+        <div class="autor-avatar">🩺</div>
+        <div class="autor-nome">
+          <h4>Ana Cláudia R.</h4>
+          <span>Psicopedagoga Clínica</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="depoimento-card reveal delay-200">
+      <div class="estrelas-avaliacao">★★★★★</div>
+      <p>"Uma história sensível, colorida e muito necessária. Mostra para as crianças atípicas que seus sentimentos e seus mundos são incrivelmente importantes."</p>
+      <div class="autor-depoimento">
+        <div class="autor-avatar">👨</div>
+        <div class="autor-nome">
+          <h4>Roberto F.</h4>
+          <span>Pai do Tiago (8 anos)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ SEÇÃO ── -->
+<section class="faq-section">
+  <div class="secao-titulo-vendas reveal">
+    <h2>Dúvidas Frequentes</h2>
+    <p>Tire suas dúvidas sobre o processo de compra e entrega:</p>
+  </div>
+  
+  <div class="faq-container reveal">
+    <div class="faq-item">
+      <button class="faq-pergunta" onclick="toggleFaq(this)">
+        Como funciona a compra pelo Mercado Livre?
+      </button>
+      <div class="faq-resposta">
+        <div class="faq-resposta-inner">
+          Ao clicar em comprar, você será redirecionado para o nosso anúncio oficial no Mercado Livre. Lá, você usará sua conta do Mercado Livre/Mercado Pago para concluir a compra com total segurança, aproveitando as formas de pagamento disponíveis (PIX, Cartão, Boleto) e as garantias da plataforma.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-pergunta" onclick="toggleFaq(this)">
+        Como é calculado o frete e o prazo de entrega?
+      </button>
+      <div class="faq-resposta">
+        <div class="faq-resposta-inner">
+          O frete e o prazo são calculados automaticamente pelo sistema do Mercado Livre com base no seu CEP. Se você possui benefícios ou pontos no Mercado Livre, poderá inclusive contar com frete grátis ou descontos especiais na entrega.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-pergunta" onclick="toggleFaq(this)">
+        O livro possui estoque físico imediato?
+      </button>
+      <div class="faq-resposta">
+        <div class="faq-resposta-inner">
+          Sim! Nós possuímos estoque próprio e físico do livro. Assim que a sua compra for confirmada pelo Mercado Livre, nós preparamos o seu pacote com todo o carinho e ele é postado rapidamente para chegar o quanto antes em sua casa.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-pergunta" onclick="toggleFaq(this)">
+        O Jogo da Memória e a Ficha de Leitura vêm junto com o livro?
+      </button>
+      <div class="faq-resposta">
+        <div class="faq-resposta-inner">
+          Sim! Eles são brindes especiais inclusos na sua compra. O Jogo da Memória da Conexão é enviado fisicamente junto com o livro, e a Ficha de Leitura Pedagógica acompanha o produto para enriquecer os momentos de leitura conjunta.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section class="cta-final">
+  <div class="cta-final-inner reveal">
+    <h2>Garanta já o seu exemplar</h2>
+    <p>Abra as portas para o Mundo de Vicente na sua casa ou escola e fortaleça a conexão emocional com as crianças que você ama.</p>
+    
+    <!-- BOTÃO DE ADICIONAR AO CARRINHO -->
+    <button onclick="adicionarAoCarrinho('entendendo-como-sou', 'Entendendo Como Sou', 49.90, 'Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg')" class="btn-comprar-ml" aria-label="Adicionar o livro Entendendo Como Sou ao carrinho">
+      🛒 Adicionar ao Carrinho
+    </button>
+    
+    <div class="selo-item">
+      <span class="selo-icon">🛡️</span>
+      <span>Compra 100% garantida e protegida pelo Mercado Livre</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer id="contato">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="index.html#inicio" class="footer-logo" aria-label="Voltar para o início">
+        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente" width="160" height="71" loading="lazy">
+      </a>
+
+      <nav class="footer-nav" aria-label="Navegação do Rodapé">
+        <a href="index.html#sobre">Sobre o Projeto</a>
+        <a href="index.html#livros">Livros</a>
+        <a href="#detalhes">Comprar Livro</a>
+        <a href="index.html#entrevistas">Entrevistas</a>
+        <a href="index.html#recursos">Recursos</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2024 No Mundo de Vicente. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Funções do Menu Mobile (Hambúrguer)
+  function toggleMenuMobile() {
+    const toggleBtn = document.querySelector('.menu-toggle');
+    const overlay = document.getElementById('nav-mobile-overlay');
+    const menuContent = document.getElementById('nav-mobile-content');
+    
+    const isActived = toggleBtn.classList.contains('ativo');
+    
+    if (isActived) {
+      toggleBtn.classList.remove('ativo');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      overlay.classList.remove('ativo');
+      menuContent.classList.remove('ativo');
+    } else {
+      toggleBtn.classList.add('ativo');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      overlay.classList.add('ativo');
+      menuContent.classList.add('ativo');
+    }
+  }
+
+  // FAQ Acordeão
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const resposta = item.querySelector('.faq-resposta');
+    const isActived = item.classList.contains('ativo');
+    
+    // Fechar outros FAQs
+    document.querySelectorAll('.faq-item').forEach(el => {
+      if (el !== item) {
+        el.classList.remove('ativo');
+        el.querySelector('.faq-resposta').style.maxHeight = null;
+      }
+    });
+    
+    if (!isActived) {
+      item.classList.add('ativo');
+      resposta.style.maxHeight = resposta.scrollHeight + 'px';
+    } else {
+      item.classList.remove('ativo');
+      resposta.style.maxHeight = null;
+    }
+  }
+
+  // Sistema de Animação na Rolagem (Scroll Reveal)
+  document.addEventListener('DOMContentLoaded', function() {
+    const elementosRevelar = document.querySelectorAll('.reveal');
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+    
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    elementosRevelar.forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  });
+
+  // CONFIGURAÇÃO DO MERCADO PAGO (OPÇÃO 2 - MODAL INTEGRADO)
+  // Substitua as credenciais abaixo pelas suas credenciais oficiais do Mercado Pago
+  // Como obter: https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integration-configuration
+  const MP_PUBLIC_KEY = 'SUA_PUBLIC_KEY_AQUI'; // Exemplo: APP_USR-xxxxxx
+  const MP_PREFERENCE_ID = 'SEU_PREFERENCE_ID_AQUI'; // Exemplo: 123456789-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+  // Inicializa o Mercado Pago
+  let mp;
+  try {
+    if (typeof MercadoPago !== 'undefined') {
+      mp = new MercadoPago(MP_PUBLIC_KEY, {
+        locale: 'pt-BR'
+      });
+    }
+  } catch (e) {
+    console.error("Erro ao inicializar o SDK do Mercado Pago:", e);
+  }
+
+  function abrirCheckout() {
+    if (MP_PUBLIC_KEY === 'SUA_PUBLIC_KEY_AQUI' || MP_PREFERENCE_ID === 'SEU_PREFERENCE_ID_AQUI') {
+      // Mensagem lúdica de orientação para o proprietário do site caso as chaves estejam em branco
+      alert('Configuração Pendente!\n\nPara que o checkout integrado funcione:\n1. Acesse o código-fonte de "vendas.html"\n2. Procure por MP_PUBLIC_KEY e MP_PREFERENCE_ID no final do arquivo\n3. Insira suas credenciais geradas no painel do Mercado Pago.\n\n(Se você for o cliente, este botão em breve abrirá o pagamento seguro!)');
+      return;
+    }
+    
+    if (mp) {
+      mp.checkout({
+        preference: {
+          id: MP_PREFERENCE_ID
+        },
+        autoOpen: true // Abre o modal automaticamente por cima do site
+      });
+    } else {
+      alert('Erro ao carregar o sistema de pagamento. Verifique sua conexão.');
+    }
+  }
+</script>
+
+<!-- ═══ GAVETA LATERAL DO CARRINHO ═══ -->
+<div class="carrinho-overlay">
+  <div class="carrinho-drawer">
+    <div class="carrinho-header">
+      <h3>🛒 Seu Carrinho</h3>
+      <button class="carrinho-fechar">✕ Voltar</button>
+    </div>
+    <div id="carrinho-itens-lista" class="carrinho-itens-lista">
+      <!-- Itens do carrinho -->
+    </div>
+    <div class="carrinho-footer">
+      <div class="carrinho-subtotal">
+        <span class="label">Total:</span>
+        <span class="valor">R$ <span id="carrinho-total-val">0,00</span></span>
+      </div>
+      <button onclick="finalizarCompraCarrinho()" class="btn-finalizar-compra">
+        💳 Finalizar Compra
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
