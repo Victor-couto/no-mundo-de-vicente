@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja de Livros | No Mundo de Vicente</title>
+  <meta name="description" content="Conheça a coleção de livros 'No Mundo de Vicente'. Histórias lúdicas criadas com carinho para acolher, divertir e educar crianças e famílias neurodivergentes.">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Estilos e Lógica do Carrinho de Compras -->
+  <link rel="stylesheet" href="carrinho.css">
+  <script src="carrinho.js" defer></script>
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navy:          #1A3560;
+      --navy-btn:      #1B2E6B;
+      --laranja:       #E8792A;
+      --amarelo:       #F5C440;
+      --amarelo-btn:   #F5C440;
+      --verde-menta:   #E4F4EC;
+      --amarelo-claro: #FFF8E6;
+      --azul-hero:     #EAF3FB;
+      --cinza-feat:    #F4F6F9;
+      --branco:        #FFFFFF;
+      --texto:         #1A3560;
+      --texto-leve:    #40506A;
+      --texto-mutado:  #5D6F88;
+      --teal:          #1E7F6E;
+      
+      --shadow-sm:     0 2px 8px rgba(26, 53, 96, 0.05);
+      --shadow-md:     0 8px 24px rgba(26, 53, 96, 0.08);
+      --shadow-lg:     0 16px 36px rgba(26, 53, 96, 0.12);
+      --shadow-xl:     0 24px 48px rgba(26, 53, 96, 0.18);
+      
+      --radius-sm:     8px;
+      --radius-md:     16px;
+      --radius-lg:     24px;
+      --radius-xl:     32px;
+      --radius-round:  50px;
+      
+      --transition:    all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--texto);
+      line-height: 1.6;
+      background: #fff;
+      padding-top: 76px;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ── HEADER ── */
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 53, 96, 0.08);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      transition: var(--transition);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 76px;
+    }
+
+    .logo img { height: 72px; width: auto; transition: var(--transition); }
+    .logo:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    nav a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--navy);
+      transition: var(--transition);
+      position: relative;
+      padding: 6px 2px;
+      border-radius: var(--radius-sm);
+    }
+    nav a:hover { color: var(--laranja); }
+    nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+    nav a.ativo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 3px;
+      background: var(--laranja);
+      border-radius: 2px;
+    }
+
+    .nav-fale {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-btn);
+      color: white !important;
+      padding: 10px 24px;
+      border-radius: var(--radius-round);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-fale:hover { background: #0F2050; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .nav-fale:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+    .nav-fale svg { width: 16px; height: 16px; }
+
+    /* Menu Toggle (Mobile) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 26px;
+      height: 18px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 310;
+    }
+    .menu-toggle span {
+      width: 100%;
+      height: 3px;
+      background-color: var(--navy);
+      border-radius: 3px;
+      transition: var(--transition);
+      transform-origin: left center;
+    }
+    .menu-toggle:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; }
+    
+    .menu-toggle.ativo span:nth-child(1) {
+      transform: rotate(45deg);
+      background-color: var(--laranja);
+    }
+    .menu-toggle.ativo span:nth-child(2) {
+      width: 0%;
+      opacity: 0;
+    }
+    .menu-toggle.ativo span:nth-child(3) {
+      transform: rotate(-45deg);
+      background-color: var(--laranja);
+    }
+
+    /* Menu Mobile */
+    .nav-mobile-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(26, 53, 96, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 290;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+    .nav-mobile-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .nav-mobile-content {
+      position: fixed;
+      top: 76px; right: -300px; bottom: 0;
+      width: 280px;
+      background: white;
+      box-shadow: var(--shadow-xl);
+      z-index: 295;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: var(--transition);
+      overflow-y: auto;
+    }
+    .nav-mobile-content.ativo {
+      right: 0;
+    }
+    .nav-mobile-content a {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--navy);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+    .nav-mobile-content a:hover, .nav-mobile-content a.ativo {
+      background: var(--azul-hero);
+      color: var(--laranja);
+    }
+
+    /* ── LOJA HERO ── */
+    .loja-hero {
+      background: linear-gradient(135deg, #EAF3FB 0%, #F2EAFA 60%, #FFF5D6 100%);
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loja-hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .loja-hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .loja-hero h1 span.destaque-laranja {
+      color: var(--laranja);
+    }
+
+    .loja-hero p {
+      font-size: 1.1rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── SEÇÃO DE LIVROS EM GRADE ── */
+    .loja-livros-secao {
+      background: white;
+      padding: 80px 40px;
+    }
+
+    .loja-livros-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .loja-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 20px;
+    }
+
+    .livro-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      transition: var(--transition);
+    }
+
+    .livro-capa {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(26, 53, 96, 0.12), 0 2px 6px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    .livro-capa::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 12px;
+      background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0) 80%, rgba(255,255,255,0.1) 90%, rgba(0,0,0,0.05));
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .livro-capa-titulo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      line-height: 1.3;
+      z-index: 1;
+    }
+
+    .capa-2 { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
+    .capa-3 { background: linear-gradient(135deg, #8D6E4A, #5D4037); }
+    .capa-4 { background: linear-gradient(135deg, #1976D2, #0D47A1); }
+
+    .livro-card h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--navy);
+      line-height: 1.35;
+      margin-top: 8px;
+    }
+    .livro-card p {
+      font-size: 0.88rem;
+      color: var(--texto-leve);
+      line-height: 1.6;
+    }
+
+    /* Estilo Clicável e Hover */
+    .livro-card-clicavel {
+      cursor: pointer;
+    }
+    .livro-card-clicavel .livro-capa {
+      padding: 0;
+      overflow: hidden;
+      aspect-ratio: unset;
+      height: auto;
+    }
+    .livro-card-clicavel:hover .livro-capa {
+      transform: rotateY(-8deg) translateY(-8px);
+      box-shadow: -8px 15px 32px rgba(26, 53, 96, 0.2);
+    }
+    .livro-capa-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-md);
+    }
+
+    /* Estilo "Em Breve" Transparente / Opaco */
+    .livro-card-breve {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .livro-card-breve .livro-capa {
+      background: #D8E0EA !important;
+      box-shadow: none;
+      border: 1px solid rgba(26, 53, 96, 0.08);
+    }
+    .livro-capa-breve-tag {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      color: #7A8AA0;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: var(--radius-round);
+      white-space: nowrap;
+    }
+    .livro-card-breve .livro-capa-titulo {
+      color: #9AACBF;
+      text-shadow: none;
+      margin-top: 24px;
+      padding: 0 16px;
+    }
+    .livro-card-breve h4 { color: #9AACBF; }
+    .livro-card-breve p  { color: #B0BDCA; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: white;
+      border-top: 1px solid #EDF0F5;
+      padding: 32px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #EDF0F5;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo img { height: 48px; }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .footer-nav a {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--texto-leve);
+      padding: 0 16px;
+      border-right: 1px solid #D8DDE6;
+      transition: color 0.2s;
+    }
+    .footer-nav a:last-child { border-right: none; }
+    .footer-nav a:hover { color: var(--navy); }
+
+    .footer-social {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cinza-feat);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--navy); color: white; transform: translateY(-2px); }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #9AA5B8;
+    }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 1024px) {
+      .loja-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    }
+
+    @media (max-width: 850px) {
+      nav { display: none; }
+      .header-inner .nav-fale { display: none; }
+      .menu-toggle { display: flex; }
+      
+      .loja-hero { padding: 60px 20px; }
+      .loja-hero h1 { font-size: 2.2rem; }
+      .loja-livros-secao { padding: 60px 20px; }
+      
+      .footer-top { flex-direction: column; align-items: center; text-align: center; }
+      .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
+      .footer-nav a { border-right: none; }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner { padding: 0 20px; }
+      .loja-grid { grid-template-columns: 1fr; gap: 36px; }
+      .footer-nav { display: none; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html#inicio" class="logo" aria-label="Voltar para a página inicial">
+      <img src="Imagens/02bzAnders (1).png" alt="Logo No Mundo de Vicente" height="72">
+    </a>
+    <nav>
+      <a href="index.html#inicio">Início</a>
+      <a href="index.html#sobre">Sobre o Projeto</a>
+      <a href="index.html#livros">Livros</a>
+      <a href="loja.html" class="ativo" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
+      <a href="index.html#entrevistas">Entrevistas</a>
+      <a href="index.html#recursos">Recursos</a>
+      <a href="index.html#blog">Blog</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <a href="index.html#contato" class="nav-fale">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+      </svg>
+      Fale Conosco
+    </a>
+    
+    <!-- Container de Ações de Header -->
+    <div class="header-actions">
+      <!-- Ícone de Carrinho no Menu -->
+      <button class="menu-carrinho-btn" onclick="abrirCarrinho()" aria-label="Abrir carrinho de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="carrinho-badge" style="display: none;">0</span>
+      </button>
+
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" onclick="toggleMenuMobile()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menu Mobile Sidebar -->
+<div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="toggleMenuMobile()"></div>
+<div class="nav-mobile-content" id="nav-mobile-content">
+  <a href="index.html#inicio" onclick="toggleMenuMobile()">Início</a>
+  <a href="index.html#sobre" onclick="toggleMenuMobile()">Sobre o Projeto</a>
+  <a href="index.html#livros" onclick="toggleMenuMobile()">Livros</a>
+  <a href="loja.html" class="ativo" onclick="toggleMenuMobile()" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
+  <a href="index.html#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
+  <a href="index.html#recursos" onclick="toggleMenuMobile()">Recursos</a>
+  <a href="index.html#blog" onclick="toggleMenuMobile()">Blog</a>
+  <a href="index.html#contato" onclick="toggleMenuMobile()">Contato</a>
+  <a href="index.html#contato" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+    </svg>
+    Fale Conosco
+  </a>
+</div>
+
+<!-- ═══ LOJA HERO ═══ -->
+<section class="loja-hero">
+  <div class="loja-hero-inner">
+    <h1>Conheça Nossos <span class="destaque-laranja">Livros</span></h1>
+    <p>Histórias criadas com amor para celebrar as diferenças, instigar a imaginação e fortalecer a conexão entre pais, educadores e crianças.</p>
+  </div>
+</section>
+
+<!-- ═══ SEÇÃO DE LIVROS EM GRADE ═══ -->
+<section class="loja-livros-secao">
+  <div class="loja-livros-inner">
+    <div class="loja-grid">
+      <!-- Entendendo Como Sou — lançado e clicável -->
+      <div class="livro-card livro-card-clicavel reveal" onclick="window.location.href='vendas.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='vendas.html'">
+        <div class="livro-capa">
+          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="280" height="373" loading="eager">
+        </div>
+        <h4>Entendendo Como Sou</h4>
+        <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
+      </div>
+
+      <!-- Vicente, os Bichinhos — em breve -->
+      <div class="livro-card livro-card-breve reveal delay-100" tabindex="0">
+        <div class="livro-capa capa-2">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
+        </div>
+        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
+        <p>Imaginação, curiosidade e descobertas que transformam o mundo.</p>
+      </div>
+
+      <!-- A Casa dos Três Ventos — em breve -->
+      <div class="livro-card livro-card-breve reveal delay-200" tabindex="0">
+        <div class="livro-capa capa-3">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">A Casa dos Três Ventos</span>
+        </div>
+        <h4>A Casa dos Três Ventos</h4>
+        <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
+      </div>
+
+      <!-- A Saudade do Papai — em breve -->
+      <div class="livro-card livro-card-breve reveal delay-300" tabindex="0">
+        <div class="livro-capa capa-4">
+          <span class="livro-capa-breve-tag">Em breve</span>
+          <span class="livro-capa-titulo">A Saudade do Papai</span>
+        </div>
+        <h4>A Saudade do Papai</h4>
+        <p>Saudade, amor e conexão que atravessam distâncias.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer id="contato">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="index.html#inicio" class="footer-logo" aria-label="Voltar para o início">
+        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente" width="160" height="71" loading="lazy">
+      </a>
+
+      <nav class="footer-nav" aria-label="Navegação do Rodapé">
+        <a href="index.html#sobre">Sobre o Projeto</a>
+        <a href="index.html#livros">Livros</a>
+        <a href="loja.html">Comprar Livro</a>
+        <a href="index.html#entrevistas">Entrevistas</a>
+        <a href="index.html#recursos">Recursos</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2024 No Mundo de Vicente. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Funções do Menu Mobile (Hambúrguer)
+  function toggleMenuMobile() {
+    const toggleBtn = document.querySelector('.menu-toggle');
+    const overlay = document.getElementById('nav-mobile-overlay');
+    const menuContent = document.getElementById('nav-mobile-content');
+    
+    const isActived = toggleBtn.classList.contains('ativo');
+    
+    if (isActived) {
+      toggleBtn.classList.remove('ativo');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      overlay.classList.remove('ativo');
+      menuContent.classList.remove('ativo');
+    } else {
+      toggleBtn.classList.add('ativo');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      overlay.classList.add('ativo');
+      menuContent.classList.add('ativo');
+    }
+  }
+
+  // Sistema de Animação na Rolagem (Scroll Reveal)
+  document.addEventListener('DOMContentLoaded', function() {
+    const elementosRevelar = document.querySelectorAll('.reveal');
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+    
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    elementosRevelar.forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  });
+</script>
+
+<!-- ═══ GAVETA LATERAL DO CARRINHO ═══ -->
+<div class="carrinho-overlay">
+  <div class="carrinho-drawer">
+    <div class="carrinho-header">
+      <h3>🛒 Seu Carrinho</h3>
+      <button class="carrinho-fechar">✕ Voltar</button>
+    </div>
+    <div id="carrinho-itens-lista" class="carrinho-itens-lista">
+      <!-- Itens do carrinho -->
+    </div>
+    <div class="carrinho-footer">
+      <div class="carrinho-subtotal">
+        <span class="label">Total:</span>
+        <span class="valor">R$ <span id="carrinho-total-val">0,00</span></span>
+      </div>
+      <button onclick="finalizarCompraCarrinho()" class="btn-finalizar-compra">
+        💳 Finalizar Compra
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
