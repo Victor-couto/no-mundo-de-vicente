@@ -190,43 +190,18 @@ function renderizarCarrinho() {
   }
 }
 
-// Finaliza a compra conectando com o Mercado Pago
+// Link oficial do anúncio do livro "Entendendo Como Sou" no Mercado Livre
+const LINK_MERCADO_LIVRE = 'https://www.mercadolivre.com.br/entendendo-como-sou-um-livro-sensivel-e-educativo-sobre-emocoes-autoconhecimento-e-respeito-as-diferencas-ajuda-criancas-a-entenderem-seus-sentimentos-e-jeitinhos-unicos/up/MLBU3507661368';
+
+// Finaliza a compra abrindo o anúncio do Mercado Livre em uma nova aba
 function finalizarCompraCarrinho() {
   if (carrinho.length === 0) {
     alert('Adicione itens ao carrinho antes de finalizar a compra!');
     return;
   }
 
-  // Verifica as credenciais configuradas na página vendas.html
-  // Em um fluxo estático, as variáveis globais MP_PUBLIC_KEY e MP_PREFERENCE_ID estão configuradas na página vendas.html.
-  // Se o usuário clicar para finalizar na home (index.html), nós o redirecionaremos para a página de vendas com o carrinho aberto
-  // para que o checkout seja feito por lá, onde o script do SDK do Mercado Pago está ativo e as chaves cadastradas.
-  if (typeof MP_PUBLIC_KEY === 'undefined' || typeof MP_PREFERENCE_ID === 'undefined') {
-    // Estamos fora de vendas.html, redireciona e abre o carrinho lá
-    window.location.href = 'vendas.html?checkout=true';
-    return;
-  }
-
-  // Se estamos em vendas.html, executa a integração do Mercado Pago
-  if (MP_PUBLIC_KEY === 'SUA_PUBLIC_KEY_AQUI' || MP_PREFERENCE_ID === 'SEU_PREFERENCE_ID_AQUI') {
-    alert('Configuração Pendente!\n\nInsira sua Public Key e Preference ID no script do final do arquivo "vendas.html" para ativar a finalização de compras.');
-    return;
-  }
-
-  // Se temos o SDK carregado, inicializa a preferência do Mercado Pago
-  if (typeof MercadoPago !== 'undefined') {
-    const mpInstance = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
-    
-    // Abrir o checkout com o modal
-    mpInstance.checkout({
-      preference: {
-        id: MP_PREFERENCE_ID
-      },
-      autoOpen: true
-    });
-  } else {
-    alert('Erro ao carregar o sistema de pagamento do Mercado Pago. Verifique sua conexão.');
-  }
+  // Redireciona o usuário para o Mercado Livre em uma nova aba
+  window.open(LINK_MERCADO_LIVRE, '_blank');
 }
 
 // Executa na inicialização: Se na URL vier '?checkout=true', abre o carrinho automaticamente

@@ -8,8 +8,7 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- SDK do Mercado Pago V2 -->
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
+
   
   <!-- Estilos e Lógica do Carrinho de Compras -->
   <link rel="stylesheet" href="carrinho.css">
@@ -1666,42 +1665,6 @@
     });
   });
 
-  // CONFIGURAÇÃO DO MERCADO PAGO (OPÇÃO 2 - MODAL INTEGRADO)
-  // Substitua as credenciais abaixo pelas suas credenciais oficiais do Mercado Pago
-  // Como obter: https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/integration-configuration
-  const MP_PUBLIC_KEY = 'SUA_PUBLIC_KEY_AQUI'; // Exemplo: APP_USR-xxxxxx
-  const MP_PREFERENCE_ID = 'SEU_PREFERENCE_ID_AQUI'; // Exemplo: 123456789-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-
-  // Inicializa o Mercado Pago
-  let mp;
-  try {
-    if (typeof MercadoPago !== 'undefined') {
-      mp = new MercadoPago(MP_PUBLIC_KEY, {
-        locale: 'pt-BR'
-      });
-    }
-  } catch (e) {
-    console.error("Erro ao inicializar o SDK do Mercado Pago:", e);
-  }
-
-  function abrirCheckout() {
-    if (MP_PUBLIC_KEY === 'SUA_PUBLIC_KEY_AQUI' || MP_PREFERENCE_ID === 'SEU_PREFERENCE_ID_AQUI') {
-      // Mensagem lúdica de orientação para o proprietário do site caso as chaves estejam em branco
-      alert('Configuração Pendente!\n\nPara que o checkout integrado funcione:\n1. Acesse o código-fonte de "vendas.html"\n2. Procure por MP_PUBLIC_KEY e MP_PREFERENCE_ID no final do arquivo\n3. Insira suas credenciais geradas no painel do Mercado Pago.\n\n(Se você for o cliente, este botão em breve abrirá o pagamento seguro!)');
-      return;
-    }
-    
-    if (mp) {
-      mp.checkout({
-        preference: {
-          id: MP_PREFERENCE_ID
-        },
-        autoOpen: true // Abre o modal automaticamente por cima do site
-      });
-    } else {
-      alert('Erro ao carregar o sistema de pagamento. Verifique sua conexão.');
-    }
-  }
 
   // Modais de todos os livros
   function abrirTodosLivros() {
