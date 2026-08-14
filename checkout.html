@@ -733,7 +733,7 @@
   // Buscar configurações públicas e chave do PagBank do servidor (Fase 4)
   async function inicializarPagBankConfig() {
     try {
-      const response = await fetch('/api/pagbank-config');
+      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/pagbank-config');
       const config = await response.json();
       
       if (config.publicKey) {
@@ -1037,7 +1037,7 @@
 
     // Chamar a Serverless Function do backend (/api/checkout)
     try {
-      const response = await fetch('/api/checkout', {
+      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

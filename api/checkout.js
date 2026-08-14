@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
   // Obter e validar variáveis de ambiente
   const PAGBANK_ENV = process.env.PAGBANK_ENV || 'sandbox';
   const PAGBANK_TOKEN = process.env.PAGBANK_TOKEN;
-  const APP_BASE_URL = process.env.APP_BASE_URL || '';
+  const APP_BASE_URL = process.env.APP_BASE_URL || 'https://no-mundo-de-vicente.vercel.app';
 
   if (PAGBANK_ENV !== 'sandbox' && PAGBANK_ENV !== 'production') {
     console.error('[PagBank Checkout] Configuração PAGBANK_ENV inválida.');

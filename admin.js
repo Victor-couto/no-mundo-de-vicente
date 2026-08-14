@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Chama a API que fizemos na Vercel
-      const response = await fetch('/api/admin/send-tracking', {
+      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/admin/send-tracking', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
