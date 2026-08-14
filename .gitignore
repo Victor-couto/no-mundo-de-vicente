@@ -7,3 +7,5 @@ Formato do site.docx
 .env.production
 node_modules/
 *.bak
+
+.vercel
