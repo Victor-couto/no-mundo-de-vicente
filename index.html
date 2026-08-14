@@ -1522,9 +1522,8 @@
     </a>
     <nav>
       <a href="#inicio" class="ativo">Início</a>
-      <a href="#sobre" onclick="abrirSobre(); return false;">Sobre o Projeto</a>
+      <a href="sobre.html">Sobre o Projeto</a>
       <a href="#livros">Livros</a>
-      <a href="loja.html" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
       <a href="#entrevistas">Entrevistas</a>
       <a href="#recursos">Recursos</a>
       <a href="#blog">Blog</a>
@@ -1559,9 +1558,8 @@
 <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="toggleMenuMobile()"></div>
 <div class="nav-mobile-content" id="nav-mobile-content">
   <a href="#inicio" class="ativo" onclick="toggleMenuMobile()">Início</a>
-  <a href="#sobre" onclick="toggleMenuMobile(); abrirSobre(); return false;">Sobre o Projeto</a>
+  <a href="sobre.html" onclick="toggleMenuMobile()">Sobre o Projeto</a>
   <a href="#livros" onclick="toggleMenuMobile()">Livros</a>
-  <a href="loja.html" onclick="toggleMenuMobile()" style="color: var(--laranja); font-weight: 800;">Comprar Livro 🛒</a>
   <a href="#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
   <a href="#recursos" onclick="toggleMenuMobile()">Recursos</a>
   <a href="#blog" onclick="toggleMenuMobile()">Blog</a>
@@ -1619,35 +1617,13 @@
       <p>Um lugar onde perguntas viram histórias, descobertas ganham vida e a imaginação encontra espaço para crescer.</p>
       <p>Por meio dos livros, atividades, jogos e conteúdos educativos, criamos experiências que aproximam crianças, famílias, educadores e profissionais, fortalecendo vínculos e despertando novas formas de aprender e sonhar.</p>
       <p>Explore nosso universo e descubra como cada história pode abrir portas para conversas, reflexões, grandes aventuras e diversão.</p>
-      <button class="btn-hero" onclick="abrirSobre()" aria-haspopup="dialog" aria-controls="sobre-overlay">Sobre Nós</button>
+      <button class="btn-hero" onclick="window.location.href='sobre.html'" aria-haspopup="dialog" aria-controls="sobre-overlay">Sobre Nós</button>
     </div>
     <div class="hero-image">
-      <img src="Imagens/ChatGPT Image 3 de jul. de 2026, 20_24_05.png" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
+      <img src="Imagens/Vicente_Sorri_do.png" alt="Ilustração lúdica de Vicente sorridente com balões de exclamação e interrogação" width="560" height="560" fetchpriority="high" decoding="async">
     </div>
   </div>
 </section>
-
-
-<!-- ═══ SOBRE NÓS (overlay) ═══ -->
-<div id="sobre-overlay" class="sobre-nos-overlay" role="dialog" aria-modal="true" aria-label="Sobre o Projeto No Mundo de Vicente">
-  <div class="sobre-nos-inner">
-    <button class="sobre-nos-fechar" onclick="fecharSobre()" aria-label="Fechar modal Sobre o Projeto">✕ Voltar</button>
-    <div class="sobre-nos-image">
-      <img src="Imagens/Vicente_No_Foguete.png" alt="Desenho de Vicente feliz viajando em um foguete espacial azul e amarelo rumo às estrelas" width="320" height="320" loading="lazy" decoding="async">
-    </div>
-    <div class="sobre-nos-texto">
-      <h2>Sobre o Projeto</h2>
-      <p>O projeto No Mundo de Vicente nasceu dentro da nossa casa, entre histórias, perguntas, descobertas e muita imaginação.</p>
-      <p>Somos uma família neurodivergente que aprendeu a olhar para as diferenças com amor, curiosidade e respeito. Entender o funcionamento de cada um, o que encanta, o que desafia, o que acalma e o que inspira, foi um dos pontos de partida para criar este projeto.</p>
-      <p>Vicente sempre foi apaixonado por histórias. Desde pequeno, inventava mundos, personagens e aventuras nas brincadeiras em família. Aos poucos, percebemos que essas histórias carregavam algo especial: emoção, humor, criatividade e aprendizados que mereciam ser compartilhados.</p>
-      <p>Foi o próprio Vicente quem escolheu o nome "No Mundo de Vicente". Mais do que a inspiração para os livros, ele se tornou o grande incentivador para abrirmos as portas desse universo e convidarmos outras famílias a fazerem parte dele.</p>
-      <p>Ao longo dessa jornada, aprendemos que cada criança enxerga, sente e descobre o mundo à sua maneira. E acreditamos que é justamente essa singularidade que torna a infância tão rica, fascinante e cheia de possibilidades.</p>
-      <p>Hoje, cada livro, jogo, atividade e projeto que nasce aqui tem o propósito de acolher a infância, estimular a imaginação, fortalecer vínculos e celebrar os diferentes jeitos de aprender, sentir e existir.</p>
-      <p class="sobre-nos-destaque">Porque acreditamos que toda criança merece ouvir uma mensagem simples, mas poderosa:</p>
-      <p class="sobre-nos-frase">O seu mundo importa.</p>
-    </div>
-  </div>
-</div>
 
 
 
@@ -1845,7 +1821,7 @@
       </a>
 
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
-        <a href="#sobre" onclick="abrirSobre(); return false;">Sobre o Projeto</a>
+        <a href="sobre.html">Sobre o Projeto</a>
         <a href="#livros">Livros</a>
         <a href="loja.html">Comprar Livro</a>
         <a href="#entrevistas">Entrevistas</a>
@@ -1901,15 +1877,7 @@
     }
   }
 
-  // Modais Overlays
-  function abrirSobre() {
-    document.getElementById('sobre-overlay').classList.add('ativo');
-    document.body.style.overflow = 'hidden'; // Impede o scroll de fundo
-  }
-  function fecharSobre() {
-    document.getElementById('sobre-overlay').classList.remove('ativo');
-    document.body.style.overflow = '';
-  }
+
 
   function abrirLivro(id) {
     document.getElementById('livro-' + id).classList.add('ativo');
@@ -1974,10 +1942,7 @@
       revealObserver.observe(el);
     });
 
-    // Detectar hash na URL e abrir modais específicos (ex: vindo da página de vendas)
-    if (window.location.hash === '#sobre') {
-      setTimeout(abrirSobre, 300);
-    }
+    // Sem detecção de hash sobre-nos modal
   });
 </script>
 
