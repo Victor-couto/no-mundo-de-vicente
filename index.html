@@ -113,6 +113,7 @@
       position: relative;
       padding: 6px 2px;
       border-radius: var(--radius-sm);
+      white-space: nowrap;
     }
     nav a:hover { color: var(--laranja); }
     nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
@@ -1411,6 +1412,7 @@
       padding: 0 16px;
       border-right: 1px solid #D8DDE6;
       transition: color 0.2s;
+      white-space: nowrap;
     }
     .footer-nav a:last-child { border-right: none; }
     .footer-nav a:hover { color: var(--navy); }
@@ -1464,7 +1466,8 @@
       .hero-text h1 { font-size: 2.4rem; }
       .footer-top { flex-direction: column; align-items: center; text-align: center; }
       .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
-      .footer-nav a { border-right: none; }
+      .footer-nav a { border-right: none;   white-space: nowrap;
+    }
       
       /* Vicente citação responsivo */
       .vicente-quote { margin-right: 0; }
@@ -1523,20 +1526,13 @@
     <nav>
       <a href="#inicio" class="ativo">Início</a>
       <a href="sobre.html">Sobre o Projeto</a>
-      <a href="instituicoes.html">Para Instituições</a>
       <a href="loja.html">Livros</a>
       <a href="#entrevistas">Entrevistas</a>
       <a href="#recursos">Recursos</a>
+      <a href="instituicoes.html">Para Instituições</a>
       <a href="#blog">Blog</a>
-      <a href="#contato">Contato</a>
     </nav>
     <div class="header-actions">
-      <a href="#contato" class="nav-fale">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
-        </svg>
-        Fale Conosco
-      </a>
       
       <!-- Ícone de Carrinho no Menu -->
       <button class="menu-carrinho-btn" onclick="abrirCarrinho()" aria-label="Abrir carrinho de compras">
@@ -1563,14 +1559,8 @@
   <a href="loja.html" onclick="toggleMenuMobile()">Livros</a>
   <a href="#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
   <a href="#recursos" onclick="toggleMenuMobile()">Recursos</a>
+      <a href="instituicoes.html">Para Instituições</a>
   <a href="#blog" onclick="toggleMenuMobile()">Blog</a>
-  <a href="#contato" onclick="toggleMenuMobile()">Contato</a>
-  <a href="#contato" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;">
-      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
-    </svg>
-    Fale Conosco
-  </a>
 </div>
 
 
@@ -1817,13 +1807,12 @@
 
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
         <a href="sobre.html">Sobre o Projeto</a>
-        <a href="instituicoes.html">Para Instituições</a>
         <a href="loja.html">Livros</a>
         <a href="loja.html">Comprar Livro</a>
         <a href="#entrevistas">Entrevistas</a>
         <a href="#recursos">Recursos</a>
+      <a href="instituicoes.html">Para Instituições</a>
         <a href="#blog">Blog</a>
-        <a href="#contato">Contato</a>
       </nav>
 
       <div class="footer-social">

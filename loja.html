@@ -97,6 +97,7 @@
       position: relative;
       padding: 6px 2px;
       border-radius: var(--radius-sm);
+      white-space: nowrap;
     }
     nav a:hover { color: var(--laranja); }
     nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
@@ -423,6 +424,7 @@
       padding: 0 16px;
       border-right: 1px solid #D8DDE6;
       transition: color 0.2s;
+      white-space: nowrap;
     }
     .footer-nav a:last-child { border-right: none; }
     .footer-nav a:hover { color: var(--navy); }
@@ -469,7 +471,8 @@
       
       .footer-top { flex-direction: column; align-items: center; text-align: center; }
       .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
-      .footer-nav a { border-right: none; }
+      .footer-nav a { border-right: none;   white-space: nowrap;
+    }
     }
 
     @media (max-width: 600px) {
@@ -509,7 +512,6 @@
     <nav>
       <a href="index.html#inicio">Início</a>
       <a href="sobre.html">Sobre o Projeto</a>
-      <a href="instituicoes.html">Para Instituições</a>
       <a href="loja.html" class="ativo">Livros</a>
       <a href="index.html#entrevistas">Entrevistas</a>
       <a href="index.html#recursos">Recursos</a>
@@ -624,7 +626,6 @@
 
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
         <a href="sobre.html">Sobre o Projeto</a>
-        <a href="instituicoes.html">Para Instituições</a>
         <a href="loja.html">Livros</a>
         <a href="loja.html">Comprar Livro</a>
         <a href="index.html#entrevistas">Entrevistas</a>
