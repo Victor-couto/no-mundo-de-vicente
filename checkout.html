@@ -724,34 +724,55 @@
 </div>
 
 <script>
-  // ==========================================
-  // CONFIGURAÇÃO DO PAGBANK (EDITE AQUI)
-  // ==========================================
-  const PAGBANK_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt'; // Insira a sua chave pública obtida no PagBank
-  const PAGBANK_ENV = 'sandbox'; // Altere para 'production' quando for colocar no ar
-  // ==========================================
-
   let metodoPagamento = 'PIX';
   let valorTotalGlobal = 0;
   let itemsCarrinhoGlobal = [];
-
-  // Inicializar o SDK do PagBank para criptografia do cartão
   let pagseguroInstance = null;
-  try {
-    if (typeof PagSeguro === 'function') {
-      pagseguroInstance = PagSeguro({
-        env: PAGBANK_ENV,
-        publicKey: PAGBANK_PUBLIC_KEY
-      });
-      console.log('SDK PagBank carregado e inicializado com sucesso.');
+  let pagbankEnvGlobal = 'sandbox';
+
+  // Buscar configurações públicas e chave do PagBank do servidor (Fase 4)
+  async function inicializarPagBankConfig() {
+    try {
+      const response = await fetch('/api/pagbank-config');
+      const config = await response.json();
+      
+      if (config.publicKey) {
+        pagbankEnvGlobal = config.environment;
+        pagseguroInstance = PagSeguro({
+          env: config.environment,
+          publicKey: config.publicKey
+        });
+        console.log(`[PagBank SDK] Inicializado com sucesso em modo: ${config.environment}`);
+      } else {
+        throw new Error('Chave pública não retornada pelo servidor.');
+      }
+    } catch (e) {
+      console.error('[PagBank SDK] Erro ao carregar configurações do PagBank do servidor:', e);
+      // Fallback local do Sandbox se falhar, apenas para testes
+      if (typeof PagSeguro === 'function') {
+        pagseguroInstance = PagSeguro({
+          env: 'sandbox',
+          publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt'
+        });
+      }
     }
-  } catch (e) {
-    console.error('Falha ao inicializar o SDK do PagBank:', e);
+  }
+
+  // Chave de Idempotência Única da Sessão de Compra (Fase 8)
+  function inicializarIdempotencyKey() {
+    let key = sessionStorage.getItem('pagbank_idempotency_key');
+    if (!key) {
+      key = 'idemp-' + Math.random().toString(36).substring(2, 15) + '-' + Date.now();
+      sessionStorage.setItem('pagbank_idempotency_key', key);
+    }
+    return key;
   }
 
   // Carregar dados ao inicializar
   document.addEventListener('DOMContentLoaded', () => {
+    inicializarPagBankConfig();
     carregarResumoCarrinho();
+    inicializarIdempotencyKey();
   });
 
   function carregarResumoCarrinho() {
@@ -903,14 +924,29 @@
   // ==========================================
   // FUNÇÃO PRINCIPAL: PROCESSAR PAGAMENTO
   // ==========================================
+  // Helper para restaurar botão em caso de falha (Fase 14)
+  function restaurarBotaoCheckout() {
+    const btnSubmit = document.getElementById('btn-submit-finalizar');
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = '💳 Confirmar e Pagar';
+  }
+
   async function processarPagamento(event) {
     event.preventDefault();
+
+    // Bloqueio de duplo clique e feedback visual (Fase 14)
+    const btnSubmit = document.getElementById('btn-submit-finalizar');
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = '⏳ Processando...';
 
     // Exibir overlay de loading
     document.getElementById('overlay-status').classList.add('ativo');
     document.getElementById('status-conteudo-loading').style.display = 'flex';
     document.getElementById('status-conteudo-sucesso').style.display = 'none';
     document.getElementById('status-conteudo-erro').style.display = 'none';
+
+    // Obter chave de idempotência estável da sessão
+    const idempotency_key = inicializarIdempotencyKey();
 
     // Obter dados do formulário
     const customer = {
@@ -934,16 +970,23 @@
       type: metodoPagamento === 'CARD' ? 'CREDIT_CARD' : metodoPagamento
     };
 
-    // Se for Cartão de Crédito, tokenizar o cartão no lado do cliente
+    // Se for Cartão de Crédito, tokenizar o cartão no lado do cliente (Fase 5)
     if (payment_method.type === 'CREDIT_CARD') {
       if (!pagseguroInstance) {
-        exibirErro('O SDK do PagBank não está inicializado. Verifique se a chave pública está correta no código.');
+        exibirErro('O SDK de criptografia de cartão do PagBank não está inicializado.');
+        restaurarBotaoCheckout();
         return;
       }
 
-      const rawExpiry = document.getElementById('card-expiry').value.replace(/\D/g, ''); // Ex: 082028
+      const rawExpiry = document.getElementById('card-expiry').value.replace(/\D/g, ''); 
+      if (rawExpiry.length !== 6) {
+        exibirErro('Data de validade do cartão incorreta. Use o formato MM/AAAA.');
+        restaurarBotaoCheckout();
+        return;
+      }
+
       const expMonth = rawExpiry.substring(0, 2);
-      const expYear = rawExpiry.substring(2);
+      const expYear = '20' + rawExpiry.substring(2); // Converter AA para AAAA se necessário
 
       try {
         const cardEncrypt = pagseguroInstance.encryptCard({
@@ -957,25 +1000,29 @@
         if (cardEncrypt.hasErrors) {
           console.error('Erros na criptografia do cartão:', cardEncrypt.errors);
           const firstError = cardEncrypt.errors[0];
-          exibirErro(`Dados do cartão inválidos: ${firstError.message || 'Verifique os campos do cartão.'}`);
+          exibirErro(`Dados do cartão inválidos: ${firstError.message || 'Verifique os dados.'}`);
+          restaurarBotaoCheckout();
           return;
         }
 
         payment_method.card_token = cardEncrypt.encryptedCard;
         payment_method.installments = document.getElementById('card-installments').value;
 
+        // Limpar dados do formulário sensíveis após criptografar (Fase 5 e 14)
+        document.getElementById('card-number').value = '';
+        document.getElementById('card-cvv').value = '';
+
       } catch (e) {
         console.error('Falha de criptografia de cartão:', e);
-        exibirErro('Erro de comunicação segura com o processador de cartões. Tente novamente.');
+        exibirErro('Erro ao processar chaves de segurança do cartão. Tente novamente.');
+        restaurarBotaoCheckout();
         return;
       }
     }
 
-    // Formatar itens para enviar com a nomenclatura esperada pelo backend
+    // Formatar itens para enviar apenas o ID e quantidade (Fase 7)
     const formattedItems = itemsCarrinhoGlobal.map(item => ({
       id: item.id,
-      name: item.titulo,
-      price: item.preco,
       quantity: item.qtd
     }));
 
@@ -984,7 +1031,8 @@
       items: formattedItems,
       customer,
       shipping,
-      payment_method
+      payment_method,
+      idempotency_key
     };
 
     // Chamar a Serverless Function do backend (/api/checkout)
@@ -1000,7 +1048,7 @@
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.details?.message || data.error || 'Erro no processamento da transação.');
+        throw new Error(data.error || 'Erro no processamento do pagamento.');
       }
 
       // Sucesso na transação!
@@ -1009,6 +1057,7 @@
     } catch (err) {
       console.error('Erro no checkout de rede:', err);
       exibirErro(err.message || 'Falha de conexão com o servidor. Tente novamente.');
+      restaurarBotaoCheckout();
     }
   }
 
@@ -1022,26 +1071,26 @@
 
     const msgPrincipal = document.getElementById('msg-sucesso-principal');
 
-    if (data.payment_type === 'PIX') {
+    if (data.paymentType === 'PIX') {
       msgPrincipal.textContent = 'Pedido reservado! Efetue o pagamento via Pix para confirmar a compra.';
       
       const pixHtml = `
         <div class="checkout-resultado-box">
           <p style="font-weight:700;font-size:0.95rem;margin-bottom:8px;">Aponte a câmera do seu banco para o QR Code abaixo:</p>
-          <img src="${data.pix.qrcode_image}" alt="QR Code Pix" class="qrcode-img">
+          <img src="${data.pix.qrcodeImage}" alt="QR Code Pix" class="qrcode-img">
           <p style="font-size:0.85rem;color:var(--texto-leve);margin-top:4px;">Ou utilize o código Copia e Cola:</p>
           <div class="copia-cola-container">
-            <input type="text" readonly class="copia-cola-input" value="${data.pix.qrcode_text}" id="pix-copia-cola-text">
+            <input type="text" readonly class="copia-cola-input" value="${data.pix.qrcodeText}" id="pix-copia-cola-text">
             <button type="button" class="btn-copiar" onclick="copiarTexto('pix-copia-cola-text', this)">Copiar Código</button>
           </div>
         </div>
       `;
       detalhesContainer.innerHTML = pixHtml;
 
-    } else if (data.payment_type === 'BOLETO') {
+    } else if (data.paymentType === 'BOLETO') {
       msgPrincipal.textContent = 'Boleto bancário gerado com sucesso!';
       
-      const dataVenc = new Date(data.boleto.due_date);
+      const dataVenc = new Date(data.boleto.dueDate);
       const vencStr = dataVenc.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
       const boletoHtml = `
@@ -1052,23 +1101,23 @@
             <input type="text" readonly class="copia-cola-input" value="${data.boleto.barcode}" id="boleto-bar-text">
             <button type="button" class="btn-copiar" onclick="copiarTexto('boleto-bar-text', this)">Copiar</button>
           </div>
-          <a href="${data.boleto.pdf_link}" target="_blank" rel="noopener" class="btn-boleto-pdf">
+          <a href="${data.boleto.pdf}" target="_blank" rel="noopener" class="btn-boleto-pdf">
             📄 Visualizar e Imprimir Boleto PDF
           </a>
         </div>
       `;
       detalhesContainer.innerHTML = boletoHtml;
 
-    } else if (data.payment_type === 'CREDIT_CARD') {
-      if (data.card.status === 'PAID') {
+    } else if (data.paymentType === 'CREDIT_CARD') {
+      if (data.status === 'PAID' || data.status === 'AUTHORIZED') {
         msgPrincipal.textContent = 'Pagamento Aprovado! Seu pedido já está sendo preparado.';
         detalhesContainer.innerHTML = `
-          <div class="checkout-resultado-box" style="border-left:5px solid var(--teal)">
-            <p style="font-weight:700;color:var(--teal);font-size:1.1rem;margin-bottom:4px;">Sucesso!</p>
+          <div class="checkout-resultado-box" style="border-left:5px solid #10B981">
+            <p style="font-weight:700;color:#10B981;font-size:1.1rem;margin-bottom:4px;">Sucesso!</p>
             <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">O PagBank confirmou o pagamento no seu cartão de crédito com sucesso.</p>
           </div>
         `;
-      } else if (data.card.status === 'IN_ANALYSIS') {
+      } else if (data.status === 'IN_ANALYSIS') {
         msgPrincipal.textContent = 'Pagamento em análise pelo PagBank.';
         detalhesContainer.innerHTML = `
           <div class="checkout-resultado-box" style="border-left:5px solid var(--amarelo)">
@@ -1077,13 +1126,17 @@
           </div>
         `;
       } else {
-        // Recusado
-        throw new Error(data.card.message || 'Cartão recusado. Tente outro cartão ou método.');
+        // Recusado ou erro genérico
+        exibirErro(data.message || 'Cartão recusado. Verifique os dados ou escolha outra forma de pagamento.');
+        restaurarBotaoCheckout();
+        return;
       }
     }
 
-    // Limpar carrinho local
+    // Limpar carrinho local e chave de idempotência de sucesso (Fase 8 e 14)
     localStorage.removeItem('nomundodevicente_cart');
+    sessionStorage.removeItem('pagbank_idempotency_key');
+  }
   }
 
   function exibirErro(msg) {

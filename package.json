@@ -1,0 +1,13 @@
+{
+  "name": "no-mundo-de-vicente-checkout",
+  "version": "1.0.0",
+  "description": "Checkout transparente com PagBank na Vercel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "axios": "^1.7.2"
+  },
+  "private": true
+}

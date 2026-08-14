@@ -1,2 +1,9 @@
 .claude/
 Formato do site.docx
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+node_modules/
+*.bak

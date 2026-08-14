@@ -1,82 +1,132 @@
 const axios = require('axios');
 
-module.exports = async (req, res) => {
-  // Habilitar CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+// Tabela de Preços Oficiais Server-Side (Crucial para FASE 7)
+const PRODUTOS_OFICIAIS = {
+  'entendendo-como-sou': {
+    name: 'Livro Entendendo Como Sou',
+    price: 38.90 // R$ 38,90
+  }
+};
 
-  // Tratar requisição de preflight CORS
+module.exports = async (req, res) => {
+  // CORS Same-Origin de Segurança (Prioriza mesmo domínio na Vercel)
+  res.setHeader('Access-Control-Allow-Origin', '*'); 
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Idempotency-Key');
+
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Método não permitido' });
+    res.status(405).json({ success: false, error: 'Método não permitido.' });
+    return;
+  }
+
+  // Obter e validar variáveis de ambiente
+  const PAGBANK_ENV = process.env.PAGBANK_ENV || 'sandbox';
+  const PAGBANK_TOKEN = process.env.PAGBANK_TOKEN;
+  const APP_BASE_URL = process.env.APP_BASE_URL || '';
+
+  if (PAGBANK_ENV !== 'sandbox' && PAGBANK_ENV !== 'production') {
+    console.error('[PagBank Checkout] Configuração PAGBANK_ENV inválida.');
+    res.status(500).json({ success: false, error: 'Erro de configuração interna do servidor.' });
+    return;
+  }
+
+  if (!PAGBANK_TOKEN) {
+    console.error('[PagBank Checkout] Credencial PAGBANK_TOKEN ausente.');
+    res.status(500).json({ success: false, error: 'Credenciais de pagamento não configuradas no servidor.' });
     return;
   }
 
   try {
-    const { items, customer, shipping, payment_method } = req.body;
-
-    if (!items || !customer || !shipping || !payment_method) {
-      res.status(400).json({ error: 'Parâmetros incompletos' });
+    // 1. Limite de tamanho de request básico e validação de corpo vazio
+    if (!req.body || typeof req.body !== 'object') {
+      res.status(400).json({ success: false, error: 'Corpo da requisição inválido.' });
       return;
     }
 
-    // Carregar credenciais
-    const PAGBANK_TOKEN = process.env.PAGBANK_TOKEN;
-    const PAGBANK_ENV = process.env.PAGBANK_ENV || 'production';
+    const { items, customer, shipping, payment_method, idempotency_key } = req.body;
 
-    if (!PAGBANK_TOKEN) {
-      res.status(500).json({ error: 'Credenciais do PagBank não configuradas no servidor' });
+    // 2. Validação de campos obrigatórios
+    if (!items || !customer || !shipping || !payment_method || !idempotency_key) {
+      res.status(400).json({ success: false, error: 'Dados da requisição incompletos.' });
       return;
     }
 
-    // Configurar URL da API de Pedidos do PagBank (Sandbox vs Produção)
-    const baseUrl = PAGBANK_ENV === 'sandbox'
-      ? 'https://sandbox.api.pagseguro.com/orders'
-      : 'https://api.pagseguro.com/orders';
-
-    // Obter DDI/DDD/Número do telefone limpos
-    const cleanPhone = customer.phone.replace(/\D/g, ''); // Ex: 5511999999999
-    let areaCode = '11';
-    let phoneNumber = '999999999';
-    if (cleanPhone.length >= 10) {
-      // Se tiver DDI 55 no início (ex: 5511999999999)
-      const offset = cleanPhone.startsWith('55') ? 2 : 0;
-      areaCode = cleanPhone.substring(offset, offset + 2);
-      phoneNumber = cleanPhone.substring(offset + 2);
+    // 3. Validação de CPF, E-mail e Telefone (Fase 12)
+    const cleanCpf = customer.cpf ? customer.cpf.replace(/\D/g, '') : '';
+    if (cleanCpf.length !== 11) {
+      res.status(400).json({ success: false, error: 'CPF inválido. Deve conter 11 dígitos.' });
+      return;
     }
 
-    // Formatar itens para o padrão da API do PagBank (unit_amount em centavos)
-    const formattedItems = items.map((item, idx) => ({
-      reference_id: item.id || `item-${idx + 1}`,
-      name: item.name,
-      quantity: item.quantity,
-      unit_amount: Math.round(parseFloat(item.price) * 100) // Converte para centavos
-    }));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!customer.email || !emailRegex.test(customer.email)) {
+      res.status(400).json({ success: false, error: 'Endereço de e-mail inválido.' });
+      return;
+    }
 
-    // Calcular o total em centavos
-    const totalAmount = formattedItems.reduce((acc, item) => acc + (item.unit_amount * item.quantity), 0);
+    const cleanPhone = customer.phone ? customer.phone.replace(/\D/g, '') : '';
+    if (cleanPhone.length < 10 || cleanPhone.length > 11) {
+      res.status(400).json({ success: false, error: 'Telefone inválido. Deve conter DDD + número.' });
+      return;
+    }
 
-    // Formatar Endereço
-    const stateCodes = {
-      'AC': 'AC', 'AL': 'AL', 'AP': 'AP', 'AM': 'AM', 'BA': 'BA', 'CE': 'CE', 'DF': 'DF', 'ES': 'ES', 'GO': 'GO',
-      'MA': 'MA', 'MT': 'MT', 'MS': 'MS', 'MG': 'MG', 'PA': 'PA', 'PB': 'PB', 'PR': 'PR', 'PE': 'PE', 'PI': 'PI',
-      'RJ': 'RJ', 'RN': 'RN', 'RS': 'RS', 'RO': 'RO', 'RR': 'RR', 'SC': 'SC', 'SP': 'SP', 'SE': 'SE', 'TO': 'TO'
-    };
-    const regionCode = stateCodes[shipping.state.toUpperCase().trim()] || 'SP';
+    // 4. Validação Server-Side do Preço dos Produtos (Fase 7)
+    let totalCalculadoCentavos = 0;
+    const formattedItems = [];
+
+    for (const item of items) {
+      const itemOficial = PRODUTOS_OFICIAIS[item.id];
+      
+      if (!itemOficial) {
+        res.status(400).json({ success: false, error: `Produto não identificado ou inválido: ${item.id}` });
+        return;
+      }
+
+      const quantity = parseInt(item.quantity);
+      if (isNaN(quantity) || quantity <= 0) {
+        res.status(400).json({ success: false, error: `Quantidade inválida para o produto ${item.id}.` });
+        return;
+      }
+
+      // Preço oficial do servidor em centavos
+      const itemPriceCentavos = Math.round(itemOficial.price * 100);
+      const subtotalItem = itemPriceCentavos * quantity;
+      
+      totalCalculadoCentavos += subtotalItem;
+
+      formattedItems.push({
+        reference_id: item.id,
+        name: itemOficial.name,
+        quantity: quantity,
+        unit_amount: itemPriceCentavos
+      });
+    }
+
+    if (totalCalculadoCentavos <= 0) {
+      res.status(400).json({ success: false, error: 'O valor total do pedido deve ser maior que zero.' });
+      return;
+    }
+
+    // 5. Preparar Endereço e Dados do Cliente para o PagBank
+    const areaCode = cleanPhone.substring(0, 2);
+    const phoneNumber = cleanPhone.substring(2);
+
+    const stateCodes = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+    const regionCode = shipping.state ? shipping.state.toUpperCase().trim() : '';
+    if (!stateCodes.includes(regionCode)) {
+      res.status(400).json({ success: false, error: 'Sigla de estado de entrega inválida.' });
+      return;
+    }
 
     const customerObj = {
       name: customer.name,
       email: customer.email,
-      tax_id: customer.cpf.replace(/\D/g, ''),
+      tax_id: cleanCpf,
       phones: [{
         country: '55',
         area: areaCode,
@@ -96,38 +146,45 @@ module.exports = async (req, res) => {
       postal_code: shipping.cep.replace(/\D/g, '')
     };
 
-    // Criar chave de idempotência única por transação
-    const idempotencyKey = `idemp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    // Configurar URL da API de Pedidos do PagBank (Sandbox vs Produção)
+    const baseUrl = PAGBANK_ENV === 'sandbox'
+      ? 'https://sandbox.api.pagseguro.com/orders'
+      : 'https://api.pagseguro.com/orders';
 
-    // Montar payload base da requisição de pedidos (Orders)
+    // URL de Notificação para Webhook
+    const notificationUrls = [];
+    if (APP_BASE_URL) {
+      notificationUrls.push(`${APP_BASE_URL.replace(/\/$/, '')}/api/webhooks/pagbank`);
+    }
+
+    // Montar a Payload do Pedido
     const payload = {
-      reference_id: `ref-${Date.now()}`,
+      reference_id: `ref-${Date.now()}-${idempotency_key.substring(0, 6)}`,
       customer: customerObj,
       items: formattedItems,
       shipping: {
         address: shippingAddressObj
-      }
+      },
+      notification_urls: notificationUrls
     };
 
     // Injetar dados de pagamento conforme o método escolhido
     if (payment_method.type === 'PIX') {
-      // No PagBank, Pix é gerado via objeto qr_codes
       payload.qr_codes = [{
         amount: {
-          value: totalAmount
+          value: totalCalculadoCentavos
         },
         expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 horas de validade
       }];
     } else if (payment_method.type === 'BOLETO') {
-      // Boleto gera uma charge
       const dueDate = new Date();
       dueDate.setDate(dueDate.getDate() + 3); // 3 dias de vencimento
       const formattedDueDate = dueDate.toISOString().split('T')[0];
 
       payload.charges = [{
-        reference_id: `charge-${Date.now()}`,
+        reference_id: `charge-boleto-${Date.now()}`,
         amount: {
-          value: totalAmount,
+          value: totalCalculadoCentavos,
           currency: 'BRL'
         },
         payment_method: {
@@ -148,11 +205,10 @@ module.exports = async (req, res) => {
         }
       }];
     } else if (payment_method.type === 'CREDIT_CARD') {
-      // Cartão de Crédito gera uma charge
       payload.charges = [{
-        reference_id: `charge-${Date.now()}`,
+        reference_id: `charge-card-${Date.now()}`,
         amount: {
-          value: totalAmount,
+          value: totalCalculadoCentavos,
           currency: 'BRL'
         },
         payment_method: {
@@ -165,62 +221,76 @@ module.exports = async (req, res) => {
         }
       }];
     } else {
-      res.status(400).json({ error: 'Método de pagamento inválido' });
+      res.status(400).json({ success: false, error: 'Método de pagamento inválido.' });
       return;
     }
 
-    // Fazer a chamada à API do PagBank
+    // 6. Chamada com Tratamento de Timeouts e Idempotência (Fase 8 e 12)
     const response = await axios.post(baseUrl, payload, {
       headers: {
         'Authorization': `Bearer ${PAGBANK_TOKEN}`,
         'Content-Type': 'application/json',
-        'x-idempotency-key': idempotencyKey
+        'x-idempotency-key': idempotency_key
       },
-      timeout: 15000 // 15 segundos de timeout
+      timeout: 10000 // Timeout de 10 segundos
     });
 
-    // Tratar a resposta e simplificar para o frontend
+    // 7. Normalização das Respostas ao Cliente (Fase 9)
     const order = response.data;
     const responseData = {
-      order_id: order.id,
-      reference_id: order.reference_id,
-      payment_type: payment_method.type
+      success: true,
+      orderId: order.id,
+      referenceId: order.reference_id,
+      paymentType: payment_method.type
     };
 
     if (payment_method.type === 'PIX') {
-      // Extrair QR Code e link
       const qrCodeObj = order.qr_codes[0];
       const pngLink = qrCodeObj.links.find(l => l.media === 'image/png') || qrCodeObj.links[0];
       responseData.pix = {
-        qrcode_image: pngLink ? pngLink.href : '',
-        qrcode_text: qrCodeObj.text
+        qrcodeImage: pngLink ? pngLink.href : '',
+        qrcodeText: qrCodeObj.text
       };
+      responseData.status = 'WAITING'; // Pix inicia aguardando pagamento
     } else if (payment_method.type === 'BOLETO') {
-      // Extrair dados do boleto
       const charge = order.charges[0];
       const pdfLink = charge.links.find(l => l.media === 'application/pdf');
+      
+      responseData.chargeId = charge.id;
+      responseData.status = charge.status; // EX: WAITING
       responseData.boleto = {
         barcode: charge.payment_response.payment_method.boleto.barcode,
-        pdf_link: pdfLink ? pdfLink.href : '',
-        due_date: charge.payment_response.payment_method.boleto.due_date
+        pdf: pdfLink ? pdfLink.href : '',
+        dueDate: charge.payment_response.payment_method.boleto.due_date
       };
     } else if (payment_method.type === 'CREDIT_CARD') {
-      // Extrair dados do cartão
       const charge = order.charges[0];
-      responseData.card = {
-        status: charge.status, // PAID, DECLINED, IN_ANALYSIS
-        message: charge.payment_response ? charge.payment_response.message : ''
-      };
+      responseData.chargeId = charge.id;
+      responseData.status = charge.status; // PAID, DECLINED, IN_ANALYSIS
+      responseData.message = charge.payment_response ? charge.payment_response.message : '';
     }
+
+    // Registrar log básico desprovido de chaves privadas ou dados de cartão (Fase 12)
+    console.log(`[PagBank Checkout] Pedido criado com sucesso. OrderID: ${order.id}, Status: ${responseData.status}`);
 
     res.status(200).json(responseData);
 
   } catch (error) {
-    console.error('Erro no processamento do checkout PagBank:', error.response ? error.response.data : error.message);
+    // Tratamento de falha de rede ou erros retornados pela API do PagBank
     const apiError = error.response ? error.response.data : null;
+    
+    console.error('[PagBank Checkout Error] Erro ao processar pagamento:', 
+      apiError ? JSON.stringify(apiError) : error.message
+    );
+
+    // Não retornar stack trace ou dados confidenciais ao cliente
+    const clientErrorMessage = apiError && apiError.error_messages 
+      ? apiError.error_messages.map(m => m.description).join(' ') 
+      : 'Ocorreu um erro ao processar o seu pagamento com o PagBank. Verifique seus dados.';
+
     res.status(error.response ? error.response.status : 500).json({
-      error: 'Erro ao processar pagamento junto ao PagBank',
-      details: apiError || error.message
+      success: false,
+      error: clientErrorMessage
     });
   }
 };
