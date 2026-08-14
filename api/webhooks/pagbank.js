@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const axios = require('axios');
+const { db } = require('../utils/firebase-admin');
 
 // Configuração para desabilitar o bodyParser padrão da Vercel
 // permitindo a leitura do raw body para verificação correta de assinatura
@@ -248,8 +249,23 @@ module.exports = async (req, res) => {
     // Registros de logs seguros desprovidos de chaves privadas ou dados de cartão (Fase 12)
     console.log(`[PagBank Webhook] Notificação recebida com sucesso. OrderID: ${orderId}, Ref: ${referenceId}, Status: ${status}`);
 
-    // Disparar envio de e-mail de venda confirmada
+    // Disparar envio de e-mail de venda confirmada e salvar no Firestore
     if (status === 'PAID') {
+      if (db) {
+        try {
+          await db.collection('pedidos').doc(orderId).set({
+            ...payload,
+            admin_status: 'Aguardando Envio',
+            created_at: new Date().toISOString()
+          }, { merge: true });
+          console.log(`[Firebase] Pedido ${orderId} salvo no Firestore com sucesso.`);
+        } catch (fbErr) {
+          console.error('[Firebase Error] Erro ao salvar pedido:', fbErr.message);
+        }
+      } else {
+        console.warn('[Firebase] db não configurado. Pedido não salvo no Firestore.');
+      }
+
       await sendNotificationEmail(payload);
     }
 

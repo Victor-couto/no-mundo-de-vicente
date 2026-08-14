@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - No Mundo de Vicente</title>
+  <link rel="stylesheet" href="admin.css">
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    // TODO: Substitua pelas chaves do seu projeto Firebase (Firebase Console > Project Settings)
+    const firebaseConfig = {
+      apiKey: "COLE_SUA_API_KEY_AQUI",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      projectId: "SEU_PROJETO",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+
+    let app;
+    try {
+      app = initializeApp(firebaseConfig);
+    } catch(e) {
+      console.error("Erro ao inicializar Firebase. Verifique a configuração.", e);
+    }
+
+    const auth = app ? getAuth(app) : null;
+    const db = app ? getFirestore(app) : null;
+
+    window.firebaseApp = { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, collection, getDocs, doc, updateDoc, query, orderBy };
+  </script>
+</head>
+<body>
+
+  <!-- Loading State -->
+  <div id="app-loading" class="fullscreen-center">
+    <div class="spinner"></div>
+    <p>Carregando segurança...</p>
+  </div>
+
+  <!-- Login Section -->
+  <div id="login-section" class="fullscreen-center hidden">
+    <div class="login-card">
+      <img src="Imagens/Vicente_No_Foguete.png" alt="Logo" class="admin-logo">
+      <h2>Acesso Restrito</h2>
+      <p class="subtitle">Área de Logística e Gestão</p>
+      
+      <form id="login-form">
+        <div class="input-group">
+          <label for="email">E-mail Administrativo</label>
+          <input type="email" id="email" required autocomplete="email">
+        </div>
+        <div class="input-group">
+          <label for="password">Senha Segura</label>
+          <input type="password" id="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-primary" id="login-btn">Autenticar</button>
+        <p id="login-error" class="error-msg hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Section -->
+  <div id="dashboard-section" class="hidden">
+    <header class="admin-header">
+      <div class="header-content">
+        <h1>Painel de Vendas</h1>
+        <button id="logout-btn" class="btn-outline">Sair</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="actions-bar">
+        <button id="refresh-btn" class="btn-secondary">Atualizar Pedidos</button>
+      </div>
+
+      <div class="table-container">
+        <table id="orders-table">
+          <thead>
+            <tr>
+              <th>ID Pedido</th>
+              <th>Data</th>
+              <th>Comprador</th>
+              <th>Itens</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <!-- Pedidos injetados aqui -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Etiqueta de Envio (Oculta para visualização normal, usada apenas para impressão) -->
+  <div id="print-label-section" class="print-only hidden">
+    <div class="label-container" id="label-content">
+      <!-- Conteúdo da etiqueta injetado via JS -->
+    </div>
+  </div>
+
+  <script src="admin.js" type="module"></script>
+</body>
+</html>
