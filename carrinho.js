@@ -190,42 +190,15 @@ function renderizarCarrinho() {
   }
 }
 
-// Finaliza a compra conectando com o Mercado Pago Checkout Pro (Modal Integrado)
+// Finaliza a compra redirecionando para a página de checkout transparente (PagBank)
 function finalizarCompraCarrinho() {
   if (carrinho.length === 0) {
     alert('Adicione itens ao carrinho antes de finalizar a compra!');
     return;
   }
 
-  // Se o usuário clicar para finalizar fora de vendas.html, redireciona com ?checkout=true
-  if (typeof MP_PUBLIC_KEY === 'undefined' || typeof MP_PREFERENCE_ID === 'undefined') {
-    window.location.href = 'vendas.html?checkout=true';
-    return;
-  }
-
-  // Se as chaves estiverem pendentes de configuração
-  if (MP_PUBLIC_KEY === 'SUA_PUBLIC_KEY_AQUI' || MP_PREFERENCE_ID === 'SEU_PREFERENCE_ID_AQUI') {
-    alert('Configuração Pendente!\n\nPara que o checkout integrado funcione:\n1. Acesse o código-fonte de "vendas.html"\n2. Localize as variáveis MP_PUBLIC_KEY e MP_PREFERENCE_ID no final do arquivo\n3. Insira suas credenciais reais geradas no painel do Mercado Pago.');
-    return;
-  }
-
-  // Executa o checkout integrado
-  if (typeof MercadoPago !== 'undefined') {
-    try {
-      const mpInstance = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
-      mpInstance.checkout({
-        preference: {
-          id: MP_PREFERENCE_ID
-        },
-        autoOpen: true // Abre o modal flutuante imediatamente
-      });
-    } catch (e) {
-      console.error("Erro ao inicializar o checkout do Mercado Pago:", e);
-      alert('Erro ao carregar o sistema de pagamento. Verifique as credenciais no console.');
-    }
-  } else {
-    alert('Erro ao carregar o sistema de pagamento do Mercado Pago. Verifique sua conexão.');
-  }
+  // Redireciona para o checkout transparente no próprio site
+  window.location.href = 'checkout.html';
 }
 
 // Executa na inicialização: Se na URL vier '?checkout=true', abre o carrinho automaticamente
