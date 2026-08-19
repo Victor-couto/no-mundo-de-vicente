@@ -1313,6 +1313,168 @@
       font-weight: 600;
     }
 
+    /* ── RECURSOS PARA DOWNLOAD ── */
+    .recursos {
+      background: var(--cinza-feat);
+      padding: 88px 40px;
+    }
+
+    .recursos-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .recursos-cabecalho {
+      max-width: 620px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+    .recursos-cabecalho .secao-tag {
+      justify-content: center;
+    }
+    .recursos-cabecalho p {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+    }
+
+    .recursos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 32px;
+    }
+
+    /* Card de recurso individual — copie este bloco no HTML para adicionar um novo item */
+    .recurso-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .recurso-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .recurso-capa {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: var(--azul-hero);
+    }
+    .recurso-capa img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: var(--transition);
+    }
+    .recurso-card:hover .recurso-capa img {
+      transform: scale(1.04);
+    }
+
+    .recurso-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .recurso-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--amarelo-claro);
+      color: var(--laranja);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 5px 14px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .recurso-info h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--navy);
+    }
+
+    .recurso-info p {
+      font-size: 0.88rem;
+      color: var(--texto-leve);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .btn-baixar {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--laranja);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 13px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 8px 16px rgba(232, 121, 42, 0.2);
+    }
+    .btn-baixar:hover {
+      background: #D0641A;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(232, 121, 42, 0.3);
+    }
+
+    /* Card "placeholder" indicando que vêm mais recursos por aí */
+    .recurso-card-em-breve {
+      border: 2px dashed var(--bordas, #D8DDE6);
+      background: transparent;
+      box-shadow: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 24px;
+      gap: 12px;
+      color: var(--texto-mutado);
+      min-height: 260px;
+    }
+    .recurso-card-em-breve:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--laranja);
+    }
+    .recurso-card-em-breve .recurso-em-breve-icone {
+      font-size: 2.2rem;
+    }
+    .recurso-card-em-breve h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--texto-leve);
+    }
+    .recurso-card-em-breve p {
+      font-size: 0.85rem;
+      color: var(--texto-mutado);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .recursos { padding: 56px 20px; }
+      .recursos-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── NEWSLETTER ── */
     .newsletter {
       background: linear-gradient(135deg, #C9E4F5 0%, #D8EEF7 40%, #C5DDED 100%);
@@ -1693,6 +1855,45 @@
 
     <div class="vicente-image-wrap">
       <img src="Imagens/Vicente_Pensativo.png" alt="Ilustração lúdica do Vicente pensativo com a mão no queixo, olhando para cima com curiosidade" width="180" height="231" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RECURSOS PARA DOWNLOAD ═══ -->
+<section class="recursos" id="recursos">
+  <div class="recursos-inner">
+    <div class="recursos-cabecalho reveal">
+      <h2 class="secao-tag">Recursos para brincar e aprender <span class="tag-star" aria-hidden="true">★</span></h2>
+      <p>A leitura não precisa parar quando o livro fecha! Aqui você encontra atividades gratuitas e imprimíveis, pensadas com carinho para prolongar a diversão em casa, na escola ou no consultório — e transformar cada tema do livro em uma brincadeira em família.</p>
+    </div>
+
+    <div class="recursos-grid">
+
+      <!-- ┌─────────────────────────────────────────────────────────────────┐
+           │ CARD DE RECURSO — copie o bloco .recurso-card abaixo para
+           │ adicionar um novo material para download. Troque a imagem,
+           │ a etiqueta (.recurso-tag), o título, a descrição e o link/nome
+           │ do arquivo no atributo download do botão .btn-baixar.
+           └─────────────────────────────────────────────────────────────────┘ -->
+      <div class="recurso-card reveal">
+        <div class="recurso-capa">
+          <img src="Imagens/JOGOS/Caça palavas.png" alt="Atividade de caça-palavras ilustrada com o tema Emoções, com 12 palavras escondidas e emojis coloridos" loading="lazy">
+        </div>
+        <div class="recurso-info">
+          <span class="recurso-tag">Atividade imprimível</span>
+          <h4>Caça-Palavras das Emoções</h4>
+          <p>Alegria, coragem, saudade, orgulho... quantas dessas palavras você consegue encontrar? Uma brincadeira divertida para ajudar a criança a reconhecer e nomear sentimentos enquanto treina atenção e vocabulário.</p>
+          <a href="Imagens/JOGOS/Caça palavas.png" download="Caça-Palavras das Emoções - No Mundo de Vicente.png" class="btn-baixar">⬇ Baixar Gratuitamente</a>
+        </div>
+      </div>
+
+      <!-- Placeholder "em breve": pode ser removido assim que o próximo recurso for adicionado -->
+      <div class="recurso-card recurso-card-em-breve reveal delay-100">
+        <span class="recurso-em-breve-icone" aria-hidden="true">🎁</span>
+        <h4>Mais novidades a caminho!</h4>
+        <p>Estamos preparando fichas de leitura, desenhos para colorir e novos jogos. Volte sempre por aqui.</p>
+      </div>
+
     </div>
   </div>
 </section>
