@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const { items, customer, shipping, idempotency_key, token, payment_method_id, installments, issuer_id } = req.body;
+    const { items, customer, shipping, idempotency_key, token, payment_method_id, installments, issuer_id, device_id } = req.body;
 
     // Validação de campos obrigatórios
     if (!items || !customer || !shipping || !idempotency_key || !payment_method_id) {
@@ -174,12 +174,19 @@ module.exports = async (req, res) => {
 
     // Chamar API de Pagamentos do Mercado Pago
     const url = 'https://api.mercadopago.com/v1/payments';
+    const requestHeaders = {
+      'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+      'X-Idempotency-Key': idempotency_key
+    };
+    // Device ID gerado pelo security.js do Mercado Pago no front-end.
+    // Obrigatório para a análise antifraude da API de pagamentos — sem ele o
+    // Mercado Pago pode recusar a transação com erro de política (UNAUTHORIZED).
+    if (device_id) {
+      requestHeaders['X-meli-session-id'] = device_id;
+    }
     const response = await axios.post(url, payload, {
-      headers: {
-        'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-        'X-Idempotency-Key': idempotency_key
-      },
+      headers: requestHeaders,
       timeout: 12000
     });
 

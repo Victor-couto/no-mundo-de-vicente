@@ -9,6 +9,8 @@
   
   <!-- SDK oficial do Mercado Pago V2 -->
   <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <!-- Script de segurança/antifraude do Mercado Pago (gera o Device ID exigido pela API de pagamentos) -->
+  <script src="https://www.mercadopago.com/v2/security.js" view="checkout"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -207,6 +209,94 @@
     }
     .pag-conteudo-aba.ativo {
       display: block;
+    }
+
+    /* Selo de segurança Mercado Pago */
+    .mp-seguranca-faixa {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, #EAF8FF 0%, #E4F4EC 100%);
+      border: 1px solid #BEE7FA;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: var(--navy);
+      line-height: 1.45;
+    }
+    .mp-seguranca-faixa svg {
+      width: 26px;
+      height: 26px;
+      stroke: #009EE3;
+      flex-shrink: 0;
+    }
+    .mp-seguranca-faixa strong {
+      color: #009EE3;
+    }
+    .mp-logo-oficial {
+      margin-left: auto;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #009EE3;
+      white-space: nowrap;
+      background: white;
+      padding: 6px 12px;
+      border-radius: var(--radius-round);
+      box-shadow: var(--shadow-md);
+    }
+    .mp-logo-oficial svg {
+      width: 18px;
+      height: 18px;
+      stroke: none;
+      fill: #009EE3;
+    }
+    .mp-logo-oficial strong {
+      color: #2D3277;
+    }
+    @media (max-width: 560px) {
+      .mp-seguranca-faixa { flex-wrap: wrap; }
+      .mp-logo-oficial { margin-left: 0; }
+    }
+
+    .mp-selo-resumo {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--texto-mutado);
+      font-weight: 600;
+      text-align: center;
+    }
+    .mp-selo-resumo svg {
+      width: 18px;
+      height: 18px;
+      stroke: #009EE3;
+      flex-shrink: 0;
+    }
+    .mp-selo-resumo strong {
+      color: #009EE3;
+    }
+
+    /* Rodapé de confiança abaixo do Brick */
+    .mp-rodape-confianca {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 18px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--bordas);
+      font-size: 0.8rem;
+      color: var(--texto-mutado);
+      font-weight: 600;
     }
 
     /* Info Pix e Boleto */
@@ -565,9 +655,31 @@
           <h2 class="painel-titulo">
             <span class="painel-num">3</span> Pagamento
           </h2>
-          
+
+          <!-- Selo de segurança Mercado Pago -->
+          <div class="mp-seguranca-faixa">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <div>
+              <strong>Ambiente 100% seguro.</strong>
+              Seu pagamento é processado diretamente pelos servidores do <strong>Mercado Pago</strong>, com criptografia de ponta a ponta. Nós não armazenamos nem temos acesso aos dados do seu cartão.
+            </div>
+            <span class="mp-logo-oficial" aria-label="Mercado Pago">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/></svg>
+              Mercado<strong>Pago</strong>
+            </span>
+          </div>
+
           <div id="paymentBrick_container">
             <p style="color: var(--texto-leve); text-align: center; font-size: 0.95rem;">Carregando opções de pagamento seguras...</p>
+          </div>
+
+          <!-- Rodapé de confiança -->
+          <div class="mp-rodape-confianca">
+            <span>🔒 Conexão criptografada (SSL)</span>
+            <span>🛡️ Compra protegida pelo Mercado Pago</span>
+            <span>✅ PIX, Cartão e Boleto</span>
           </div>
         </div>
 
@@ -601,6 +713,13 @@
         <!-- O botão de finalização será gerido pelo Mercado Pago Brick dentro do painel de pagamento -->
         <div id="btn-submit-placeholder" style="margin-top: 24px; padding: 16px; border-radius: 12px; background: var(--azul-hero); border: 1px solid var(--bordas); text-align: center; font-size: 0.9rem; color: var(--texto-leve); font-weight: 600;">
           💡 Utilize o painel ao lado (Etapa 3) para escolher a forma de pagamento e finalizar a compra.
+        </div>
+
+        <div class="mp-selo-resumo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Compra 100% segura, processada pelo <strong>Mercado Pago</strong></span>
         </div>
       </div>
     </div>
@@ -781,6 +900,9 @@
             const idempotency_key = inicializarIdempotencyKey();
 
             // 4. Payload para o nosso backend
+            // device_id: gerado pelo script de segurança do Mercado Pago (security.js).
+            // É exigido pela análise antifraude da API de pagamentos — sem ele, o Mercado
+            // Pago pode recusar a transação com erro de política (UNAUTHORIZED).
             const payload = {
               token: formData.token,
               payment_method_id: formData.payment_method_id,
@@ -789,7 +911,8 @@
               items: formattedItems,
               customer,
               shipping,
-              idempotency_key
+              idempotency_key,
+              device_id: window.MP_DEVICE_SESSION_ID || ''
             };
 
             fetch('https://no-mundo-de-vicente.vercel.app/api/checkout', {
