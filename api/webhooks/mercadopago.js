@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { db } = require('../utils/firebase-admin');
 
-async function sendNotificationEmail(payment) {
+async function sendNotificationEmail(payment, session) {
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   if (!RESEND_API_KEY) {
     console.error('[Mercado Pago Webhook] RESEND_API_KEY não está configurada no ambiente.');
@@ -10,23 +10,17 @@ async function sendNotificationEmail(payment) {
 
   const paymentId = payment.id;
   const referenceId = payment.external_reference;
-  const metadata = payment.metadata || {};
-  
-  const customerName = metadata.customer_name || 'Não informado';
-  const customerEmail = metadata.customer_email || 'Não informado';
-  const customerCpf = metadata.customer_cpf || 'Não informado';
-  const customerPhone = metadata.customer_phone || 'Não informado';
+  const customer = session.customer || {};
+  const shipping = session.shipping || {};
 
-  const addressStr = `${metadata.shipping_street || ''}, ${metadata.shipping_number || ''} ${metadata.shipping_complement ? `- ${metadata.shipping_complement}` : ''}, ${metadata.shipping_neighborhood || ''}, ${metadata.shipping_city || ''} - ${metadata.shipping_state || ''}, CEP: ${metadata.shipping_cep || ''}`;
+  const customerName = customer.name || 'Não informado';
+  const customerEmail = customer.email || 'Não informado';
+  const customerCpf = customer.cpf || 'Não informado';
+  const customerPhone = customer.phone || 'Não informado';
 
-  let items = [];
-  try {
-    if (metadata.items_json) {
-      items = JSON.parse(metadata.items_json);
-    }
-  } catch (e) {
-    console.error('[Mercado Pago Webhook] Erro ao fazer parse de items_json:', e);
-  }
+  const addressStr = `${shipping.street || ''}, ${shipping.number || ''} ${shipping.complement ? `- ${shipping.complement}` : ''}, ${shipping.neighborhood || ''}, ${shipping.city || ''} - ${shipping.state || ''}, CEP: ${shipping.cep || ''}`;
+
+  const items = session.items || [];
 
   let itemsHtml = '';
   items.forEach(item => {
@@ -188,6 +182,20 @@ module.exports = async (req, res) => {
     console.log(`[Mercado Pago Webhook] Status do pagamento ${paymentId}: ${status}`);
 
     if (status === 'approved') {
+      const referenceId = payment.external_reference || '';
+
+      // Fallback mínimo caso a sessão de checkout não seja encontrada no Firestore
+      let session = {
+        customer: {
+          name: (payment.payer && payment.payer.email) || 'Não informado',
+          email: (payment.payer && payment.payer.email) || 'Não informado',
+          cpf: (payment.payer && payment.payer.identification && payment.payer.identification.number) || '',
+          phone: ''
+        },
+        shipping: {},
+        items: []
+      };
+
       if (db) {
         try {
           const docRef = db.collection('pedidos').doc(paymentId.toString());
@@ -199,65 +207,68 @@ module.exports = async (req, res) => {
             return;
           }
 
-          const metadata = payment.metadata || {};
-          let items = [];
-          try {
-            if (metadata.items_json) {
-              items = JSON.parse(metadata.items_json);
+          // Recupera os dados completos do pedido (cliente, entrega, itens) que foram
+          // salvos em /api/checkout antes do redirecionamento ao Checkout Pro.
+          if (referenceId) {
+            const sessionRef = db.collection('checkout_sessions').doc(referenceId);
+            const sessionSnap = await sessionRef.get();
+            if (sessionSnap.exists) {
+              session = sessionSnap.data();
+              sessionRef.update({ used: true }).catch(() => {});
+            } else {
+              console.warn(`[Mercado Pago Webhook] Sessão de checkout não encontrada para a referência ${referenceId}.`);
             }
-          } catch (e) {
-            console.error('[Mercado Pago Webhook] Erro ao decodificar items_json:', e.message);
           }
 
           const orderData = {
             id: paymentId.toString(),
-            reference_id: payment.external_reference || '',
+            reference_id: referenceId,
             status: 'PAID',
             payment_type: payment.payment_method_id ? payment.payment_method_id.toUpperCase() : 'MERCADO_PAGO',
             created_at: new Date().toISOString(),
             admin_status: 'Aguardando Envio',
-            
+
             customer: {
-              name: metadata.customer_name || (payment.payer && payment.payer.email) || 'Não informado',
-              email: metadata.customer_email || (payment.payer && payment.payer.email) || 'Não informado',
-              tax_id: metadata.customer_cpf || '',
-              phone: metadata.customer_phone || ''
+              name: (session.customer && session.customer.name) || 'Não informado',
+              email: (session.customer && session.customer.email) || 'Não informado',
+              tax_id: (session.customer && session.customer.cpf) || '',
+              phone: (session.customer && session.customer.phone) || ''
             },
-            
+
             shipping: {
               address: {
-                street: metadata.shipping_street || '',
-                number: metadata.shipping_number || '',
-                complement: metadata.shipping_complement || '',
-                locality: metadata.shipping_neighborhood || '',
-                city: metadata.shipping_city || '',
-                region_code: metadata.shipping_state || '',
+                street: (session.shipping && session.shipping.street) || '',
+                number: (session.shipping && session.shipping.number) || '',
+                complement: (session.shipping && session.shipping.complement) || '',
+                locality: (session.shipping && session.shipping.neighborhood) || '',
+                city: (session.shipping && session.shipping.city) || '',
+                region_code: (session.shipping && session.shipping.state) || '',
                 country: 'BRA',
-                postal_code: metadata.shipping_cep || ''
+                postal_code: (session.shipping && session.shipping.cep) || ''
               }
             },
-            
-            items: items.map(item => ({
+
+            items: (session.items || []).map(item => ({
               reference_id: item.id,
               name: item.title || item.name,
               quantity: item.quantity,
               unit_amount: Math.round((item.unit_price || item.unit_amount || 0) * 100)
             })),
-            
+
             total_amount: Math.round(payment.transaction_amount * 100)
           };
 
           await docRef.set(orderData);
           console.log(`[Firebase] Pedido ${paymentId} salvo no Firestore com sucesso.`);
 
-          await sendNotificationEmail(payment);
+          await sendNotificationEmail(payment, session);
 
         } catch (fbErr) {
           console.error('[Firebase Error] Erro ao registrar pedido:', fbErr.message);
         }
       } else {
         console.warn('[Firebase] db não configurado. Enviando apenas e-mail.');
-        await sendNotificationEmail(payment);
+        await sendNotificationEmail(payment, session);
       }
     }
 

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { admin, db } = require('../utils/firebase-admin');
+const { auth, db } = require('../utils/firebase-admin');
 
 module.exports = async (req, res) => {
   // CORS configuration
@@ -21,9 +21,14 @@ module.exports = async (req, res) => {
     return res.status(401).json({ error: 'Não autorizado. Token ausente.' });
   }
 
+  if (!auth) {
+    console.error('[Send Tracking] Firebase Admin não configurado no servidor.');
+    return res.status(500).json({ error: 'Configuração interna pendente (Firebase).' });
+  }
+
   const idToken = authHeader.split('Bearer ')[1];
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    await auth.verifyIdToken(idToken);
     // Usuário autenticado
   } catch (error) {
     console.error('Erro na validação do token Firebase:', error);
