@@ -1,3 +1,14 @@
+// Endereço de remetente impresso nas etiquetas de envio.
+// ⚠️ SUBSTITUA pelos dados reais de onde os pedidos são despachados.
+const REMETENTE = {
+  nome: 'No Mundo de Vicente',
+  rua: 'PREENCHER RUA E NÚMERO',
+  bairro: 'PREENCHER BAIRRO',
+  cidade: 'PREENCHER CIDADE',
+  estado: 'UF',
+  cep: '00000-000'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const fba = window.firebaseApp;
   
@@ -182,44 +193,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Handle Print Label
+  // Gera as barrinhas decorativas do "código de barras" da etiqueta (visual, não é um código de barras real/escaneável)
+  function gerarBarrasDecorativas(seed) {
+    let barras = '';
+    for (let i = 0; i < 40; i++) {
+      barras += '<span></span>';
+    }
+    return barras;
+  }
+
+  // Handle Print Label — imprime só o endereço, em um layout compacto de
+  // etiqueta de envio (estilo Mercado Envios/Correios), sem logo e sem
+  // nenhum dado sensível do comprador (nada de CPF, e-mail ou telefone).
   function handlePrintLabel(e) {
     const tr = e.target.closest('tr');
     const rawData = tr.dataset.orderData;
-    if(!rawData) return;
-    
+    if (!rawData) return;
+
     const data = JSON.parse(rawData);
     const addr = data.shipping?.address || {};
-    
-    const labelHtml = `
-      <div class="label-title">ETIQUETA DE ENVIO</div>
-      
-      <div class="label-section">
-        <strong>REMETENTE:</strong>
-        <div class="label-text">
-          Loja No Mundo de Vicente<br>
-          Rua Fictícia, 123 - Centro<br>
-          São Paulo - SP<br>
-          CEP: 01000-000
-        </div>
-      </div>
-      
-      <hr style="border:1px dashed #ccc; margin: 10mm 0;">
+    const pedidoId = tr.querySelector('td strong')?.textContent || '';
 
-      <div class="label-section">
-        <strong>DESTINATÁRIO:</strong>
-        <div class="label-text" style="font-size: 13pt;">
-          <b>${data.customer?.name}</b><br>
-          ${addr.street}, ${addr.number} ${addr.complement ? '- ' + addr.complement : ''}<br>
-          ${addr.locality}, ${addr.city} - ${addr.region_code}<br>
-          <b>CEP: ${addr.postal_code}</b>
+    const labelHtml = `
+      <div class="label-header">
+        <span class="label-loja">${REMETENTE.nome}</span>
+        <span class="label-pedido">Pedido #${pedidoId}</span>
+      </div>
+
+      <div class="label-cep-destaque">
+        <div class="label-cep-valor">${addr.postal_code || '—'}</div>
+        <div class="label-cep-legenda">CEP de Destino</div>
+      </div>
+
+      <div class="label-barras">${gerarBarrasDecorativas(addr.postal_code)}</div>
+
+      <div class="label-section label-destinatario">
+        <div class="label-section-titulo">Destinatário</div>
+        <div class="label-nome">${data.customer?.name || ''}</div>
+        <div class="label-text">
+          ${addr.street || ''}, ${addr.number || ''}${addr.complement ? ' - ' + addr.complement : ''}<br>
+          ${addr.locality || ''}<br>
+          ${addr.city || ''} - ${addr.region_code || ''}
         </div>
       </div>
+
+      <div class="label-section label-remetente">
+        <div class="label-section-titulo">Remetente</div>
+        <div class="label-text">
+          ${REMETENTE.nome}<br>
+          ${REMETENTE.rua}, ${REMETENTE.bairro}<br>
+          ${REMETENTE.cidade} - ${REMETENTE.estado} · CEP: ${REMETENTE.cep}
+        </div>
+      </div>
+
+      <div class="label-corte">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
     `;
 
     const printSection = document.getElementById('label-content');
     printSection.innerHTML = labelHtml;
-    
+
     window.print();
   }
 
