@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loja de Livros | No Mundo de Vicente</title>
-  <meta name="description" content="Conheça a coleção de livros 'No Mundo de Vicente'. Histórias lúdicas criadas com carinho para acolher, divertir e educar crianças e famílias neurodivergentes.">
+  <title>Recursos | No Mundo de Vicente</title>
+  <meta name="description" content="Baixe gratuitamente atividades e materiais lúdicos do universo No Mundo de Vicente, como o Caça-Palavras das Emoções, para prolongar o aprendizado em casa, na escola ou no consultório.">
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
@@ -212,178 +212,70 @@
       color: var(--laranja);
     }
 
-    /* ── LOJA HERO ── */
-    .loja-hero {
-      background: linear-gradient(135deg, #EAF3FB 0%, #F2EAFA 60%, #FFF5D6 100%);
+    /* ── CONTEÚDO SOBRE ── */
+    .sobre-secao {
+      background: linear-gradient(135deg, #EAF3FB 0%, #FFFFFF 50%, #FFF8E6 100%);
       padding: 80px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      min-height: calc(100vh - 76px - 140px); /* Garante bom preenchimento */
+      display: flex;
+      align-items: center;
     }
 
-    .loja-hero-inner {
-      max-width: 800px;
+    .sobre-inner {
+      max-width: 1100px;
       margin: 0 auto;
-      position: relative;
-      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
       animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .loja-hero h1 {
-      font-size: 3rem;
-      font-weight: 900;
-      color: var(--navy);
-      margin-bottom: 20px;
-      line-height: 1.2;
+    .sobre-image {
+      display: flex;
+      justify-content: center;
+      position: relative;
     }
-    .loja-hero h1 span.destaque-laranja {
-      color: var(--laranja);
-    }
-
-    .loja-hero p {
-      font-size: 1.1rem;
-      color: var(--texto-leve);
-      line-height: 1.8;
-      max-width: 600px;
-      margin: 0 auto;
+    .sobre-image img {
+      width: 100%;
+      max-width: 440px;
+      height: auto;
+      filter: drop-shadow(0 15px 30px rgba(26, 53, 96, 0.15));
+      animation: floatFoguete 6s ease-in-out infinite;
     }
 
-    /* ── SEÇÃO DE LIVROS EM GRADE ── */
-    .loja-livros-secao {
-      background: white;
-      padding: 80px 40px;
-    }
-
-    .loja-livros-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .loja-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      margin-top: 20px;
-    }
-
-    .livro-card {
+    .sobre-texto {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 16px;
-      transition: var(--transition);
+      gap: 20px;
     }
-
-    .livro-capa {
-      width: 100%;
-      aspect-ratio: 3/4;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      box-shadow: 0 10px 28px rgba(26, 53, 96, 0.12), 0 2px 6px rgba(0,0,0,0.08);
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-    .livro-capa::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; bottom: 0;
-      width: 12px;
-      background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0) 80%, rgba(255,255,255,0.1) 90%, rgba(0,0,0,0.05));
-      border-radius: var(--radius-md) 0 0 var(--radius-md);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .livro-capa-titulo {
-      font-family: 'Nunito', sans-serif;
+    .sobre-texto h1 {
+      font-size: 2.8rem;
       font-weight: 900;
-      font-size: 1rem;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      line-height: 1.3;
-      z-index: 1;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 8px;
     }
-
-    .capa-2 { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
-    .capa-3 { background: linear-gradient(135deg, #8D6E4A, #5D4037); }
-    .capa-4 { background: linear-gradient(135deg, #1976D2, #0D47A1); }
-
-    .livro-card h4 {
+    .sobre-texto p {
+      font-size: 1.05rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+    }
+    .sobre-texto p.sobre-destaque {
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--navy);
-      line-height: 1.35;
-      margin-top: 8px;
+      font-size: 1.25rem;
+      color: var(--laranja);
+      margin-top: 16px;
+      margin-bottom: -8px;
     }
-    .livro-card p {
-      font-size: 0.88rem;
-      color: var(--texto-leve);
-      line-height: 1.6;
-    }
-
-    /* Estilo Clicável e Hover */
-    .livro-card-clicavel {
-      cursor: pointer;
-    }
-    .livro-card-clicavel .livro-capa {
-      padding: 0;
-      overflow: hidden;
-      aspect-ratio: unset;
-      height: auto;
-    }
-    .livro-card-clicavel:hover .livro-capa {
-      transform: rotateY(-8deg) translateY(-8px);
-      box-shadow: -8px 15px 32px rgba(26, 53, 96, 0.2);
-    }
-    .livro-capa-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: var(--radius-md);
-    }
-
-    /* Estilo "Em Breve" Transparente / Opaco */
-    .livro-card-breve {
-      opacity: 0.45;
-      pointer-events: none;
-    }
-    .livro-card-breve .livro-capa {
-      background: #D8E0EA !important;
-      box-shadow: none;
-      border: 1px solid rgba(26, 53, 96, 0.08);
-    }
-    .livro-capa-breve-tag {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: #7A8AA0;
+    .sobre-texto p.sobre-frase {
       font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 16px;
-      border-radius: var(--radius-round);
-      white-space: nowrap;
+      font-weight: 900;
+      font-size: 2.2rem;
+      color: var(--laranja);
+      line-height: 1.1;
     }
-    .livro-card-breve .livro-capa-titulo {
-      color: #9AACBF;
-      text-shadow: none;
-      margin-top: 24px;
-      padding: 0 16px;
-    }
-    .livro-card-breve h4 { color: #9AACBF; }
-    .livro-card-breve p  { color: #B0BDCA; }
 
     /* ── FOOTER ── */
     footer {
@@ -413,9 +305,7 @@
     .footer-nav {
       display: flex;
       align-items: center;
-      gap: 0;
     }
-
     .footer-nav a {
       font-family: 'Nunito', sans-serif;
       font-size: 0.87rem;
@@ -434,7 +324,6 @@
       align-items: center;
       gap: 12px;
     }
-
     .social-btn {
       width: 36px;
       height: 36px;
@@ -455,19 +344,196 @@
       color: #9AA5B8;
     }
 
-    /* ── RESPONSIVO ── */
-    @media (max-width: 1024px) {
-      .loja-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    /* Animações */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatFoguete {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(1deg); }
     }
 
+    /* ── RECURSOS PARA DOWNLOAD (página dedicada) ── */
+    .recursos {
+      background: linear-gradient(135deg, #EAF3FB 0%, #FFFFFF 45%, var(--cinza-feat) 100%);
+      padding: 88px 40px;
+      min-height: calc(100vh - 76px - 140px);
+      display: flex;
+      align-items: center;
+    }
+
+    .recursos-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .recursos-cabecalho {
+      max-width: 620px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+    .recursos-cabecalho .secao-tag {
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+    .recursos-cabecalho p {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      line-height: 1.7;
+    }
+
+    .recursos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 32px;
+    }
+
+    /* Card de recurso individual — copie este bloco no HTML para adicionar um novo item */
+    .recurso-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .recurso-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .recurso-capa {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: var(--azul-hero);
+    }
+    .recurso-capa img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: var(--transition);
+    }
+    .recurso-card:hover .recurso-capa img {
+      transform: scale(1.04);
+    }
+
+    .recurso-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .recurso-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--amarelo-claro);
+      color: var(--laranja);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 5px 14px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .recurso-info h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--navy);
+    }
+
+    .recurso-info p {
+      font-size: 0.88rem;
+      color: var(--texto-leve);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .btn-baixar {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--laranja);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 13px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 8px 16px rgba(232, 121, 42, 0.2);
+    }
+    .btn-baixar:hover {
+      background: #D0641A;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(232, 121, 42, 0.3);
+    }
+
+    /* Card "placeholder" indicando que vêm mais recursos por aí */
+    .recurso-card-em-breve {
+      border: 2px dashed var(--bordas, #D8DDE6);
+      background: transparent;
+      box-shadow: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 24px;
+      gap: 12px;
+      color: var(--texto-mutado);
+      min-height: 260px;
+    }
+    .recurso-card-em-breve:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--laranja);
+    }
+    .recurso-card-em-breve .recurso-em-breve-icone {
+      font-size: 2.2rem;
+    }
+    .recurso-card-em-breve h4 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--texto-leve);
+    }
+    .recurso-card-em-breve p {
+      font-size: 0.85rem;
+      color: var(--texto-mutado);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .recursos { padding: 56px 20px; }
+      .recursos-grid { grid-template-columns: 1fr; }
+      .recursos-cabecalho .secao-tag { font-size: 1.7rem; }
+    }
+
+    /* ── RESPONSIVO ── */
     @media (max-width: 850px) {
       nav { display: none; }
       .header-inner .nav-fale { display: none; }
       .menu-toggle { display: flex; }
       
-      .loja-hero { padding: 60px 20px; }
-      .loja-hero h1 { font-size: 2.2rem; }
-      .loja-livros-secao { padding: 60px 20px; }
+      .sobre-secao { padding: 60px 20px; }
+      .sobre-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .sobre-image img { max-width: 320px; }
+      .sobre-texto h1 { font-size: 2.2rem; }
+      .sobre-texto p.sobre-frase { font-size: 1.8rem; }
       
       .footer-top { flex-direction: column; align-items: center; text-align: center; }
       .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
@@ -477,29 +543,8 @@
 
     @media (max-width: 600px) {
       .header-inner { padding: 0 20px; }
-      .loja-grid { grid-template-columns: 1fr; gap: 36px; }
       .footer-nav { display: none; }
     }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform, opacity;
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .delay-100 { transition-delay: 0.1s; }
-    .delay-200 { transition-delay: 0.2s; }
-    .delay-300 { transition-delay: 0.3s; }
   </style>
 </head>
 <body>
@@ -512,14 +557,13 @@
     <nav>
       <a href="index.html#inicio">Início</a>
       <a href="sobre.html">Sobre o Projeto</a>
-      <a href="loja.html" class="ativo">Livros</a>
+      <a href="loja.html">Livros</a>
       <a href="index.html#entrevistas">Entrevistas</a>
-      <a href="recursos.html">Recursos</a>
+      <a href="recursos.html" class="ativo">Recursos</a>
       <a href="instituicoes.html">Para Instituições</a>
       <a href="index.html#blog">Blog</a>
     </nav>
     
-    <!-- Container de Ações de Header -->
     <div class="header-actions">
       <a href="index.html#contato" class="nav-fale">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -549,9 +593,9 @@
 <div class="nav-mobile-content" id="nav-mobile-content">
   <a href="index.html#inicio" onclick="toggleMenuMobile()">Início</a>
   <a href="sobre.html" onclick="toggleMenuMobile()">Sobre o Projeto</a>
-  <a href="loja.html" class="ativo" onclick="toggleMenuMobile()">Livros</a>
+  <a href="loja.html" onclick="toggleMenuMobile()">Livros</a>
   <a href="index.html#entrevistas" onclick="toggleMenuMobile()">Entrevistas</a>
-  <a href="recursos.html" onclick="toggleMenuMobile()">Recursos</a>
+  <a href="recursos.html" class="ativo" onclick="toggleMenuMobile()">Recursos</a>
       <a href="instituicoes.html">Para Instituições</a>
   <a href="index.html#blog" onclick="toggleMenuMobile()">Blog</a>
   <a href="index.html#contato" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
@@ -562,59 +606,46 @@
   </a>
 </div>
 
-<!-- ═══ LOJA HERO ═══ -->
-<section class="loja-hero">
-  <div class="loja-hero-inner">
-    <h1>Conheça Nossos <span class="destaque-laranja">Livros</span></h1>
-    <p>Histórias criadas com amor para celebrar as diferenças, instigar a imaginação e fortalecer a conexão entre pais, educadores e crianças.</p>
-  </div>
-</section>
+<!-- ═══ SEÇÃO RECURSOS ═══ -->
+<section class="recursos" id="recursos">
+  <div class="recursos-inner">
+    <div class="recursos-cabecalho reveal">
+      <h1 class="secao-tag">Recursos para brincar e aprender <span class="tag-star" aria-hidden="true">★</span></h1>
+      <p>A leitura não precisa parar quando o livro fecha! Aqui você encontra atividades gratuitas e imprimíveis, pensadas com carinho para prolongar a diversão em casa, na escola ou no consultório — e transformar cada tema do livro em uma brincadeira em família.</p>
+    </div>
 
-<!-- ═══ SEÇÃO DE LIVROS EM GRADE ═══ -->
-<section class="loja-livros-secao">
-  <div class="loja-livros-inner">
-    <div class="loja-grid">
-      <!-- Entendendo Como Sou — lançado e clicável -->
-      <div class="livro-card livro-card-clicavel reveal" onclick="window.location.href='vendas.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='vendas.html'">
-        <div class="livro-capa">
-          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="280" height="373" loading="eager">
+    <div class="recursos-grid">
+
+      <!-- ┌─────────────────────────────────────────────────────────────────┐
+           │ CARD DE RECURSO — copie o bloco .recurso-card abaixo para
+           │ adicionar um novo material para download. Troque a imagem,
+           │ a etiqueta (.recurso-tag), o título, a descrição e o link/nome
+           │ do arquivo no atributo download do botão .btn-baixar.
+           └─────────────────────────────────────────────────────────────────┘ -->
+      <div class="recurso-card reveal">
+        <div class="recurso-capa">
+          <img src="Imagens/JOGOS/Caça palavas.png" alt="Atividade de caça-palavras ilustrada com o tema Emoções, com 12 palavras escondidas e emojis coloridos" loading="lazy">
         </div>
-        <h4>Entendendo Como Sou</h4>
-        <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
+        <div class="recurso-info">
+          <span class="recurso-tag">Atividade imprimível</span>
+          <h4>Caça-Palavras das Emoções</h4>
+          <p>Alegria, coragem, saudade, orgulho... quantas dessas palavras você consegue encontrar? Uma brincadeira divertida para ajudar a criança a reconhecer e nomear sentimentos enquanto treina atenção e vocabulário.</p>
+          <a href="Imagens/JOGOS/Caça palavas.png" download="Caça-Palavras das Emoções - No Mundo de Vicente.png" class="btn-baixar">⬇ Baixar Gratuitamente</a>
+        </div>
       </div>
 
-      <!-- Vicente, os Bichinhos — em breve -->
-      <div class="livro-card livro-card-breve reveal delay-100" tabindex="0">
-        <div class="livro-capa capa-2">
-          <span class="livro-capa-breve-tag">Em breve</span>
-          <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
-        </div>
-        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
-        <p>Imaginação, curiosidade e descobertas que transformam o mundo.</p>
+      <!-- Placeholder "em breve": pode ser removido assim que o próximo recurso for adicionado -->
+      <div class="recurso-card recurso-card-em-breve reveal delay-100">
+        <span class="recurso-em-breve-icone" aria-hidden="true">🎁</span>
+        <h4>Mais novidades a caminho!</h4>
+        <p>Estamos preparando fichas de leitura, desenhos para colorir e novos jogos. Volte sempre por aqui.</p>
       </div>
 
-      <!-- A Casa dos Três Ventos — em breve -->
-      <div class="livro-card livro-card-breve reveal delay-200" tabindex="0">
-        <div class="livro-capa capa-3">
-          <span class="livro-capa-breve-tag">Em breve</span>
-          <span class="livro-capa-titulo">A Casa dos Três Ventos</span>
-        </div>
-        <h4>A Casa dos Três Ventos</h4>
-        <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
-      </div>
-
-      <!-- A Saudade do Papai — em breve -->
-      <div class="livro-card livro-card-breve reveal delay-300" tabindex="0">
-        <div class="livro-capa capa-4">
-          <span class="livro-capa-breve-tag">Em breve</span>
-          <span class="livro-capa-titulo">A Saudade do Papai</span>
-        </div>
-        <h4>A Saudade do Papai</h4>
-        <p>Saudade, amor e conexão que atravessam distâncias.</p>
-      </div>
     </div>
   </div>
 </section>
+
+
 
 <!-- ═══ FOOTER ═══ -->
 <footer id="contato">
@@ -680,30 +711,6 @@
       menuContent.classList.add('ativo');
     }
   }
-
-  // Sistema de Animação na Rolagem (Scroll Reveal)
-  document.addEventListener('DOMContentLoaded', function() {
-    const elementosRevelar = document.querySelectorAll('.reveal');
-    
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-    
-    const revealObserver = new IntersectionObserver(function(entries, observer) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-    
-    elementosRevelar.forEach(function(el) {
-      revealObserver.observe(el);
-    });
-  });
 </script>
 
 <!-- ═══ GAVETA LATERAL DO CARRINHO ═══ -->
