@@ -1,11 +1,15 @@
 // firebase-admin v14 removeu a API antiga (namespaced: admin.apps, admin.credential,
 // admin.firestore()) do import padrão. É preciso usar a API modular abaixo.
+//
+// Importante: NÃO importar 'firebase-admin/auth' aqui. Esse submódulo puxa
+// jwks-rsa/jose (ESM-only) e quebra o require() no bundler serverless da Vercel
+// (ERR_REQUIRE_ESM), derrubando TODAS as rotas que importam este arquivo — inclusive
+// /api/checkout e o webhook, que nem precisam de autenticação. A rota que realmente
+// precisa (api/admin/send-tracking.js) importa firebase-admin/auth isoladamente.
 const { initializeApp, getApps, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
-const { getAuth } = require('firebase-admin/auth');
 
 let db = null;
-let auth = null;
 
 try {
   if (!getApps().length) {
@@ -29,10 +33,9 @@ try {
 
   if (getApps().length) {
     db = getFirestore();
-    auth = getAuth();
   }
 } catch (error) {
   console.error('[Firebase Admin Error] Erro ao inicializar:', error.message);
 }
 
-module.exports = { db, auth };
+module.exports = { db };

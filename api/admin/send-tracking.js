@@ -1,5 +1,17 @@
 const axios = require('axios');
-const { auth, db } = require('../utils/firebase-admin');
+const { db } = require('../utils/firebase-admin');
+
+// firebase-admin/auth é importado isoladamente aqui (e não no utils/firebase-admin.js
+// compartilhado) porque ele puxa jwks-rsa/jose (ESM-only), que pode falhar ao ser
+// exigido via require() no bundler serverless da Vercel. Isolar o require evita que
+// uma falha aqui derrube as demais rotas (checkout, webhook) que não usam auth.
+let auth = null;
+try {
+  const { getAuth } = require('firebase-admin/auth');
+  auth = getAuth();
+} catch (error) {
+  console.error('[Send Tracking] Falha ao carregar firebase-admin/auth:', error.message);
+}
 
 module.exports = async (req, res) => {
   // CORS configuration
