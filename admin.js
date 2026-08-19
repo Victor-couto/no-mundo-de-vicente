@@ -70,27 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Carregar pedidos
   async function loadOrders() {
-    ordersTbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando pedidos...</td></tr>';
-    
+    ordersTbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Carregando pedidos...</td></tr>';
+
     try {
       const q = fba.query(fba.collection(fba.db, "pedidos"), fba.orderBy("created_at", "desc"));
       const querySnapshot = await fba.getDocs(q);
-      
+
       ordersTbody.innerHTML = '';
-      
+
       if (querySnapshot.empty) {
-        ordersTbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum pedido encontrado.</td></tr>';
+        ordersTbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum pedido encontrado.</td></tr>';
         return;
       }
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const tr = document.createElement('tr');
-        
+
         const date = new Date(data.created_at).toLocaleDateString('pt-BR');
         const status = data.admin_status || 'Aguardando';
         const badgeClass = status.includes('Enviado') ? 'Enviado' : 'Aguardando';
-        
+
         let itemsStr = '';
         let total = 0;
         if (data.items) {
@@ -102,10 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
           total = (data.charges[0].amount.value / 100).toFixed(2).replace('.', ',');
         }
 
+        const addr = data.shipping?.address;
+        let addressStr = '<em style="color:#999;">Não informado</em>';
+        if (addr) {
+          addressStr = `${addr.street || ''}, ${addr.number || ''}${addr.complement ? ' - ' + addr.complement : ''}<br>${addr.locality || ''}, ${addr.city || ''} - ${addr.region_code || ''}<br>CEP: ${addr.postal_code || ''}`;
+        }
+
         tr.innerHTML = `
           <td><strong>${doc.id}</strong></td>
           <td>${date}</td>
           <td>${data.customer?.name}<br><small>${data.customer?.email}</small></td>
+          <td><small>${addressStr}</small></td>
           <td><small>${itemsStr}</small></td>
           <td>R$ ${total}</td>
           <td><span class="badge ${badgeClass}">${status}</span></td>
@@ -130,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error("Erro ao buscar pedidos:", error);
-      ordersTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: red;">Erro ao carregar dados. Verifique a configuração do banco e permissões.</td></tr>';
+      ordersTbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: red;">Erro ao carregar dados. Verifique a configuração do banco e permissões.</td></tr>';
     }
   }
 
