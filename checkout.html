@@ -7,8 +7,8 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- SDK de Criptografia do PagBank -->
-  <script src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"></script>
+  <!-- SDK oficial do Mercado Pago V2 -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -464,7 +464,7 @@
   <div class="checkout-grid">
     <!-- COLUNA DA ESQUERDA: FORMULÁRIOS -->
     <div class="checkout-form-col">
-      <form id="checkout-form" onsubmit="processarPagamento(event)">
+      <form id="checkout-form" onsubmit="return false;">
         
         <!-- ETAPA 1: CONTATO -->
         <div class="painel">
@@ -566,81 +566,9 @@
             <span class="painel-num">3</span> Pagamento
           </h2>
           
-          <div class="pag-abas">
-            <div class="pag-aba ativo" id="aba-pix" onclick="setMetodoPagamento('PIX')">
-              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M9 22V12h6v10M2 12h20"/>
-              </svg>
-              <span>Pix</span>
-            </div>
-            <div class="pag-aba" id="aba-card" onclick="setMetodoPagamento('CARD')">
-              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-              </svg>
-              <span>Cartão</span>
-            </div>
-            <div class="pag-aba" id="aba-boleto" onclick="setMetodoPagamento('BOLETO')">
-              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-              </svg>
-              <span>Boleto</span>
-            </div>
+          <div id="paymentBrick_container">
+            <p style="color: var(--texto-leve); text-align: center; font-size: 0.95rem;">Carregando opções de pagamento seguras...</p>
           </div>
-
-          <!-- Conteúdo Aba Pix -->
-          <div class="pag-conteudo-aba ativo" id="conteudo-pix">
-            <div class="info-pag-bloco">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
-              </svg>
-              <div>
-                <strong>Pix com aprovação imediata:</strong><br>
-                O QR Code será exibido assim que você clicar em "Finalizar". Escaneie com o app do seu banco para pagar.
-              </div>
-            </div>
-          </div>
-
-          <!-- Conteúdo Aba Boleto -->
-          <div class="pag-conteudo-aba" id="conteudo-boleto">
-            <div class="info-pag-bloco">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              <div>
-                <strong>Boleto Bancário (vencimento em 3 dias):</strong><br>
-                Gere o boleto e pague em qualquer banco ou casa lotérica. A confirmação de pagamento pode levar de 1 a 2 dias úteis.
-              </div>
-            </div>
-          </div>
-
-          <!-- Conteúdo Aba Cartão -->
-          <div class="pag-conteudo-aba" id="conteudo-card">
-            <div class="form-grid">
-              <div class="form-group form-col-full">
-                <label for="card-number">Número do Cartão</label>
-                <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" oninput="mascaraCartao(this)">
-              </div>
-              <div class="form-group form-col-full">
-                <label for="card-holder">Nome Impresso no Cartão</label>
-                <input type="text" id="card-holder" placeholder="NOME DO TITULAR">
-              </div>
-              <div class="form-group">
-                <label for="card-expiry">Validade</label>
-                <input type="text" id="card-expiry" placeholder="MM/AAAA" maxlength="7" oninput="mascaraValidade(this)">
-              </div>
-              <div class="form-group">
-                <label for="card-cvv">Código CVV</label>
-                <input type="text" id="card-cvv" placeholder="123" maxlength="4">
-              </div>
-              <div class="form-group form-col-full">
-                <label for="card-installments">Opção de Parcelamento</label>
-                <select id="card-installments">
-                  <!-- Inserido dinamicamente com base no total -->
-                </select>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </form>
@@ -670,9 +598,10 @@
           </div>
         </div>
 
-        <button type="submit" form="checkout-form" class="btn-finalizar" id="btn-submit-finalizar">
-          💳 Confirmar e Pagar
-        </button>
+        <!-- O botão de finalização será gerido pelo Mercado Pago Brick dentro do painel de pagamento -->
+        <div id="btn-submit-placeholder" style="margin-top: 24px; padding: 16px; border-radius: 12px; background: var(--azul-hero); border: 1px solid var(--bordas); text-align: center; font-size: 0.9rem; color: var(--texto-leve); font-weight: 600;">
+          💡 Utilize o painel ao lado (Etapa 3) para escolher a forma de pagamento e finalizar a compra.
+        </div>
       </div>
     </div>
   </div>
@@ -686,7 +615,7 @@
       Processando Pagamento...
     </h2>
     <p style="font-size:1.05rem;color:rgba(255,255,255,0.8)">
-      Aguarde um momento enquanto validamos os dados com o PagBank. Não atualize a página.
+      Aguarde um momento enquanto conectamos você ao Mercado Pago. Não atualize a página.
     </p>
   </div>
 
@@ -696,7 +625,7 @@
       Pedido Confirmado!
     </h2>
     <p style="font-size:1.05rem;color:rgba(255,255,255,0.9);margin-bottom:12px;" id="msg-sucesso-principal">
-      Seu pagamento foi confirmado com sucesso pelo PagBank.
+      Seu pagamento foi confirmado com sucesso pelo Mercado Pago.
     </p>
     
     <!-- Renderizado dinamicamente com base no método de pagamento (Ex: Qr Code do Pix, Código de barras Boleto) -->
@@ -724,56 +653,250 @@
 </div>
 
 <script>
-  let metodoPagamento = 'PIX';
   let valorTotalGlobal = 0;
   let itemsCarrinhoGlobal = [];
-  let pagseguroInstance = null;
-  let pagbankEnvGlobal = 'sandbox';
+  let paymentBrickController = null;
 
-  // Buscar configurações públicas e chave do PagBank do servidor (Fase 4)
-  async function inicializarPagBankConfig() {
-    try {
-      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/pagbank-config');
-      const config = await response.json();
-      
-      if (config.publicKey) {
-        pagbankEnvGlobal = config.environment;
-        pagseguroInstance = PagSeguro({
-          env: config.environment,
-          publicKey: config.publicKey
-        });
-        console.log(`[PagBank SDK] Inicializado com sucesso em modo: ${config.environment}`);
-      } else {
-        throw new Error('Chave pública não retornada pelo servidor.');
-      }
-    } catch (e) {
-      console.error('[PagBank SDK] Erro ao carregar configurações do PagBank do servidor:', e);
-      // Fallback local do Sandbox se falhar, apenas para testes
-      if (typeof PagSeguro === 'function') {
-        pagseguroInstance = PagSeguro({
-          env: 'sandbox',
-          publicKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt'
-        });
-      }
-    }
-  }
-
-  // Chave de Idempotência Única da Sessão de Compra (Fase 8)
+  // Chave de Idempotência Única da Sessão de Compra
   function inicializarIdempotencyKey() {
-    let key = sessionStorage.getItem('pagbank_idempotency_key');
+    let key = sessionStorage.getItem('mercadopago_idempotency_key');
     if (!key) {
-      key = 'idemp-' + Math.random().toString(36).substring(2, 15) + '-' + Date.now();
-      sessionStorage.setItem('pagbank_idempotency_key', key);
+      key = 'mp-idemp-' + Math.random().toString(36).substring(2, 15) + '-' + Date.now();
+      sessionStorage.setItem('mercadopago_idempotency_key', key);
     }
     return key;
   }
 
-  // Carregar dados ao inicializar
-  document.addEventListener('DOMContentLoaded', () => {
-    inicializarPagBankConfig();
-    carregarResumoCarrinho();
-    inicializarIdempotencyKey();
+  // Carregar dados ao inicializar e verificar retornos de pagamento do Mercado Pago
+  document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const paymentId = urlParams.get('payment_id');
+    
+    if (status) {
+      tratarRetornoPagamento(status, paymentId);
+    } else {
+      carregarResumoCarrinho();
+      inicializarIdempotencyKey();
+      
+      // Inicializar Mercado Pago se houver itens no carrinho
+      if (valorTotalGlobal > 0) {
+        await inicializarMercadoPago();
+      }
+    }
   });
+
+  // Inicializar o SDK do Mercado Pago e o Payment Brick
+  async function inicializarMercadoPago() {
+    try {
+      // Buscar a chave pública do servidor
+      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/public-key');
+      const data = await response.json();
+      
+      if (!data.publicKey) {
+        throw new Error('Chave pública não retornada pelo servidor.');
+      }
+      
+      const mp = new window.MercadoPago(data.publicKey);
+      const bricksBuilder = mp.bricks();
+      
+      await renderPaymentBrick(bricksBuilder);
+      
+    } catch (e) {
+      console.error('[Mercado Pago SDK] Erro de inicialização:', e);
+      const container = document.getElementById('paymentBrick_container');
+      if (container) {
+        container.innerHTML = `
+          <div style="color: #EF4444; padding: 16px; border: 1px solid #FCA5A5; border-radius: 8px; background: #FEF2F2; text-align: center;">
+            <strong>Erro ao carregar o sistema de pagamentos.</strong><br>
+            Por favor, recarregue a página ou tente novamente mais tarde.
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Renderizar o Payment Brick
+  async function renderPaymentBrick(bricksBuilder) {
+    const customerEmail = document.getElementById('c-email')?.value || '';
+    
+    const settings = {
+      initialization: {
+        amount: valorTotalGlobal,
+        payer: {
+          email: customerEmail,
+        }
+      },
+      customization: {
+        paymentMethods: {
+          creditCard: 'all',
+          debitCard: 'all',
+          ticket: 'all',
+          bankTransfer: ['pix']
+        },
+        visual: {
+          style: {
+            theme: 'default'
+          }
+        }
+      },
+      callbacks: {
+        onReady: () => {
+          console.log('[Mercado Pago Brick] Carregado.');
+        },
+        onSubmit: ({ selectedPaymentMethod, formData }) => {
+          return new Promise((resolve, reject) => {
+            // 1. Validar formulário local
+            if (!validarFormulario()) {
+              reject(new Error('Formulário local incompleto.'));
+              return;
+            }
+
+            // 2. Exibir overlay de processamento
+            exibirProcessamento();
+
+            // 3. Obter dados da identificação e entrega
+            const customer = {
+              name: document.getElementById('c-nome').value,
+              email: document.getElementById('c-email').value,
+              cpf: document.getElementById('c-cpf').value,
+              phone: document.getElementById('c-phone').value
+            };
+
+            const shipping = {
+              cep: document.getElementById('e-cep').value,
+              street: document.getElementById('e-street').value,
+              number: document.getElementById('e-number').value,
+              complement: document.getElementById('e-complement').value,
+              neighborhood: document.getElementById('e-neighborhood').value,
+              city: document.getElementById('e-city').value,
+              state: document.getElementById('e-state').value
+            };
+
+            const formattedItems = itemsCarrinhoGlobal.map(item => ({
+              id: item.id,
+              quantity: item.qtd
+            }));
+
+            const idempotency_key = inicializarIdempotencyKey();
+
+            // 4. Payload para o nosso backend
+            const payload = {
+              token: formData.token,
+              payment_method_id: formData.payment_method_id,
+              installments: formData.installments,
+              issuer_id: formData.issuer_id,
+              items: formattedItems,
+              customer,
+              shipping,
+              idempotency_key
+            };
+
+            fetch('https://no-mundo-de-vicente.vercel.app/api/checkout', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            })
+            .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
+            .then(({ ok, data }) => {
+              if (!ok || !data.success) {
+                throw new Error(data.error || 'Erro ao processar o pagamento.');
+              }
+
+              // Sucesso! Mostrar modal com os dados
+              exibirSucesso(data);
+              resolve();
+            })
+            .catch(err => {
+              console.error('[Checkout Error]', err);
+              exibirErro(err.message || 'Falha de conexão com o servidor. Tente novamente.');
+              reject(err);
+            });
+          });
+        },
+        onError: (error) => {
+          console.error('[Mercado Pago Brick Error]', error);
+          exibirErro('Ocorreu um erro no módulo do Mercado Pago. Tente recarregar a página.');
+        }
+      }
+    };
+
+    window.paymentBrickController = await bricksBuilder.create(
+      'payment',
+      'paymentBrick_container',
+      settings
+    );
+  }
+
+  // Validar o formulário local do comprador/endereço usando reportValidity()
+  function validarFormulario() {
+    const form = document.getElementById('checkout-form');
+    if (!form) return false;
+    
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return false;
+    }
+    return true;
+  }
+
+  function tratarRetornoPagamento(status, paymentId) {
+    document.getElementById('overlay-status').classList.add('ativo');
+    document.getElementById('status-conteudo-loading').style.display = 'none';
+    
+    const msgPrincipal = document.getElementById('msg-sucesso-principal');
+    const detalhesContainer = document.getElementById('resultado-pagamento-detalhes');
+    detalhesContainer.innerHTML = '';
+
+    if (status === 'success' || status === 'approved') {
+      document.getElementById('status-conteudo-sucesso').style.display = 'flex';
+      document.getElementById('status-conteudo-erro').style.display = 'none';
+      
+      msgPrincipal.textContent = 'Seu pagamento foi confirmado com sucesso pelo Mercado Pago!';
+      
+      detalhesContainer.innerHTML = `
+        <div class="checkout-resultado-box" style="border-left: 5px solid #10B981; padding: 20px; text-align: center; width: 100%;">
+          <p style="font-weight: 700; color: #10B981; font-size: 1.1rem; margin-bottom: 8px;">Compra Concluída!</p>
+          <p style="font-size: 0.95rem; color: var(--texto-leve)">
+            Obrigado pela sua compra! O seu pagamento foi aprovado e o pedido já está sendo preparado para o envio.
+          </p>
+          ${paymentId ? `<p style="font-size: 0.85rem; color: var(--texto-mutado); margin-top: 12px;">ID da Transação: ${paymentId}</p>` : ''}
+        </div>
+      `;
+      
+      localStorage.removeItem('nomundodevicente_cart');
+      sessionStorage.removeItem('mercadopago_idempotency_key');
+      
+    } else if (status === 'pending' || status === 'in_process') {
+      document.getElementById('status-conteudo-sucesso').style.display = 'flex';
+      document.getElementById('status-conteudo-erro').style.display = 'none';
+      
+      msgPrincipal.textContent = 'Seu pagamento está em processamento!';
+      
+      detalhesContainer.innerHTML = `
+        <div class="checkout-resultado-box" style="border-left: 5px solid var(--amarelo); padding: 20px; text-align: center; width: 100%;">
+          <p style="font-weight: 700; color: var(--navy); font-size: 1.1rem; margin-bottom: 8px;">Aguardando Confirmação</p>
+          <p style="font-size: 0.95rem; color: var(--texto-leve)">
+            O Mercado Pago está processando a sua transação (Pix pendente ou análise de cartão). 
+            Assim que a aprovação for confirmada, você receberá um e-mail de notificação.
+          </p>
+          ${paymentId ? `<p style="font-size: 0.85rem; color: var(--texto-mutado); margin-top: 12px;">ID da Transação: ${paymentId}</p>` : ''}
+        </div>
+      `;
+      
+      localStorage.removeItem('nomundodevicente_cart');
+      sessionStorage.removeItem('mercadopago_idempotency_key');
+      
+    } else {
+      document.getElementById('status-conteudo-sucesso').style.display = 'none';
+      document.getElementById('status-conteudo-erro').style.display = 'flex';
+      
+      const msgErro = document.getElementById('msg-erro-detalhes');
+      msgErro.textContent = 'Não foi possível concluir o seu pagamento pelo Mercado Pago. Por favor, tente novamente no checkout ou escolha outro método.';
+    }
+  }
 
   function carregarResumoCarrinho() {
     const listContainer = document.getElementById('resumo-carrinho-itens');
@@ -789,7 +912,6 @@
       listContainer.innerHTML = '<p style="color:var(--texto-leve);font-size:0.9rem;text-align:center;">Seu carrinho está vazio.</p>';
       subtotalSpan.textContent = '0,00';
       totalSpan.textContent = '0,00';
-      document.getElementById('btn-submit-finalizar').disabled = true;
       return;
     }
 
@@ -801,7 +923,6 @@
         listContainer.innerHTML = '<p style="color:var(--texto-leve);font-size:0.9rem;text-align:center;">Seu carrinho está vazio.</p>';
         subtotalSpan.textContent = '0,00';
         totalSpan.textContent = '0,00';
-        document.getElementById('btn-submit-finalizar').disabled = true;
         return;
       }
 
@@ -828,70 +949,8 @@
       subtotalSpan.textContent = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       totalSpan.textContent = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      // Atualizar parcelas do cartão
-      carregarOpcoesParcelamento(total);
-
     } catch (e) {
       console.error('Erro ao ler carrinho:', e);
-    }
-  }
-
-  function carregarOpcoesParcelamento(total) {
-    const installmentsSelect = document.getElementById('card-installments');
-    if (!installmentsSelect) return;
-
-    installmentsSelect.innerHTML = '';
-    
-    // PagBank suporta até 12x. Faremos juros simples ou exibições informativas
-    for (let i = 1; i <= 12; i++) {
-      const valorParcela = total / i;
-      const optionText = i === 1 
-        ? `1x de R$ ${valorParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (Sem juros)`
-        : `${i}x de R$ ${valorParcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (Sem juros)`;
-      
-      const option = document.createElement('option');
-      option.value = i;
-      option.textContent = optionText;
-      installmentsSelect.appendChild(option);
-    }
-  }
-
-  // Alternar abas de pagamento
-  function setMetodoPagamento(metodo) {
-    metodoPagamento = metodo;
-
-    // Remover classe ativo de todas as abas
-    document.getElementById('aba-pix').classList.remove('ativo');
-    document.getElementById('aba-card').classList.remove('ativo');
-    document.getElementById('aba-boleto').classList.remove('ativo');
-
-    // Ocultar todos os conteúdos
-    document.getElementById('conteudo-pix').classList.remove('ativo');
-    document.getElementById('conteudo-card').classList.remove('ativo');
-    document.getElementById('conteudo-boleto').classList.remove('ativo');
-
-    // Ativar o correto
-    if (metodo === 'PIX') {
-      document.getElementById('aba-pix').classList.add('ativo');
-      document.getElementById('conteudo-pix').classList.add('ativo');
-      document.getElementById('card-number').required = false;
-      document.getElementById('card-holder').required = false;
-      document.getElementById('card-expiry').required = false;
-      document.getElementById('card-cvv').required = false;
-    } else if (metodo === 'BOLETO') {
-      document.getElementById('aba-boleto').classList.add('ativo');
-      document.getElementById('conteudo-boleto').classList.add('ativo');
-      document.getElementById('card-number').required = false;
-      document.getElementById('card-holder').required = false;
-      document.getElementById('card-expiry').required = false;
-      document.getElementById('card-cvv').required = false;
-    } else if (metodo === 'CARD') {
-      document.getElementById('aba-card').classList.add('ativo');
-      document.getElementById('conteudo-card').classList.add('ativo');
-      document.getElementById('card-number').required = true;
-      document.getElementById('card-holder').required = true;
-      document.getElementById('card-expiry').required = true;
-      document.getElementById('card-cvv').required = true;
     }
   }
 
@@ -914,154 +973,26 @@
       document.getElementById('e-city').value = data.localidade || '';
       document.getElementById('e-state').value = data.uf || '';
       
-      // Focar no número após preenchimento
       document.getElementById('e-number').focus();
     } catch (e) {
       console.error('Erro ao buscar CEP:', e);
     }
   }
 
-  // ==========================================
-  // FUNÇÃO PRINCIPAL: PROCESSAR PAGAMENTO
-  // ==========================================
-  // Helper para restaurar botão em caso de falha (Fase 14)
-  function restaurarBotaoCheckout() {
-    const btnSubmit = document.getElementById('btn-submit-finalizar');
-    btnSubmit.disabled = false;
-    btnSubmit.textContent = '💳 Confirmar e Pagar';
-  }
-
-  async function processarPagamento(event) {
-    event.preventDefault();
-
-    // Bloqueio de duplo clique e feedback visual (Fase 14)
-    const btnSubmit = document.getElementById('btn-submit-finalizar');
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = '⏳ Processando...';
-
-    // Exibir overlay de loading
+  function exibirProcessamento() {
     document.getElementById('overlay-status').classList.add('ativo');
     document.getElementById('status-conteudo-loading').style.display = 'flex';
     document.getElementById('status-conteudo-sucesso').style.display = 'none';
     document.getElementById('status-conteudo-erro').style.display = 'none';
 
-    // Obter chave de idempotência estável da sessão
-    const idempotency_key = inicializarIdempotencyKey();
-
-    // Obter dados do formulário
-    const customer = {
-      name: document.getElementById('c-nome').value,
-      email: document.getElementById('c-email').value,
-      cpf: document.getElementById('c-cpf').value,
-      phone: document.getElementById('c-phone').value
-    };
-
-    const shipping = {
-      cep: document.getElementById('e-cep').value,
-      street: document.getElementById('e-street').value,
-      number: document.getElementById('e-number').value,
-      complement: document.getElementById('e-complement').value,
-      neighborhood: document.getElementById('e-neighborhood').value,
-      city: document.getElementById('e-city').value,
-      state: document.getElementById('e-state').value
-    };
-
-    const payment_method = {
-      type: metodoPagamento === 'CARD' ? 'CREDIT_CARD' : metodoPagamento
-    };
-
-    // Se for Cartão de Crédito, tokenizar o cartão no lado do cliente (Fase 5)
-    if (payment_method.type === 'CREDIT_CARD') {
-      if (!pagseguroInstance) {
-        exibirErro('O SDK de criptografia de cartão do PagBank não está inicializado.');
-        restaurarBotaoCheckout();
-        return;
-      }
-
-      const rawExpiry = document.getElementById('card-expiry').value.replace(/\D/g, ''); 
-      if (rawExpiry.length !== 6) {
-        exibirErro('Data de validade do cartão incorreta. Use o formato MM/AAAA.');
-        restaurarBotaoCheckout();
-        return;
-      }
-
-      const expMonth = rawExpiry.substring(0, 2);
-      const expYear = '20' + rawExpiry.substring(2); // Converter AA para AAAA se necessário
-
-      try {
-        const cardEncrypt = pagseguroInstance.encryptCard({
-          number: document.getElementById('card-number').value.replace(/\s/g, ''),
-          holder: document.getElementById('card-holder').value,
-          expMonth: expMonth,
-          expYear: expYear,
-          cvv: document.getElementById('card-cvv').value
-        });
-
-        if (cardEncrypt.hasErrors) {
-          console.error('Erros na criptografia do cartão:', cardEncrypt.errors);
-          const firstError = cardEncrypt.errors[0];
-          exibirErro(`Dados do cartão inválidos: ${firstError.message || 'Verifique os dados.'}`);
-          restaurarBotaoCheckout();
-          return;
-        }
-
-        payment_method.card_token = cardEncrypt.encryptedCard;
-        payment_method.installments = document.getElementById('card-installments').value;
-
-        // Limpar dados do formulário sensíveis após criptografar (Fase 5 e 14)
-        document.getElementById('card-number').value = '';
-        document.getElementById('card-cvv').value = '';
-
-      } catch (e) {
-        console.error('Falha de criptografia de cartão:', e);
-        exibirErro('Erro ao processar chaves de segurança do cartão. Tente novamente.');
-        restaurarBotaoCheckout();
-        return;
-      }
-    }
-
-    // Formatar itens para enviar apenas o ID e quantidade (Fase 7)
-    const formattedItems = itemsCarrinhoGlobal.map(item => ({
-      id: item.id,
-      quantity: item.qtd
-    }));
-
-    // Preparar dados do payload para a API
-    const payload = {
-      items: formattedItems,
-      customer,
-      shipping,
-      payment_method,
-      idempotency_key
-    };
-
-    // Chamar a Serverless Function do backend (/api/checkout)
-    try {
-      const response = await fetch('https://no-mundo-de-vicente.vercel.app/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro no processamento do pagamento.');
-      }
-
-      // Sucesso na transação!
-      exibirSucesso(data);
-
-    } catch (err) {
-      console.error('Erro no checkout de rede:', err);
-      exibirErro(err.message || 'Falha de conexão com o servidor. Tente novamente.');
-      restaurarBotaoCheckout();
-    }
+    const loadingHeading = document.querySelector('#status-conteudo-loading h2');
+    const loadingText = document.querySelector('#status-conteudo-loading p');
+    if (loadingHeading) loadingHeading.textContent = 'Processando Pagamento...';
+    if (loadingText) loadingText.textContent = 'Aguarde um momento enquanto validamos a transação com segurança. Não atualize a página.';
   }
 
   function exibirSucesso(data) {
+    document.getElementById('overlay-status').classList.add('ativo');
     document.getElementById('status-conteudo-loading').style.display = 'none';
     document.getElementById('status-conteudo-sucesso').style.display = 'flex';
     document.getElementById('status-conteudo-erro').style.display = 'none';
@@ -1071,14 +1002,14 @@
 
     const msgPrincipal = document.getElementById('msg-sucesso-principal');
 
-    if (data.paymentType === 'PIX') {
+    if (data.paymentMethodId === 'pix' && data.pix) {
       msgPrincipal.textContent = 'Pedido reservado! Efetue o pagamento via Pix para confirmar a compra.';
       
       const pixHtml = `
-        <div class="checkout-resultado-box">
+        <div class="checkout-resultado-box" style="border-left: 5px solid var(--amarelo);">
           <p style="font-weight:700;font-size:0.95rem;margin-bottom:8px;">Aponte a câmera do seu banco para o QR Code abaixo:</p>
-          <img src="${data.pix.qrcodeImage}" alt="QR Code Pix" class="qrcode-img">
-          <p style="font-size:0.85rem;color:var(--texto-leve);margin-top:4px;">Ou utilize o código Copia e Cola:</p>
+          <img src="data:image/png;base64,${data.pix.qrcodeImage}" alt="QR Code Pix" class="qrcode-img">
+          <p style="font-size:0.85rem;color:var(--texto-leve);margin-top:12px;">Ou utilize o código Copia e Cola abaixo:</p>
           <div class="copia-cola-container">
             <input type="text" readonly class="copia-cola-input" value="${data.pix.qrcodeText}" id="pix-copia-cola-text">
             <button type="button" class="btn-copiar" onclick="copiarTexto('pix-copia-cola-text', this)">Copiar Código</button>
@@ -1087,55 +1018,66 @@
       `;
       detalhesContainer.innerHTML = pixHtml;
 
-    } else if (data.paymentType === 'BOLETO') {
+    } else if ((data.paymentMethodId === 'bolbradesco' || data.paymentMethodId === 'pec') && data.boleto) {
       msgPrincipal.textContent = 'Boleto bancário gerado com sucesso!';
       
-      const dataVenc = new Date(data.boleto.dueDate);
-      const vencStr = dataVenc.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+      let vencStr = 'Vencimento em breve';
+      if (data.boleto.dueDate) {
+        const dataVenc = new Date(data.boleto.dueDate);
+        vencStr = dataVenc.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+      }
 
       const boletoHtml = `
-        <div class="checkout-resultado-box">
+        <div class="checkout-resultado-box" style="border-left: 5px solid var(--amarelo);">
           <p style="font-weight:700;font-size:0.95rem;margin-bottom:8px;">Vencimento do Boleto: <strong>${vencStr}</strong></p>
-          <p style="font-size:0.85rem;color:var(--texto-leve);text-align:center;">Copie a linha digitável do código de barras para pagamento:</p>
+          <p style="font-size:0.85rem;color:var(--texto-leve);text-align:center;margin-top:4px;">Copie a linha digitável do código de barras para pagamento:</p>
           <div class="copia-cola-container">
             <input type="text" readonly class="copia-cola-input" value="${data.boleto.barcode}" id="boleto-bar-text">
             <button type="button" class="btn-copiar" onclick="copiarTexto('boleto-bar-text', this)">Copiar</button>
           </div>
-          <a href="${data.boleto.pdf}" target="_blank" rel="noopener" class="btn-boleto-pdf">
+          <a href="${data.boleto.pdf}" target="_blank" rel="noopener" class="btn-boleto-pdf" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
             📄 Visualizar e Imprimir Boleto PDF
           </a>
         </div>
       `;
       detalhesContainer.innerHTML = boletoHtml;
 
-    } else if (data.paymentType === 'CREDIT_CARD') {
-      if (data.status === 'PAID' || data.status === 'AUTHORIZED') {
+    } else {
+      // Cartão ou outro método aprovado / pendente
+      if (data.status === 'approved') {
         msgPrincipal.textContent = 'Pagamento Aprovado! Seu pedido já está sendo preparado.';
         detalhesContainer.innerHTML = `
           <div class="checkout-resultado-box" style="border-left:5px solid #10B981">
             <p style="font-weight:700;color:#10B981;font-size:1.1rem;margin-bottom:4px;">Sucesso!</p>
-            <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">O PagBank confirmou o pagamento no seu cartão de crédito com sucesso.</p>
+            <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">O Mercado Pago confirmou o pagamento no seu cartão de crédito com sucesso.</p>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 8px;">Transação ID: ${data.paymentId}</p>
           </div>
         `;
-      } else if (data.status === 'IN_ANALYSIS') {
-        msgPrincipal.textContent = 'Pagamento em análise pelo PagBank.';
+      } else if (data.status === 'in_process') {
+        msgPrincipal.textContent = 'Pagamento em análise pelo Mercado Pago.';
         detalhesContainer.innerHTML = `
           <div class="checkout-resultado-box" style="border-left:5px solid var(--amarelo)">
             <p style="font-weight:700;color:var(--navy);font-size:1.1rem;margin-bottom:4px;">Transação em Análise</p>
-            <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">A sua transação está passando por análise cadastral de segurança. Você receberá a confirmação por e-mail.</p>
+            <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">A sua transação está passando por análise cadastral de segurança do Mercado Pago. Você receberá a confirmação por e-mail.</p>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 8px;">Transação ID: ${data.paymentId}</p>
           </div>
         `;
       } else {
-        // Recusado ou erro genérico
-        exibirErro(data.message || 'Cartão recusado. Verifique os dados ou escolha outra forma de pagamento.');
-        restaurarBotaoCheckout();
-        return;
+        // Fallback genérico de sucesso
+        msgPrincipal.textContent = 'Pedido finalizado!';
+        detalhesContainer.innerHTML = `
+          <div class="checkout-resultado-box" style="border-left:5px solid #10B981">
+            <p style="font-weight:700;color:#10B981;font-size:1.1rem;margin-bottom:4px;">Transação Finalizada</p>
+            <p style="font-size:0.95rem;text-align:center;color:var(--texto-leve)">Status: ${data.status} (${data.statusDetail})</p>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 8px;">Transação ID: ${data.paymentId}</p>
+          </div>
+        `;
       }
     }
 
-    // Limpar carrinho local e chave de idempotência de sucesso (Fase 8 e 14)
+    // Limpar carrinho e idempotência
     localStorage.removeItem('nomundodevicente_cart');
-    sessionStorage.removeItem('pagbank_idempotency_key');
+    sessionStorage.removeItem('mercadopago_idempotency_key');
   }
 
   function exibirErro(msg) {
@@ -1153,11 +1095,13 @@
     window.location.href = 'index.html';
   }
 
-  // Copiar código para área de transferência
+  // Copiar código para a área de transferência
   function copiarTexto(inputId, buttonEl) {
     const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    
     inputEl.select();
-    inputEl.setSelectionRange(0, 99999); // Mobile
+    inputEl.setSelectionRange(0, 99999);
     
     try {
       navigator.clipboard.writeText(inputEl.value);
@@ -1169,7 +1113,6 @@
         buttonEl.style.background = 'var(--navy)';
       }, 2000);
     } catch (err) {
-      // Fallback
       document.execCommand('copy');
       buttonEl.textContent = 'Copiado! ✓';
       setTimeout(() => {
@@ -1199,18 +1142,6 @@
   function mascaraCEP(el) {
     let value = el.value.replace(/\D/g, '');
     value = value.replace(/^(\d{5})(\d)/, '$1-$2');
-    el.value = value;
-  }
-
-  function mascaraCartao(el) {
-    let value = el.value.replace(/\D/g, '');
-    value = value.replace(/(\d{4})(\d)/g, '$1 $2');
-    el.value = value.trim();
-  }
-
-  function mascaraValidade(el) {
-    let value = el.value.replace(/\D/g, '');
-    value = value.replace(/(\d{2})(\d)/, '$1/$2');
     el.value = value;
   }
 </script>

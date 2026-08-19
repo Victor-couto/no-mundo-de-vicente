@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-// Tabela de Preços Oficiais Server-Side (Crucial para FASE 7)
+// Tabela de Preços Oficiais Server-Side
 const PRODUTOS_OFICIAIS = {
   'entendendo-como-sou': {
     name: 'Livro Entendendo Como Sou',
@@ -9,7 +9,7 @@ const PRODUTOS_OFICIAIS = {
 };
 
 module.exports = async (req, res) => {
-  // CORS Same-Origin de Segurança (Prioriza mesmo domínio na Vercel)
+  // CORS Same-Origin de Segurança
   res.setHeader('Access-Control-Allow-Origin', '*'); 
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Idempotency-Key');
@@ -25,38 +25,30 @@ module.exports = async (req, res) => {
   }
 
   // Obter e validar variáveis de ambiente
-  const PAGBANK_ENV = process.env.PAGBANK_ENV || 'sandbox';
-  const PAGBANK_TOKEN = process.env.PAGBANK_TOKEN;
+  const MERCADO_PAGO_ACCESS_TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN;
   const APP_BASE_URL = process.env.APP_BASE_URL || 'https://no-mundo-de-vicente.vercel.app';
 
-  if (PAGBANK_ENV !== 'sandbox' && PAGBANK_ENV !== 'production') {
-    console.error('[PagBank Checkout] Configuração PAGBANK_ENV inválida.');
-    res.status(500).json({ success: false, error: 'Erro de configuração interna do servidor.' });
-    return;
-  }
-
-  if (!PAGBANK_TOKEN) {
-    console.error('[PagBank Checkout] Credencial PAGBANK_TOKEN ausente.');
+  if (!MERCADO_PAGO_ACCESS_TOKEN) {
+    console.error('[Mercado Pago Checkout] Credencial MERCADO_PAGO_ACCESS_TOKEN ausente.');
     res.status(500).json({ success: false, error: 'Credenciais de pagamento não configuradas no servidor.' });
     return;
   }
 
   try {
-    // 1. Limite de tamanho de request básico e validação de corpo vazio
     if (!req.body || typeof req.body !== 'object') {
       res.status(400).json({ success: false, error: 'Corpo da requisição inválido.' });
       return;
     }
 
-    const { items, customer, shipping, payment_method, idempotency_key } = req.body;
+    const { items, customer, shipping, idempotency_key, token, payment_method_id, installments, issuer_id } = req.body;
 
-    // 2. Validação de campos obrigatórios
-    if (!items || !customer || !shipping || !payment_method || !idempotency_key) {
-      res.status(400).json({ success: false, error: 'Dados da requisição incompletos.' });
+    // Validação de campos obrigatórios
+    if (!items || !customer || !shipping || !idempotency_key || !payment_method_id) {
+      res.status(400).json({ success: false, error: 'Dados da requisição incompletos (checkout transparente).' });
       return;
     }
 
-    // 3. Validação de CPF, E-mail e Telefone (Fase 12)
+    // Validação de CPF, E-mail e Telefone
     const cleanCpf = customer.cpf ? customer.cpf.replace(/\D/g, '') : '';
     if (cleanCpf.length !== 11) {
       res.status(400).json({ success: false, error: 'CPF inválido. Deve conter 11 dígitos.' });
@@ -75,8 +67,8 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 4. Validação Server-Side do Preço dos Produtos (Fase 7)
-    let totalCalculadoCentavos = 0;
+    // Validação Server-Side do Preço dos Produtos
+    let totalCalculado = 0;
     const formattedItems = [];
 
     for (const item of items) {
@@ -93,200 +85,146 @@ module.exports = async (req, res) => {
         return;
       }
 
-      // Preço oficial do servidor em centavos
-      const itemPriceCentavos = Math.round(itemOficial.price * 100);
-      const subtotalItem = itemPriceCentavos * quantity;
+      const itemPrice = itemOficial.price;
+      const subtotalItem = itemPrice * quantity;
       
-      totalCalculadoCentavos += subtotalItem;
+      totalCalculado += subtotalItem;
 
       formattedItems.push({
-        reference_id: item.id,
-        name: itemOficial.name,
+        id: item.id,
+        title: itemOficial.name,
         quantity: quantity,
-        unit_amount: itemPriceCentavos
+        unit_price: itemPrice,
+        currency_id: 'BRL'
       });
     }
 
-    if (totalCalculadoCentavos <= 0) {
+    if (totalCalculado <= 0) {
       res.status(400).json({ success: false, error: 'O valor total do pedido deve ser maior que zero.' });
       return;
     }
 
-    // 5. Preparar Endereço e Dados do Cliente para o PagBank
+    // Preparar dados do comprador e endereço
     const areaCode = cleanPhone.substring(0, 2);
     const phoneNumber = cleanPhone.substring(2);
 
-    const stateCodes = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
-    const regionCode = shipping.state ? shipping.state.toUpperCase().trim() : '';
-    if (!stateCodes.includes(regionCode)) {
-      res.status(400).json({ success: false, error: 'Sigla de estado de entrega inválida.' });
-      return;
-    }
+    // Separar primeiro e último nome
+    const nameParts = customer.name.trim().split(/\s+/);
+    const firstName = nameParts[0] || 'Comprador';
+    const lastName = nameParts.slice(1).join(' ') || 'Silva';
 
-    const customerObj = {
-      name: customer.name,
-      email: customer.email,
-      tax_id: cleanCpf,
-      phones: [{
-        country: '55',
-        area: areaCode,
-        number: phoneNumber,
-        type: 'MOBILE'
-      }]
+    const payerObj = {
+      email: customer.email.trim(),
+      first_name: firstName,
+      last_name: lastName,
+      identification: {
+        type: 'CPF',
+        number: cleanCpf
+      },
+      address: {
+        zip_code: shipping.cep.replace(/\D/g, ''),
+        street_name: shipping.street,
+        street_number: parseInt(shipping.number) || 0,
+        neighborhood: shipping.neighborhood,
+        city: shipping.city,
+        federal_unit: shipping.state ? shipping.state.toUpperCase().trim() : 'SP'
+      }
     };
 
-    const shippingAddressObj = {
-      street: shipping.street,
-      number: shipping.number,
-      complement: shipping.complement || '',
-      locality: shipping.neighborhood,
-      city: shipping.city,
-      region_code: regionCode,
-      country: 'BRA',
-      postal_code: shipping.cep.replace(/\D/g, '')
+    // Configurar URLs de retorno e webhook
+    const baseDomain = APP_BASE_URL.replace(/\/$/, '');
+    const notificationUrl = `${baseDomain}/api/webhooks/mercadopago`;
+
+    // Armazenar detalhes de entrega e identificação nos metadados para recuperação no Webhook
+    const metadata = {
+      idempotency_key: idempotency_key,
+      customer_name: customer.name,
+      customer_email: customer.email,
+      customer_cpf: cleanCpf,
+      customer_phone: cleanPhone,
+      shipping_cep: shipping.cep.replace(/\D/g, ''),
+      shipping_street: shipping.street,
+      shipping_number: shipping.number,
+      shipping_complement: shipping.complement || '',
+      shipping_neighborhood: shipping.neighborhood,
+      shipping_city: shipping.city,
+      shipping_state: shipping.state ? shipping.state.toUpperCase().trim() : '',
+      items_json: JSON.stringify(formattedItems)
     };
 
-    // Configurar URL da API de Pedidos do PagBank (Sandbox vs Produção)
-    const baseUrl = PAGBANK_ENV === 'sandbox'
-      ? 'https://sandbox.api.pagseguro.com/orders'
-      : 'https://api.pagseguro.com/orders';
-
-    // URL de Notificação para Webhook
-    const notificationUrls = [];
-    if (APP_BASE_URL) {
-      notificationUrls.push(`${APP_BASE_URL.replace(/\/$/, '')}/api/webhooks/pagbank`);
-    }
-
-    // Montar a Payload do Pedido
+    // Montar o payload do pagamento transparente (/v1/payments)
     const payload = {
-      reference_id: `ref-${Date.now()}-${idempotency_key.substring(0, 6)}`,
-      customer: customerObj,
-      items: formattedItems,
-      shipping: {
-        address: shippingAddressObj
-      },
-      notification_urls: notificationUrls
+      transaction_amount: parseFloat(totalCalculado.toFixed(2)),
+      description: 'Compra No Mundo de Vicente',
+      payment_method_id: payment_method_id,
+      payer: payerObj,
+      notification_url: notificationUrl,
+      external_reference: `ref-${Date.now()}-${idempotency_key.substring(0, 6)}`,
+      metadata: metadata
     };
 
-    // Injetar dados de pagamento conforme o método escolhido
-    if (payment_method.type === 'PIX') {
-      payload.qr_codes = [{
-        amount: {
-          value: totalCalculadoCentavos
-        },
-        expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 horas de validade
-      }];
-    } else if (payment_method.type === 'BOLETO') {
-      const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + 3); // 3 dias de vencimento
-      const formattedDueDate = dueDate.toISOString().split('T')[0];
-
-      payload.charges = [{
-        reference_id: `charge-boleto-${Date.now()}`,
-        amount: {
-          value: totalCalculadoCentavos,
-          currency: 'BRL'
-        },
-        payment_method: {
-          type: 'BOLETO',
-          boleto: {
-            due_date: formattedDueDate,
-            instruction_lines: {
-              line_1: 'Pagável em qualquer banco até o vencimento.',
-              line_2: 'Não receber após o vencimento.'
-            },
-            holder: {
-              name: customerObj.name,
-              tax_id: customerObj.tax_id,
-              email: customerObj.email,
-              address: shippingAddressObj
-            }
-          }
-        }
-      }];
-    } else if (payment_method.type === 'CREDIT_CARD') {
-      payload.charges = [{
-        reference_id: `charge-card-${Date.now()}`,
-        amount: {
-          value: totalCalculadoCentavos,
-          currency: 'BRL'
-        },
-        payment_method: {
-          type: 'CREDIT_CARD',
-          installments: parseInt(payment_method.installments) || 1,
-          capture: true,
-          card: {
-            encrypted: payment_method.card_token
-          }
-        }
-      }];
-    } else {
-      res.status(400).json({ success: false, error: 'Método de pagamento inválido.' });
-      return;
+    // Adicionar campos específicos para cartão se fornecidos
+    if (token) {
+      payload.token = token;
+      payload.installments = parseInt(installments) || 1;
+      if (issuer_id) {
+        payload.issuer_id = parseInt(issuer_id);
+      }
     }
 
-    // 6. Chamada com Tratamento de Timeouts e Idempotência (Fase 8 e 12)
-    const response = await axios.post(baseUrl, payload, {
+    // Chamar API de Pagamentos do Mercado Pago
+    const url = 'https://api.mercadopago.com/v1/payments';
+    const response = await axios.post(url, payload, {
       headers: {
-        'Authorization': `Bearer ${PAGBANK_TOKEN}`,
+        'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
-        'x-idempotency-key': idempotency_key
+        'X-Idempotency-Key': idempotency_key
       },
-      timeout: 10000 // Timeout de 10 segundos
+      timeout: 12000
     });
 
-    // 7. Normalização das Respostas ao Cliente (Fase 9)
-    const order = response.data;
+    const payment = response.data;
+    console.log(`[Mercado Pago Payments API] Pagamento criado com sucesso. ID: ${payment.id}, Status: ${payment.status}, Ref: ${payload.external_reference}`);
+
+    // Formatar resposta simplificada para o cliente
     const responseData = {
       success: true,
-      orderId: order.id,
-      referenceId: order.reference_id,
-      paymentType: payment_method.type
+      paymentId: payment.id,
+      status: payment.status,
+      statusDetail: payment.status_detail,
+      paymentMethodId: payment.payment_method_id,
+      externalReference: payment.external_reference
     };
 
-    if (payment_method.type === 'PIX') {
-      const qrCodeObj = order.qr_codes[0];
-      const pngLink = qrCodeObj.links.find(l => l.media === 'image/png') || qrCodeObj.links[0];
+    // Adicionar dados específicos de Pix
+    if (payment.payment_method_id === 'pix' && payment.point_of_interaction?.transaction_data) {
       responseData.pix = {
-        qrcodeImage: pngLink ? pngLink.href : '',
-        qrcodeText: qrCodeObj.text
+        qrcodeImage: payment.point_of_interaction.transaction_data.qr_code_base64,
+        qrcodeText: payment.point_of_interaction.transaction_data.qr_code
       };
-      responseData.status = 'WAITING'; // Pix inicia aguardando pagamento
-    } else if (payment_method.type === 'BOLETO') {
-      const charge = order.charges[0];
-      const pdfLink = charge.links.find(l => l.media === 'application/pdf');
-      
-      responseData.chargeId = charge.id;
-      responseData.status = charge.status; // EX: WAITING
-      responseData.boleto = {
-        barcode: charge.payment_response.payment_method.boleto.barcode,
-        pdf: pdfLink ? pdfLink.href : '',
-        dueDate: charge.payment_response.payment_method.boleto.due_date
-      };
-    } else if (payment_method.type === 'CREDIT_CARD') {
-      const charge = order.charges[0];
-      responseData.chargeId = charge.id;
-      responseData.status = charge.status; // PAID, DECLINED, IN_ANALYSIS
-      responseData.message = charge.payment_response ? charge.payment_response.message : '';
     }
 
-    // Registrar log básico desprovido de chaves privadas ou dados de cartão (Fase 12)
-    console.log(`[PagBank Checkout] Pedido criado com sucesso. OrderID: ${order.id}, Status: ${responseData.status}`);
+    // Adicionar dados específicos de Boleto
+    if (payment.payment_method_id === 'bolbradesco' || payment.payment_method_id === 'pec') {
+      responseData.boleto = {
+        barcode: payment.transaction_details?.barcode?.content || payment.barcode?.content || '',
+        pdf: payment.transaction_details?.external_resource_url || '',
+        dueDate: payment.date_of_expiration || ''
+      };
+    }
 
     res.status(200).json(responseData);
 
   } catch (error) {
-    // Tratamento de falha de rede ou erros retornados pela API do PagBank
     const apiError = error.response ? error.response.data : null;
     
-    console.error('[PagBank Checkout Error] Erro ao processar pagamento:', 
+    console.error('[Mercado Pago Payments Error] Erro ao processar pagamento:', 
       apiError ? JSON.stringify(apiError) : error.message
     );
 
-    // Não retornar stack trace ou dados confidenciais ao cliente
-    const clientErrorMessage = apiError && apiError.error_messages 
-      ? apiError.error_messages.map(m => m.description).join(' ') 
-      : 'Ocorreu um erro ao processar o seu pagamento com o PagBank. Verifique seus dados.';
+    const clientErrorMessage = apiError && apiError.message 
+      ? apiError.message 
+      : 'Ocorreu um erro ao processar o seu pagamento com o Mercado Pago. Tente novamente.';
 
     res.status(error.response ? error.response.status : 500).json({
       success: false,

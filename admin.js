@@ -96,7 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.items) {
           itemsStr = data.items.map(i => `${i.quantity}x ${i.name}`).join('<br>');
         }
-        if (data.charges && data.charges[0]) {
+        if (typeof data.total_amount === 'number') {
+          total = (data.total_amount / 100).toFixed(2).replace('.', ',');
+        } else if (data.charges && data.charges[0]) {
           total = (data.charges[0].amount.value / 100).toFixed(2).replace('.', ',');
         }
 
