@@ -9,6 +9,9 @@ const PRODUTOS_OFICIAIS = {
   }
 };
 
+// Frete único, cobrado em todo pedido (mesmo valor exibido no checkout.html)
+const FRETE_PADRAO = 7.49;
+
 module.exports = async (req, res) => {
   // CORS Same-Origin de Segurança
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -107,6 +110,16 @@ module.exports = async (req, res) => {
       res.status(400).json({ success: false, error: 'O valor total do pedido deve ser maior que zero.' });
       return;
     }
+
+    // Adiciona o frete único como um item à parte na cobrança
+    formattedItems.push({
+      id: 'frete-padrao',
+      title: 'Frete',
+      quantity: 1,
+      unit_price: FRETE_PADRAO,
+      currency_id: 'BRL'
+    });
+    totalCalculado += FRETE_PADRAO;
 
     // Preparar dados do comprador e endereço
     const areaCode = cleanPhone.substring(0, 2);

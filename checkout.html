@@ -719,7 +719,7 @@
           </div>
           <div class="resumo-linha">
             <span>Frete:</span>
-            <span style="color: var(--teal); font-weight: 700;">Grátis</span>
+            <span>R$ <span id="resumo-frete">7,49</span></span>
           </div>
           <div class="resumo-linha total">
             <span>Total:</span>
@@ -957,9 +957,15 @@
     }
   }
 
+  // Frete único fixo, cobrado em todo pedido (independente da quantidade de itens).
+  // Precisa ser o mesmo valor usado no backend (api/checkout.js), que é quem
+  // efetivamente calcula o total cobrado no Mercado Pago.
+  const FRETE_PADRAO = 7.49;
+
   function carregarResumoCarrinho() {
     const listContainer = document.getElementById('resumo-carrinho-itens');
     const subtotalSpan = document.getElementById('resumo-subtotal');
+    const freteSpan = document.getElementById('resumo-frete');
     const totalSpan = document.getElementById('resumo-total');
 
     if (!listContainer) return;
@@ -970,6 +976,7 @@
     if (!itensStr) {
       listContainer.innerHTML = '<p style="color:var(--texto-leve);font-size:0.9rem;text-align:center;">Seu carrinho está vazio.</p>';
       subtotalSpan.textContent = '0,00';
+      freteSpan.textContent = '0,00';
       totalSpan.textContent = '0,00';
       return;
     }
@@ -977,18 +984,19 @@
     try {
       const itens = JSON.parse(itensStr);
       itemsCarrinhoGlobal = itens;
-      
+
       if (itens.length === 0) {
         listContainer.innerHTML = '<p style="color:var(--texto-leve);font-size:0.9rem;text-align:center;">Seu carrinho está vazio.</p>';
         subtotalSpan.textContent = '0,00';
+        freteSpan.textContent = '0,00';
         totalSpan.textContent = '0,00';
         return;
       }
 
-      let total = 0;
+      let subtotal = 0;
       itens.forEach(item => {
         const itemTotal = item.preco * item.qtd;
-        total += itemTotal;
+        subtotal += itemTotal;
         const itemHtml = `
           <div class="resumo-item">
             <img src="${item.img || 'Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg'}" alt="${item.titulo}" class="resumo-item-img">
@@ -1004,8 +1012,10 @@
         listContainer.insertAdjacentHTML('beforeend', itemHtml);
       });
 
+      const total = subtotal + FRETE_PADRAO;
       valorTotalGlobal = total;
-      subtotalSpan.textContent = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      subtotalSpan.textContent = subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      freteSpan.textContent = FRETE_PADRAO.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       totalSpan.textContent = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     } catch (e) {
