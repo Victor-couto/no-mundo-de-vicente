@@ -881,69 +881,59 @@
     }
 
     /* ── DEPOIMENTOS ── */
+    /* ── DEPOIMENTOS ── */
     .depoimentos-section {
       background: var(--azul-hero);
       padding: 80px 40px;
     }
 
+    /* Grade de Relatos (Prints de WhatsApp) */
     .depoimentos-grid {
-      max-width: 1200px;
-      margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
+      max-width: 1200px;
+      margin: 30px auto 0;
     }
 
-    .depoimento-card {
+    .depoimento-card-print {
       background: white;
-      border-radius: var(--radius-md);
-      padding: 36px;
+      border-radius: var(--radius-lg);
+      padding: 12px;
       box-shadow: var(--shadow-sm);
       border: 1px solid rgba(26, 53, 96, 0.04);
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .estrelas-avaliacao {
-      color: var(--amarelo);
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-    }
-
-    .depoimento-card p {
-      font-size: 0.95rem;
-      color: var(--texto-leve);
-      line-height: 1.7;
-      font-style: italic;
-      margin-bottom: 24px;
-    }
-
-    .autor-depoimento {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .autor-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #D8E0EA;
-      display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      transition: var(--transition);
     }
 
-    .autor-nome h4 {
-      font-size: 0.92rem;
-      font-weight: 800;
-      color: var(--navy);
+    .depoimento-card-print:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
     }
-    .autor-nome span {
-      font-size: 0.78rem;
-      color: var(--texto-mutado);
+
+    .depoimento-card-print img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-md);
+      display: block;
+    }
+
+    /* Ajuste para responsivo */
+    @media (max-width: 1024px) {
+      .depoimentos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .depoimentos-grid {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+        margin: 30px auto 0;
+      }
     }
 
     /* ── FAQ SEÇÃO ── */
@@ -1426,48 +1416,26 @@
 </section>
 
 <!-- ═══ DEPOIMENTOS ═══ -->
-<section class="depoimentos-section">
+<section class="depoimentos-section" id="depoimentos">
   <div class="secao-titulo-vendas reveal">
     <h2>Quem já leu, recomenda!</h2>
     <p>Veja o carinho de quem abriu as portas para o Mundo de Vicente:</p>
   </div>
   
   <div class="depoimentos-grid">
-    <div class="depoimento-card reveal">
-      <div class="estrelas-avaliacao">★★★★★</div>
-      <p>"O livro trouxe conversas incríveis aqui em casa. Meu filho se identificou muito com o Vicente e começou a explicar como ele sente as coisas."</p>
-      <div class="autor-depoimento">
-        <div class="autor-avatar">👩</div>
-        <div class="autor-nome">
-          <h4>Mariana S.</h4>
-          <span>Mãe do Leo (6 anos)</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="depoimento-card reveal delay-100">
-      <div class="estrelas-avaliacao">★★★★★</div>
-      <p>"Como psicopedagoga, recomendo fortemente. O Jogo da Memória da Conexão é maravilhoso para usar em consultório e estreitar vínculos emocionais."</p>
-      <div class="autor-depoimento">
-        <div class="autor-avatar">🩺</div>
-        <div class="autor-nome">
-          <h4>Ana Cláudia R.</h4>
-          <span>Psicopedagoga Clínica</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="depoimento-card reveal delay-200">
-      <div class="estrelas-avaliacao">★★★★★</div>
-      <p>"Uma história sensível, colorida e muito necessária. Mostra para as crianças atípicas que seus sentimentos e seus mundos são incrivelmente importantes."</p>
-      <div class="autor-depoimento">
-        <div class="autor-avatar">👨</div>
-        <div class="autor-nome">
-          <h4>Roberto F.</h4>
-          <span>Pai do Tiago (8 anos)</span>
-        </div>
-      </div>
-    </div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.10.jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.10 (1).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.11.jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.11 (1).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.11 (2).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.11 (3).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.11 (4).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.12.jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.12 (1).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.12 (2).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.12 (3).jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.13.jpeg" alt="Relato de leitor" loading="lazy"></div>
+    <div class="depoimento-card-print reveal"><img src="Relatos/WhatsApp Image 2026-08-20 at 17.00.13 (1).jpeg" alt="Relato de leitor" loading="lazy"></div>
   </div>
 </section>
 
