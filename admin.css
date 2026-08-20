@@ -224,15 +224,19 @@ td {
     top: 0;
     width: 100%;
   }
+  /* Folha A4 inteira; a etiqueta ocupa só a metade superior (~135mm de
+     altura útil, com folga de segurança) para otimizar o papel — corta-se
+     na linha tracejada e a metade de baixo fica livre para reaproveitar. */
   @page {
-    size: 100mm 150mm;
-    margin: 0;
+    size: A4;
+    margin: 10mm;
   }
   .label-container {
-    width: 100mm;
-    height: 150mm;
+    width: 190mm;
+    max-width: 100%;
+    height: 128mm;
     border: 1.5px solid #000;
-    padding: 6mm;
+    padding: 5mm 6mm;
     box-sizing: border-box;
     font-family: 'Helvetica', 'Arial', sans-serif;
     color: #000;
@@ -245,39 +249,57 @@ td {
     align-items: baseline;
     border-bottom: 1.5px solid #000;
     padding-bottom: 3mm;
-    margin-bottom: 5mm;
+    margin-bottom: 4mm;
   }
   .label-header .label-loja {
     font-weight: bold;
-    font-size: 11pt;
+    font-size: 13pt;
     letter-spacing: 0.5px;
   }
   .label-header .label-pedido {
-    font-size: 9pt;
+    font-size: 10pt;
   }
-  .label-cep-destaque {
+
+  /* Corpo em duas colunas: CEP + código de barras à esquerda,
+     destinatário/remetente à direita — aproveita a largura da folha A4 */
+  .label-corpo {
+    flex: 1;
+    display: flex;
+    gap: 6mm;
+    min-height: 0;
+  }
+
+  .label-coluna-esquerda {
+    width: 48mm;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1.5px dashed #000;
+    padding-right: 6mm;
     text-align: center;
-    margin-bottom: 5mm;
   }
   .label-cep-destaque .label-cep-valor {
     font-weight: bold;
-    font-size: 26pt;
-    letter-spacing: 2px;
-    line-height: 1;
+    font-size: 22pt;
+    letter-spacing: 1px;
+    line-height: 1.15;
   }
   .label-cep-destaque .label-cep-legenda {
-    font-size: 8pt;
+    font-size: 7.5pt;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: #333;
+    margin-top: 1mm;
   }
   .label-barras {
     display: flex;
     align-items: flex-end;
-    gap: 0.6mm;
-    height: 12mm;
-    margin: 0 auto 5mm;
-    width: 80%;
+    gap: 0.5mm;
+    height: 14mm;
+    width: 100%;
+    margin-top: 6mm;
   }
   .label-barras span {
     background: #000;
@@ -288,10 +310,17 @@ td {
   .label-barras span:nth-child(5n) { height: 80%; }
   .label-barras span:nth-child(7n) { height: 45%; }
 
+  .label-coluna-direita {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4mm;
+    min-width: 0;
+  }
+
   .label-section {
     border: 1px solid #000;
     padding: 3mm 4mm;
-    margin-bottom: 4mm;
   }
   .label-section-titulo {
     font-size: 8pt;
@@ -303,25 +332,25 @@ td {
   }
   .label-destinatario .label-nome {
     font-weight: bold;
-    font-size: 13pt;
+    font-size: 14pt;
     margin-bottom: 1.5mm;
   }
   .label-text {
-    font-size: 10.5pt;
+    font-size: 11pt;
     line-height: 1.5;
   }
   .label-remetente {
     margin-top: auto;
   }
   .label-remetente .label-text {
-    font-size: 9pt;
+    font-size: 9.5pt;
     color: #333;
   }
   .label-corte {
     text-align: center;
-    font-size: 7pt;
+    font-size: 8pt;
     color: #666;
     letter-spacing: 2px;
-    margin-top: 3mm;
+    margin-top: 4mm;
   }
 }

@@ -220,33 +220,36 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="label-pedido">Pedido #${pedidoId}</span>
       </div>
 
-      <div class="label-cep-destaque">
-        <div class="label-cep-valor">${addr.postal_code || '—'}</div>
-        <div class="label-cep-legenda">CEP de Destino</div>
-      </div>
+      <div class="label-corpo">
+        <div class="label-coluna-esquerda">
+          <div class="label-cep-destaque">
+            <div class="label-cep-valor">${addr.postal_code || '—'}</div>
+            <div class="label-cep-legenda">CEP de Destino</div>
+          </div>
+          <div class="label-barras">${gerarBarrasDecorativas(addr.postal_code)}</div>
+        </div>
 
-      <div class="label-barras">${gerarBarrasDecorativas(addr.postal_code)}</div>
+        <div class="label-coluna-direita">
+          <div class="label-section label-destinatario">
+            <div class="label-section-titulo">Destinatário</div>
+            <div class="label-nome">${data.customer?.name || ''}</div>
+            <div class="label-text">
+              ${addr.street || ''}, ${addr.number || ''}${addr.complement ? ' - ' + addr.complement : ''}<br>
+              ${addr.locality || ''}<br>
+              ${addr.city || ''} - ${addr.region_code || ''}
+            </div>
+          </div>
 
-      <div class="label-section label-destinatario">
-        <div class="label-section-titulo">Destinatário</div>
-        <div class="label-nome">${data.customer?.name || ''}</div>
-        <div class="label-text">
-          ${addr.street || ''}, ${addr.number || ''}${addr.complement ? ' - ' + addr.complement : ''}<br>
-          ${addr.locality || ''}<br>
-          ${addr.city || ''} - ${addr.region_code || ''}
+          <div class="label-section label-remetente">
+            <div class="label-section-titulo">Remetente</div>
+            <div class="label-text">
+              ${REMETENTE.nome}<br>
+              ${REMETENTE.rua}, ${REMETENTE.bairro}<br>
+              ${REMETENTE.cidade} - ${REMETENTE.estado} · CEP: ${REMETENTE.cep}
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="label-section label-remetente">
-        <div class="label-section-titulo">Remetente</div>
-        <div class="label-text">
-          ${REMETENTE.nome}<br>
-          ${REMETENTE.rua}, ${REMETENTE.bairro}<br>
-          ${REMETENTE.cidade} - ${REMETENTE.estado} · CEP: ${REMETENTE.cep}
-        </div>
-      </div>
-
-      <div class="label-corte">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div>
     `;
 
     const printSection = document.getElementById('label-content');
