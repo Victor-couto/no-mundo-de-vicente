@@ -1279,6 +1279,40 @@
       transform: translateY(-4px) scale(1.02);
     }
 
+    .vicente-quote {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: var(--shadow-sm);
+      margin-top: 8px;
+      margin-right: 140px; /* Evita que a citação sobreponha a imagem de Vicente */
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: var(--transition);
+      border: 1px solid rgba(26, 53, 96, 0.03);
+    }
+    .vicente-quote:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .vicente-quote blockquote {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .vicente-quote cite {
+      font-size: 0.95rem;
+      color: var(--texto-leve);
+      font-style: normal;
+      font-weight: 600;
+    }
+
     /* ── NEWSLETTER ── */
     .newsletter {
       background: linear-gradient(135deg, #C9E4F5 0%, #D8EEF7 40%, #C5DDED 100%);
@@ -1652,8 +1686,10 @@
   <!-- Painel direito — amarelo claro -->
   <div class="entrev-painel ep-dir reveal delay-200">
     <h2>O que estão dizendo sobre nossas histórias <span style="color:var(--amarelo)" aria-hidden="true">★</span></h2>
-    <p style="font-size: 0.95rem; color: var(--texto-leve); line-height: 1.8; max-width: 320px;">Quem já leu, recomenda! Pais, educadores e especialistas compartilham o carinho e a emoção de vivenciar o universo lúdico de Vicente.</p>
-    <a href="vendas.html#depoimentos" class="btn-amarelo-solid" style="align-self: flex-start; margin-top: 10px;">Ver relatos completos →</a>
+    <div class="vicente-quote">
+      <blockquote>"Tenho muitas perguntas e uma imaginação do tamanho do céu!"</blockquote>
+      <cite>– Vicente</cite>
+    </div>
 
     <div class="vicente-image-wrap">
       <img src="Imagens/Vicente_Pensativo.png" alt="Ilustração lúdica do Vicente pensativo com a mão no queixo, olhando para cima com curiosidade" width="180" height="231" loading="lazy" decoding="async">
