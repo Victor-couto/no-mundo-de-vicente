@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recursos | No Mundo de Vicente</title>
-  <meta name="description" content="Baixe gratuitamente atividades e materiais lúdicos do universo No Mundo de Vicente, como o Caça-Palavras das Emoções, para prolongar o aprendizado em casa, na escola ou no consultório.">
+  <title>Entrevistas | No Mundo de Vicente</title>
+  <meta name="description" content="Conversas sobre infância, neurodivergência, aprendizado e afeto. Confira as entrevistas com especialistas, educadores e famílias no projeto No Mundo de Vicente.">
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
@@ -50,7 +50,7 @@
       font-family: 'Inter', sans-serif;
       color: var(--texto);
       line-height: 1.6;
-      background: #fff;
+      background: #fdfdfd;
       padding-top: 76px;
     }
 
@@ -150,7 +150,6 @@
       transition: var(--transition);
       transform-origin: left center;
     }
-    .menu-toggle:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; }
     
     .menu-toggle.ativo span:nth-child(1) {
       transform: rotate(45deg);
@@ -165,7 +164,7 @@
       background-color: var(--laranja);
     }
 
-    /* Menu Mobile */
+    /* Menu Mobile Overlay */
     .nav-mobile-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -211,70 +210,204 @@
       background: var(--azul-hero);
       color: var(--laranja);
     }
-
-    /* ── CONTEÚDO SOBRE ── */
-    .sobre-secao {
-      background: linear-gradient(135deg, #EAF3FB 0%, #FFFFFF 50%, #FFF8E6 100%);
-      padding: 80px 40px;
-      min-height: calc(100vh - 76px - 140px); /* Garante bom preenchimento */
-      display: flex;
-      align-items: center;
-    }
-
-    .sobre-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 60px;
-      align-items: center;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .sobre-image {
-      display: flex;
+    .nav-mobile-content .nav-fale-mobile {
+      margin-top: 20px;
+      text-align: center;
       justify-content: center;
-      position: relative;
-    }
-    .sobre-image img {
-      width: 100%;
-      max-width: 440px;
-      height: auto;
-      filter: drop-shadow(0 15px 30px rgba(26, 53, 96, 0.15));
-      animation: floatFoguete 6s ease-in-out infinite;
     }
 
-    .sobre-texto {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    /* ── HERO SEÇÃO ── */
+    .entrev-hero {
+      background: linear-gradient(135deg, #EAF3FB 0%, #FFFFFF 50%, #E4F4EC 100%);
+      padding: 60px 40px 40px;
+      text-align: center;
     }
-    .sobre-texto h1 {
+    .entrev-hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .entrev-hero h1 {
       font-size: 2.8rem;
       font-weight: 900;
       color: var(--navy);
-      line-height: 1.2;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
-    .sobre-texto p {
+    .entrev-hero h1 span.destaque-laranja {
+      color: var(--laranja);
+    }
+    .entrev-hero p {
       font-size: 1.05rem;
       color: var(--texto-leve);
-      line-height: 1.8;
+      line-height: 1.7;
     }
-    .sobre-texto p.sobre-destaque {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--laranja);
-      margin-top: 16px;
-      margin-bottom: -8px;
+
+    /* ── CONTAINER PRINCIPAL DAS ENTREVISTAS ── */
+    .entrevistas-feed {
+      max-width: 1000px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
     }
-    .sobre-texto p.sobre-frase {
+
+    /* CARD DE UMA ENTREVISTA */
+    .entrevista-artigo {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(26, 53, 96, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+    .entrevista-artigo:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Cabeçalho da Entrevista (Autor, Tags, Foto) */
+    .artigo-header {
+      background: var(--cinza-feat);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 36px;
+      align-items: center;
+      border-bottom: 1px solid rgba(26, 53, 96, 0.05);
+    }
+
+    .artigo-perfil-img {
+      width: 220px;
+      height: 310px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+      object-position: center top;
+      border: 5px solid white;
+      box-shadow: var(--shadow-md);
+      justify-self: center;
+    }
+
+    .artigo-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .artigo-badge {
+      align-self: flex-start;
+      background: var(--teal);
+      color: white;
       font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 16px;
+      border-radius: var(--radius-round);
+    }
+
+    .artigo-meta h2 {
+      font-size: 1.8rem;
       font-weight: 900;
-      font-size: 2.2rem;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+
+    .artigo-meta p.cargo {
+      font-size: 0.95rem;
+      color: var(--texto-mutado);
+      font-weight: 600;
+      margin-top: -4px;
+    }
+
+    .artigo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .tag-item {
+      background: rgba(26, 53, 96, 0.05);
+      color: var(--navy);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Conteúdo da Entrevista */
+    .artigo-conteudo {
+      padding: 48px;
+    }
+
+    /* Apresentação */
+    .apresentacao-box {
+      background: var(--amarelo-claro);
+      border-left: 5px solid var(--amarelo);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .apresentacao-box p {
+      font-size: 1.02rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .apresentacao-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Bloco de Perguntas e Respostas */
+    .perguntas-respostas {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .bloco-qa {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bloco-qa h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .bloco-qa h3::before {
+      content: "P.";
       color: var(--laranja);
-      line-height: 1.1;
+      font-weight: 900;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .bloco-qa .resposta-texto {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      line-height: 1.8;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    .bloco-qa .resposta-texto::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: rgba(26, 53, 96, 0.08);
     }
 
     /* ── FOOTER ── */
@@ -344,201 +477,46 @@
       color: #9AA5B8;
     }
 
-    /* Animações */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes floatFoguete {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(1deg); }
-    }
-
-    /* ── RECURSOS PARA DOWNLOAD (página dedicada) ── */
-    .recursos {
-      background: linear-gradient(135deg, #EAF3FB 0%, #FFFFFF 45%, var(--cinza-feat) 100%);
-      padding: 88px 40px;
-      min-height: calc(100vh - 76px - 140px);
-      display: flex;
-      align-items: center;
-    }
-
-    .recursos-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .recursos-cabecalho {
-      max-width: 620px;
-      margin: 0 auto 48px;
-      text-align: center;
-    }
-    .recursos-cabecalho .secao-tag {
-      justify-content: center;
-      font-size: 2.2rem;
-    }
-    .recursos-cabecalho p {
-      font-size: 1rem;
-      color: var(--texto-leve);
-      line-height: 1.7;
-    }
-
-    .recursos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 32px;
-    }
-
-    /* Card de recurso individual — copie este bloco no HTML para adicionar um novo item */
-    .recurso-card {
-      background: white;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-    }
-    .recurso-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .recurso-capa {
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      overflow: hidden;
-      background: var(--azul-hero);
-    }
-    .recurso-capa img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: var(--transition);
-    }
-    .recurso-card:hover .recurso-capa img {
-      transform: scale(1.04);
-    }
-
-    .recurso-info {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    .recurso-tag {
-      display: inline-block;
-      align-self: flex-start;
-      background: var(--amarelo-claro);
-      color: var(--laranja);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 0.72rem;
-      padding: 5px 14px;
-      border-radius: 50px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .recurso-info h4 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 1.15rem;
-      color: var(--navy);
-    }
-
-    .recurso-info p {
-      font-size: 0.88rem;
-      color: var(--texto-leve);
-      line-height: 1.6;
-      flex: 1;
-    }
-
-    .btn-baixar {
-      margin-top: 8px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--laranja);
-      color: white;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 0.88rem;
-      padding: 13px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 8px 16px rgba(232, 121, 42, 0.2);
-    }
-    .btn-baixar:hover {
-      background: #D0641A;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(232, 121, 42, 0.3);
-    }
-
-    /* Card "placeholder" indicando que vêm mais recursos por aí */
-    .recurso-card-em-breve {
-      border: 2px dashed var(--bordas, #D8DDE6);
-      background: transparent;
-      box-shadow: none;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 32px 24px;
-      gap: 12px;
-      color: var(--texto-mutado);
-      min-height: 260px;
-    }
-    .recurso-card-em-breve:hover {
-      transform: none;
-      box-shadow: none;
-      border-color: var(--laranja);
-    }
-    .recurso-card-em-breve .recurso-em-breve-icone {
-      font-size: 2.2rem;
-    }
-    .recurso-card-em-breve h4 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--texto-leve);
-    }
-    .recurso-card-em-breve p {
-      font-size: 0.85rem;
-      color: var(--texto-mutado);
-      line-height: 1.6;
-    }
-
-    @media (max-width: 640px) {
-      .recursos { padding: 56px 20px; }
-      .recursos-grid { grid-template-columns: 1fr; }
-      .recursos-cabecalho .secao-tag { font-size: 1.7rem; }
-    }
-
     /* ── RESPONSIVO ── */
     @media (max-width: 850px) {
       nav { display: none; }
       .header-inner .nav-fale { display: none; }
       .menu-toggle { display: flex; }
       
-      .sobre-secao { padding: 60px 20px; }
-      .sobre-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-      .sobre-image img { max-width: 320px; }
-      .sobre-texto h1 { font-size: 2.2rem; }
-      .sobre-texto p.sobre-frase { font-size: 1.8rem; }
+      .entrev-hero { padding: 40px 20px; }
+      .entrev-hero h1 { font-size: 2.2rem; }
+      
+      .artigo-header {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+        text-align: center;
+        gap: 20px;
+      }
+      .artigo-perfil-img {
+        width: 200px;
+        height: 285px;
+        border-radius: var(--radius-lg);
+      }
+      .artigo-meta {
+        align-items: center;
+      }
+      .artigo-badge {
+        align-self: center;
+      }
+      .artigo-conteudo {
+        padding: 24px;
+      }
+      .apresentacao-box {
+        padding: 20px;
+        margin-bottom: 28px;
+      }
+      .bloco-qa h3 {
+        font-size: 1.05rem;
+      }
       
       .footer-top { flex-direction: column; align-items: center; text-align: center; }
       .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
-      .footer-nav a { border-right: none;   white-space: nowrap;
-    }
+      .footer-nav a { border-right: none; white-space: nowrap; }
     }
 
     @media (max-width: 600px) {
@@ -558,8 +536,8 @@
       <a href="index.html#inicio">Início</a>
       <a href="sobre.html">Sobre o Projeto</a>
       <a href="loja.html">Livros</a>
-      <a href="entrevistas.html">Entrevistas</a>
-      <a href="recursos.html" class="ativo">Recursos</a>
+      <a href="entrevistas.html" class="ativo">Entrevistas</a>
+      <a href="recursos.html">Recursos</a>
       <a href="instituicoes.html">Para Instituições</a>
       <a href="index.html#blog">Blog</a>
     </nav>
@@ -571,6 +549,7 @@
         </svg>
         Fale Conosco
       </a>
+      
       <!-- Ícone de Carrinho no Menu -->
       <button class="menu-carrinho-btn" onclick="abrirCarrinho()" aria-label="Abrir carrinho de compras">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -594,9 +573,9 @@
   <a href="index.html#inicio" onclick="toggleMenuMobile()">Início</a>
   <a href="sobre.html" onclick="toggleMenuMobile()">Sobre o Projeto</a>
   <a href="loja.html" onclick="toggleMenuMobile()">Livros</a>
-  <a href="entrevistas.html" onclick="toggleMenuMobile()">Entrevistas</a>
-  <a href="recursos.html" class="ativo" onclick="toggleMenuMobile()">Recursos</a>
-      <a href="instituicoes.html">Para Instituições</a>
+  <a href="entrevistas.html" class="ativo" onclick="toggleMenuMobile()">Entrevistas</a>
+  <a href="recursos.html" onclick="toggleMenuMobile()">Recursos</a>
+  <a href="instituicoes.html" onclick="toggleMenuMobile()">Para Instituições</a>
   <a href="index.html#blog" onclick="toggleMenuMobile()">Blog</a>
   <a href="index.html#contato" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;">
@@ -606,53 +585,128 @@
   </a>
 </div>
 
-<!-- ═══ SEÇÃO RECURSOS ═══ -->
-<section class="recursos" id="recursos">
-  <div class="recursos-inner">
-    <div class="recursos-cabecalho reveal">
-      <h1 class="secao-tag">Recursos para brincar e aprender <span class="tag-star" aria-hidden="true">★</span></h1>
-      <p>A leitura não precisa parar quando o livro fecha! Aqui você encontra atividades gratuitas e imprimíveis, pensadas com carinho para prolongar a diversão em casa, na escola ou no consultório — e transformar cada tema do livro em uma brincadeira em família.</p>
-    </div>
-
-    <div class="recursos-grid">
-
-      <!-- ┌─────────────────────────────────────────────────────────────────┐
-           │ CARD DE RECURSO — copie o bloco .recurso-card abaixo para
-           │ adicionar um novo material para download. Troque a imagem,
-           │ a etiqueta (.recurso-tag), o título, a descrição e o link/nome
-           │ do arquivo no atributo download do botão .btn-baixar.
-           └─────────────────────────────────────────────────────────────────┘ -->
-      <div class="recurso-card reveal">
-        <div class="recurso-capa">
-          <img src="Imagens/JOGOS/Caça palavas.png" alt="Atividade de caça-palavras ilustrada com o tema Emoções, com 12 palavras escondidas e emojis coloridos" loading="lazy">
-        </div>
-        <div class="recurso-info">
-          <span class="recurso-tag">Atividade imprimível</span>
-          <h4>Caça-Palavras das Emoções</h4>
-          <p>Alegria, coragem, saudade, orgulho... quantas dessas palavras você consegue encontrar? Uma brincadeira divertida para ajudar a criança a reconhecer e nomear sentimentos enquanto treina atenção e vocabulário.</p>
-          <a href="Imagens/JOGOS/Caça palavas.png" download="Caça-Palavras das Emoções - No Mundo de Vicente.png" class="btn-baixar">⬇ Baixar Gratuitamente</a>
-        </div>
-      </div>
-
-      <!-- Placeholder "em breve": pode ser removido assim que o próximo recurso for adicionado -->
-      <div class="recurso-card recurso-card-em-breve reveal delay-100">
-        <span class="recurso-em-breve-icone" aria-hidden="true">🎁</span>
-        <h4>Mais novidades a caminho!</h4>
-        <p>Estamos preparando fichas de leitura, desenhos para colorir e novos jogos. Volte sempre por aqui.</p>
-      </div>
-
-    </div>
+<!-- ═══ HERO ENTREVISTAS ═══ -->
+<section class="entrev-hero">
+  <div class="entrev-hero-inner">
+    <h1>Conversas que <span class="destaque-laranja">Inspiram</span></h1>
+    <p>Diálogos semanais sobre infância, aprendizagem, neurodivergência e afeto. Um espaço de escuta e acolhimento com especialistas, educadores e famílias atípicas.</p>
   </div>
 </section>
 
+<!-- ═══ FEED DE ENTREVISTAS ═══ -->
+<main class="entrevistas-feed">
 
+  <!-- AQUI FICARÃO AS NOVAS ENTREVISTAS (NO TOPO) -->
+
+  <!-- Entrevista: Fernanda Tavares -->
+  <article class="entrevista-artigo">
+    <div class="artigo-header">
+      <img src="entrevista/Fernanda Tavares.jpeg" alt="Foto de Fernanda Tavares" class="artigo-perfil-img">
+      <div class="artigo-meta">
+        <span class="artigo-badge">Entrevista da Semana</span>
+        <h2>Fernanda Tavares</h2>
+        <p class="cargo">Pedagoga, Psicopedagoga e Fundadora da Pequenos Passos Psicopedagogia</p>
+        <div class="artigo-tags">
+          <span class="tag-item">Mãe Atípica</span>
+          <span class="tag-item">Desenvolvimento Infantil</span>
+          <span class="tag-item">Acolhimento</span>
+          <span class="tag-item">Neurodivergência</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="artigo-conteudo">
+      <div class="apresentacao-box">
+        <p>Hoje conversamos com Fernanda Tavares, mãe atípica, pedagoga, psicopedagoga e fundadora da Pequenos Passos Psicopedagogia, sobre infância, aprendizagem, neurodivergência e os diferentes jeitos de cada criança perceber e se relacionar com o mundo.</p>
+        <p>Unindo o olhar profissional à experiência da maternidade, Fernanda compartilha reflexões sobre acolhimento, desenvolvimento e a importância de compreender cada criança para além das dificuldades.</p>
+        <p>Uma conversa sobre crianças, diferenças e, principalmente, sobre a importância de olhar para cada uma delas em sua singularidade.</p>
+      </div>
+
+      <div class="perguntas-respostas">
+        
+        <div class="bloco-qa">
+          <h3>Como nasceu o seu interesse pela psicopedagogia e o que a levou a escolher esse caminho profissional?</h3>
+          <div class="resposta-texto">
+            Minha história com a Psicopedagogia começou de um lugar muito pessoal. Antes de ser uma escolha profissional, ela nasceu das experiências que a maternidade atípica me trouxe e, especialmente, do desejo de compreender melhor as diferentes formas de aprender, sentir e estar no mundo.
+            Descobri na Psicopedagogia não apenas uma nova profissão, mas um propósito. A possibilidade de transformar experiências em conhecimento, conhecimento em acolhimento e acolhimento em caminhos possíveis para outras famílias.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>O que você acredita que nunca deveria faltar na infância de uma criança?</h3>
+          <div class="resposta-texto">
+            O essencial na infância é o vínculo seguro. 
+            A infância é o alicerce da nossa história e a fase das descobertas mais profundas. Quando a família garante um ambiente seguro, feito de afeto, escuta e presença, ela não está apenas criando memórias bonitas, está construindo os recursos emocionais e cognitivos que essa criança levará para o resto da vida.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>Qual a importância da imaginação para o desenvolvimento das crianças?</h3>
+          <div class="resposta-texto">
+            A imaginação é essencial para o desenvolvimento infantil porque permite que a criança explore possibilidades, crie, faça perguntas e encontre diferentes formas de compreender o mundo. É também por meio dela que muitas vezes expressa sentimentos e experiências que ainda não consegue colocar em palavras.
+            Preservar a imaginação é também cuidar de uma infância mais criativa e significativa.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>Muitas vezes a brincadeira é vista apenas como diversão. Qual é o verdadeiro papel do brincar no desenvolvimento infantil?</h3>
+          <div class="resposta-texto">
+            Na psicopedagogia, olhamos para a brincadeira como a ponte para o desenvolvimento cognitivo, emocional e social. Quando uma criança brinca, ela está testando hipóteses, resolvendo problemas e aprendendo a ser e estar no mundo. Respeitar e incentivar o brincar é garantir um desenvolvimento saudável.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>O que as histórias podem oferecer às crianças que, muitas vezes, outros recursos não conseguem?</h3>
+          <div class="resposta-texto">
+            As histórias ocupam um lugar muito especial no processo do desenvolvimento infantil. Elas permitem que a criança encontre palavras para sentimentos que ainda não consegue explicar, conheça diferentes possibilidades, desenvolva a linguagem, aprenda sobre empatia e imagine mundos além daquele que conhece.
+            Elas conectam a mente e o coração!
+            Quando contamos uma história, oferecemos à criança a oportunidade de viver a experiência por dentro, acionando a imaginação, a empatia e a sensibilidade emocional de uma forma que nenhum outro recurso alcança.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>O que podemos fazer para preservar a curiosidade e imaginação das crianças em um mundo que, muitas vezes, oferece respostas rápidas para tudo?</h3>
+          <div class="resposta-texto">
+            Em um mundo que oferece respostas prontas para tudo, o maior presente que podemos dar a uma criança é o espaço para perguntar. Como psicopedagoga, vejo que preservar a curiosidade e a imaginação não exige grandes recursos, mas sim presença: ouvir com atenção, permitir o tempo livre e incentivar que ela crie suas próprias hipóteses. Aprender a pensar é muito mais poderoso do que apenas receber respostas.
+            Quando trocamos uma resposta rápida por um 'o que você acha?', damos à criança a chance de explorar, criar e confiar no próprio pensamento. Proteger essa capacidade de se encantar é construir uma base sólida para toda a vida.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>Como podemos enxergar além das dificuldades e valorizar as potencialidades de cada criança?</h3>
+          <div class="resposta-texto">
+            Enxergar potencialidades é reconhecer aquilo que a criança já consegue fazer, aquilo que desperta seu interesse e aquilo que pode se tornar uma ponte para novas aprendizagens. É adaptar estratégias, respeitar a individualidade de cada uma e acreditar que desenvolvimento não acontece de forma igual para todos.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>Como a neurodivergência transformou a sua forma de enxergar a infância, tanto como mãe quanto como profissional?</h3>
+          <div class="resposta-texto">
+            A neurodivergência ampliou profundamente meu olhar sobre a infância. Como mãe, ensinou-me a olhar para cada pequena conquista com outros olhos. Como profissional, ensinou-me que não existe um único caminho para aprender. Hoje, procuro enxergar primeiro a criança e depois a dificuldade, entender os seus interesses, suas potencialidades e suas particularidades. Elas também contam uma história!
+            O diagnóstico é importante, mas ele nunca deve ser maior do que a criança.
+          </div>
+        </div>
+
+        <div class="bloco-qa">
+          <h3>Que infância você deseja ajudar a construir através do seu trabalho?</h3>
+          <div class="resposta-texto">
+            Uma infância em que as crianças possam ser vistas em sua singularidade, respeitadas e acolhidas em suas diferenças. Quero contribuir para que elas tenham espaço para brincar, imaginar, aprender e desenvolver suas potencialidades, sem serem definidas por suas dificuldades.
+            Através do meu trabalho, desejo também acolher as famílias, levando informação e ajudando a construir um olhar mais atento, sensível e respeitoso sobre cada criança.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </article>
+
+</main>
 
 <!-- ═══ FOOTER ═══ -->
 <footer id="contato">
   <div class="footer-inner">
     <div class="footer-top">
       <a href="index.html#inicio" class="footer-logo" aria-label="Voltar para o início">
-        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente" width="160" height="71" loading="lazy">
+        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente" width="160" height="71">
       </a>
 
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
@@ -661,7 +715,7 @@
         <a href="loja.html">Comprar Livro</a>
         <a href="entrevistas.html">Entrevistas</a>
         <a href="recursos.html">Recursos</a>
-      <a href="instituicoes.html">Para Instituições</a>
+        <a href="instituicoes.html">Para Instituições</a>
         <a href="index.html#blog">Blog</a>
       </nav>
 
@@ -691,7 +745,6 @@
 </footer>
 
 <script>
-  // Funções do Menu Mobile (Hambúrguer)
   function toggleMenuMobile() {
     const toggleBtn = document.querySelector('.menu-toggle');
     const overlay = document.getElementById('nav-mobile-overlay');
