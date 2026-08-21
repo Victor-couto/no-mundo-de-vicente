@@ -1131,20 +1131,18 @@
 
     /* ── ENTREVISTAS ── */
     .entrevistas {
-      display: grid;
-      grid-template-columns: 1fr;
-      min-height: auto;
-      max-width: 700px;
+      max-width: 1200px;
       margin: 80px auto;
-      gap: 32px;
       padding: 0 40px;
     }
 
     .entrev-painel {
-      padding: 60px 52px;
+      padding: 60px 80px;
       display: flex;
-      flex-direction: column;
-      gap: 16px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
@@ -1155,7 +1153,20 @@
       box-shadow: var(--shadow-lg);
     }
 
-    .ep-esq { background: var(--verde-menta); border-radius: 32px; }
+    .ep-esq { background: var(--verde-menta); border-radius: 32px; width: 100%; }
+
+    .entrev-textos {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ep-esq .entrev-destaque-card {
+      flex: 1;
+      max-width: 460px;
+      margin-top: 0;
+    }
 
     .entrev-painel h2 {
       font-size: 1.5rem;
@@ -1166,7 +1177,7 @@
       gap: 8px;
     }
 
-    .entrev-painel > p {
+    .entrev-textos p {
       font-size: 0.92rem;
       color: var(--texto-leve);
       line-height: 1.7;
@@ -1405,7 +1416,16 @@
       .header-inner .nav-fale { display: none; }
       .menu-toggle { display: flex; }
       
-      .entrevistas { grid-template-columns: 1fr; gap: 24px; margin: 40px auto; padding: 0 20px; }
+      .entrevistas { margin: 40px auto; padding: 0 20px; }
+      .ep-esq {
+        flex-direction: column;
+        padding: 40px 28px;
+        gap: 28px;
+        align-items: stretch;
+      }
+      .ep-esq .entrev-destaque-card {
+        max-width: 100%;
+      }
       .livros-inner { flex-direction: column; }
       .livros-texto { flex: none; width: 100%; text-align: center; margin-bottom: 32px; }
       .livros-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1609,9 +1629,11 @@
 
   <!-- Painel esquerdo — verde menta -->
   <div class="entrev-painel ep-esq reveal">
-    <h2>Entrevistas que inspiram <span>♡</span></h2>
-    <p>Conversas com especialistas, educadores e pessoas que fazem a diferença na vida de muitas crianças.</p>
-    <a href="entrevistas.html" class="btn-teal">Ver entrevistas →</a>
+    <div class="entrev-textos">
+      <h2>Entrevistas que inspiram <span>♡</span></h2>
+      <p>Conversas com especialistas, educadores e pessoas que fazem a diferença na vida de muitas crianças.</p>
+      <a href="entrevistas.html" class="btn-teal">Ver entrevistas →</a>
+    </div>
 
     <div class="entrev-destaque-card">
       <div class="entrev-foto">👩</div>
