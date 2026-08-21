@@ -1132,9 +1132,9 @@
     /* ── ENTREVISTAS ── */
     .entrevistas {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 460px;
-      max-width: 1200px;
+      grid-template-columns: 1fr;
+      min-height: auto;
+      max-width: 700px;
       margin: 80px auto;
       gap: 32px;
       padding: 0 40px;
@@ -1155,8 +1155,7 @@
       box-shadow: var(--shadow-lg);
     }
 
-    .ep-esq { background: var(--verde-menta); border-radius: 32px 16px 24px 32px; }
-    .ep-dir { background: var(--amarelo-claro); border-radius: 16px 32px 32px 24px; }
+    .ep-esq { background: var(--verde-menta); border-radius: 32px; }
 
     .entrev-painel h2 {
       font-size: 1.5rem;
@@ -1262,56 +1261,7 @@
       line-height: 1.5;
     }
 
-    /* Vicente quote e Imagem */
-    .vicente-image-wrap {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      width: 180px;
-      opacity: 0.9;
-      transition: var(--transition);
-    }
-    .vicente-image-wrap img {
-      width: 100%;
-      height: auto;
-    }
-    .vicente-image-wrap:hover {
-      transform: translateY(-4px) scale(1.02);
-    }
 
-    .vicente-quote {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 40px 36px;
-      box-shadow: var(--shadow-sm);
-      margin-top: 8px;
-      margin-right: 140px; /* Evita que a citação sobreponha a imagem de Vicente */
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      transition: var(--transition);
-      border: 1px solid rgba(26, 53, 96, 0.03);
-    }
-    .vicente-quote:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .vicente-quote blockquote {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 1.4rem;
-      color: var(--navy);
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-
-    .vicente-quote cite {
-      font-size: 0.95rem;
-      color: var(--texto-leve);
-      font-style: normal;
-      font-weight: 600;
-    }
 
     /* ── NEWSLETTER ── */
     .newsletter {
@@ -1468,17 +1418,7 @@
       .footer-nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
       .footer-nav a { border-right: none;   white-space: nowrap;
     }
-      
-      /* Vicente citação responsivo */
-      .vicente-quote { margin-right: 0; }
-      .vicente-image-wrap {
-        position: relative;
-        margin: 20px auto 0;
-        width: 150px;
-        bottom: auto;
-        right: auto;
-        opacity: 1;
-      }
+
 
       /* Desativar animações pesadas do Hero no mobile */
       .hero-sky, .foguete-container, .hero-clouds, .stars-bg { display: none !important; }
@@ -1683,18 +1623,6 @@
     </div>
   </div>
 
-  <!-- Painel direito — amarelo claro -->
-  <div class="entrev-painel ep-dir reveal delay-200">
-    <h2>O que estão dizendo sobre nossas histórias <span style="color:var(--amarelo)" aria-hidden="true">★</span></h2>
-    <div class="vicente-quote">
-      <blockquote>"Tenho muitas perguntas e uma imaginação do tamanho do céu!"</blockquote>
-      <cite>– Vicente</cite>
-    </div>
-
-    <div class="vicente-image-wrap">
-      <img src="Imagens/Vicente_Pensativo.png" alt="Ilustração lúdica do Vicente pensativo com a mão no queixo, olhando para cima com curiosidade" width="180" height="231" loading="lazy" decoding="async">
-    </div>
-  </div>
 </section>
 
 <!-- ═══ NEWSLETTER ═══ -->
