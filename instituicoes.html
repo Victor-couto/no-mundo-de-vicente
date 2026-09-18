@@ -1223,18 +1223,19 @@
     /* Card entrevista em destaque */
     .entrev-destaque-card {
       background: white;
+      border: 2px solid var(--teal);
       border-radius: 16px;
       padding: 20px;
       display: flex;
-      gap: 16px;
+      gap: 18px;
       align-items: flex-start;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      box-shadow: 0 10px 30px rgba(0,150,136,0.18);
       margin-top: 8px;
     }
 
     .entrev-foto {
-      width: 64px;
-      height: 64px;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
       background: linear-gradient(135deg, #D4EFDF, #A8D5B8);
       flex-shrink: 0;
@@ -1243,6 +1244,16 @@
       align-items: center;
       justify-content: center;
       font-size: 1.8rem;
+      border: 3px solid var(--teal);
+      box-shadow: 0 4px 14px rgba(0,150,136,0.25);
+    }
+
+    .entrev-foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 50%;
     }
 
     .entrev-destaque-info {
@@ -1634,7 +1645,7 @@
     </div>
 
     <div class="entrev-destaque-card">
-      <div class="entrev-foto">👩</div>
+      <div class="entrev-foto"><img src="entrevista/Fernanda Tavares.jpeg" alt="Foto de Fernanda Tavares" loading="lazy" decoding="async"></div>
       <div class="entrev-destaque-info">
         <p class="entrev-label">Entrevista da semana</p>
         <h4>Conversas sobre infância com Fernanda Tavares</h4>
