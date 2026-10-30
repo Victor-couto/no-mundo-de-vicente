@@ -780,7 +780,7 @@
 
     /* ── LIVROS ── */
     .livros {
-      background: white;
+      background: var(--papel);
       padding: 80px 40px;
     }
 
@@ -836,7 +836,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      gap: 32px;
     }
 
     .livro-card {
@@ -893,15 +893,16 @@
     .livro-card h4 {
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 1.05rem;
       color: var(--navy);
-      line-height: 1.35;
+      line-height: 1.3;
     }
     .livro-card p {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--texto-leve);
-      line-height: 1.5;
+      line-height: 1.55;
     }
+    .livro-card:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
 
 
 
@@ -1076,38 +1077,33 @@
     }
     .btn-comprar:hover { background: #e5b530; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,196,64,0.4); }
 
-    /* card em breve */
-    .livro-card-breve {
-      opacity: 0.45;
-      pointer-events: none;
-    }
+    /* card em breve: legível, só não é clicável */
+    .livro-card-breve { cursor: default; }
     .livro-card-breve .livro-capa {
-      background: #D8E0EA !important;
-      position: relative;
+      background: #EDF2F8 !important;
+      border: 2px dashed #A9B8CD;
+      box-shadow: none;
+      flex-direction: column;
+      gap: 14px;
     }
+    .livro-card-breve .livro-capa::after { display: none; }
     .livro-capa-breve-tag {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: #7A8AA0;
+      background: var(--navy);
+      color: #fff;
       font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 0.75rem;
       padding: 4px 14px;
       border-radius: 50px;
       white-space: nowrap;
     }
     .livro-card-breve .livro-capa-titulo {
-      color: #9AACBF;
+      color: var(--navy);
       text-shadow: none;
-      margin-top: 24px;
+      font-size: 1rem;
+      padding: 0 8px;
     }
-    .livro-card-breve h4 { color: #9AACBF; }
-    .livro-card-breve p  { color: #B0BDCA; }
+    .livro-card-breve:hover .livro-capa { transform: none; box-shadow: none; }
 
     /* card com imagem real */
     .livro-capa-img {
@@ -1117,17 +1113,23 @@
       border-radius: 12px;
     }
     .livro-card-clicavel { cursor: pointer; }
+    /* os livros "descansam" na mesma linha de base, mesmo com capas de proporções diferentes */
     .livro-card-clicavel .livro-capa {
       padding: 0;
-      overflow: hidden;
-      aspect-ratio: unset;
-      height: auto;
-      box-shadow: 0 8px 24px rgba(26, 53, 96, 0.15), 0 2px 4px rgba(0,0,0,0.1);
+      overflow: visible;
+      align-items: flex-end;
+      box-shadow: none;
     }
-    .livro-card:hover .livro-capa {
-      transform: rotateY(-8deg) translateY(-8px);
-      box-shadow: -8px 12px 28px rgba(26, 53, 96, 0.22);
+    .livro-card-clicavel .livro-capa::after { display: none; }
+    .livro-card-clicavel .livro-capa-img {
+      box-shadow: 0 14px 28px rgba(26, 53, 96, 0.2), 0 2px 4px rgba(26, 53, 96, 0.12);
+      transition: var(--transition);
     }
+    .livro-card-clicavel:hover .livro-capa-img {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 36px rgba(26, 53, 96, 0.26), 0 2px 4px rgba(26, 53, 96, 0.12);
+    }
+    .livro-card-clicavel:hover h4 { color: var(--laranja); }
 
     /* ── ENTREVISTAS ── */
     .entrevistas {
@@ -1458,7 +1460,7 @@
       .hero-text h1 { font-size: 2rem; }
       .features-grid { grid-template-columns: 1fr; }
       .livros { padding: 60px 20px; }
-      .livros-grid { grid-template-columns: 1fr; gap: 32px; }
+      .livros-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
       .entrevistas { margin: 32px auto; }
       .entrev-painel { padding: 40px 20px; }
       .newsletter { padding: 56px 20px; }
@@ -1598,14 +1600,14 @@
 <section class="livros" id="livros">
   <div class="livros-inner">
     <div class="livros-grid">
-      <div class="livro-card livro-card-clicavel reveal" onclick="window.location.href='loja.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='loja.html'">
+      <a href="loja.html" class="livro-card livro-card-clicavel reveal">
         <div class="livro-capa">
           <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="220" height="293" loading="lazy" decoding="async">
         </div>
         <h4>Entendendo Como Sou</h4>
         <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
-      </div>
-      <div class="livro-card livro-card-breve reveal delay-100" tabindex="0">
+      </a>
+      <div class="livro-card livro-card-breve reveal delay-100">
         <div class="livro-capa capa-2">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
@@ -1620,7 +1622,7 @@
         <h4>A Casa dos 3 Ventos</h4>
         <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
       </a>
-      <div class="livro-card livro-card-breve reveal delay-300" tabindex="0">
+      <div class="livro-card livro-card-breve reveal delay-300">
         <div class="livro-capa capa-4">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">A Saudade do Papai</span>
