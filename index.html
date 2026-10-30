@@ -115,7 +115,7 @@
       border-radius: var(--radius-sm);
       white-space: nowrap;
     }
-    nav a:hover { color: var(--laranja); }
+    nav a:hover { color: #C85A0F; }
     nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
     nav a.ativo::after {
       content: '';
@@ -237,7 +237,7 @@
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(135deg, #EAF3FB 0%, #F2EAFA 60%, #FFF5D6 100%);
+      background: linear-gradient(180deg, #D9ECFA 0%, #EEF6FC 52%, #FFF4D6 100%);
       padding: 0 40px;
       overflow: hidden;
       position: relative;
@@ -265,26 +265,37 @@
     }
 
     .hero-text h1 {
-      font-size: 3rem;
-      font-weight: 900;
-      line-height: 1.15;
+      font-size: clamp(2.5rem, 4.6vw, 3.75rem);
+      font-weight: 600;
+      line-height: 1.08;
       color: var(--navy);
       margin-bottom: 24px;
     }
 
     .hero-text h1 span.destaque-laranja {
-      color: var(--laranja);
+      color: #C85A0F;
     }
 
     .hero-text p {
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: var(--texto-leve);
-      line-height: 1.8;
-      max-width: 520px;
+      line-height: 1.75;
+      max-width: 500px;
+      margin-bottom: 16px;
+    }
+    .hero-text p.hero-lead {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--navy);
       margin-bottom: 20px;
     }
-    .hero-text p:last-of-type {
-      margin-bottom: 40px;
+    .hero-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
     }
 
     .btn-hero {
@@ -305,6 +316,21 @@
     }
     .btn-hero:hover { background: #e5b530; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(245,196,64,0.45); }
     .btn-hero:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+    .btn-hero-sec {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 14px 32px;
+      border-radius: var(--radius-round);
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      background: transparent;
+      transition: var(--transition);
+    }
+    .btn-hero-sec:hover { background: var(--navy); color: #fff; transform: translateY(-2px); }
+    .btn-hero-sec:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
 
     .hero-image {
       flex: 0 0 48%;
@@ -316,9 +342,24 @@
       animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .hero-image img {
+    /* Cena: o planeta e a órbita ficam atrás de Vicente */
+    .hero-cena {
+      position: relative;
       width: 95%;
       max-width: 560px;
+    }
+    .hero-orbita {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .hero-orbita .orbita-estrela { animation: piscarEstrela 4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+    .hero-image img {
+      position: relative;
+      width: 100%;
       height: auto;
       object-fit: contain;
       object-position: bottom center;
@@ -336,9 +377,11 @@
       pointer-events: none;
       z-index: 6;
     }
-    .hero-deco.estrela1 { top: 10%; right: 60%; font-size: 1.5rem; opacity: 0.6; }
-    .hero-deco.estrela2 { top: 20%; right: 15%; font-size: 1rem; opacity: 0.5; color: var(--amarelo); }
-    .hero-deco.estrela3 { bottom: 30%; left: 5%; font-size: 1.2rem; opacity: 0.4; color: var(--laranja); }
+    .hero-deco { width: 20px; height: 20px; }
+    .hero-deco.estrela1 { top: 12%; right: 58%; color: var(--navy); opacity: 0.45; }
+    .hero-deco.estrela2 { top: 20%; right: 12%; width: 26px; height: 26px; color: var(--amarelo); }
+    .hero-deco.estrela3 { bottom: 24%; left: 4%; width: 16px; height: 16px; color: var(--laranja); opacity: 0.8; }
+    .estrela-svg, .nuvem-svg { display: block; width: 100%; height: 100%; fill: currentColor; }
 
     /* ── CÉU DO HERO E ANIMAÇÕES DE SUPORTE ── */
     .hero-sky {
@@ -462,32 +505,36 @@
 
     .cloud {
       position: absolute;
-      font-size: 2.5rem;
-      opacity: 0.25;
-      filter: blur(1px);
+      width: 96px;
+      height: 70px;
+      opacity: 0.85;
       color: #fff;
       animation: moverNuvem 60s linear infinite;
     }
 
     .cloud-1 {
-      top: 15%;
-      left: 10%;
+      top: 5%;
+      left: 38%;
       animation-duration: 75s;
     }
 
     .cloud-2 {
-      top: 45%;
+      top: 52%;
       right: 15%;
       animation-duration: 90s;
       animation-delay: -30s;
+      width: 72px;
+      height: 53px;
+      opacity: 0.7;
     }
 
     .cloud-3 {
-      bottom: 20%;
-      left: 30%;
+      bottom: 46%;
+      left: 52%;
       animation-duration: 110s;
       animation-delay: -15s;
-      font-size: 3.5rem;
+      width: 130px;
+      height: 96px;
     }
 
     @keyframes moverNuvem {
@@ -784,17 +831,49 @@
       padding: 80px 40px;
     }
 
+    .livros { background: var(--papel); }
+
     .livros-inner {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      gap: 64px;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 44px;
     }
 
-    .livros-texto {
-      flex: 0 0 260px;
+    .livros-cab {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
     }
+    .livros-cab h2 {
+      font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+      line-height: 1.1;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .livros-cab p {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      max-width: 46ch;
+    }
+    .livros-ver-todos {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 2px solid var(--amarelo);
+      transition: var(--transition);
+    }
+    .livros-ver-todos svg { width: 18px; height: 18px; transition: transform 0.25s; }
+    .livros-ver-todos:hover { color: var(--laranja); }
+    .livros-ver-todos:hover svg { transform: translateX(4px); }
+    .livros-ver-todos:focus-visible, .livro-card:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
 
     .secao-tag {
       display: inline-flex;
@@ -836,7 +915,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      gap: 32px;
     }
 
     .livro-card {
@@ -893,14 +972,14 @@
     .livro-card h4 {
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 1.05rem;
       color: var(--navy);
-      line-height: 1.35;
+      line-height: 1.3;
     }
     .livro-card p {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--texto-leve);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
 
@@ -1076,38 +1155,33 @@
     }
     .btn-comprar:hover { background: #e5b530; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,196,64,0.4); }
 
-    /* card em breve */
-    .livro-card-breve {
-      opacity: 0.45;
-      pointer-events: none;
-    }
+    /* card em breve: legível, só não é clicável */
+    .livro-card-breve { cursor: default; }
     .livro-card-breve .livro-capa {
-      background: #D8E0EA !important;
-      position: relative;
+      background: #EDF2F8 !important;
+      border: 2px dashed #A9B8CD;
+      box-shadow: none;
+      flex-direction: column;
+      gap: 14px;
     }
+    .livro-card-breve .livro-capa::after { display: none; }
     .livro-capa-breve-tag {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: #7A8AA0;
+      background: var(--navy);
+      color: #fff;
       font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 0.75rem;
       padding: 4px 14px;
       border-radius: 50px;
       white-space: nowrap;
     }
     .livro-card-breve .livro-capa-titulo {
-      color: #9AACBF;
+      color: var(--navy);
       text-shadow: none;
-      margin-top: 24px;
+      font-size: 1rem;
+      padding: 0 8px;
     }
-    .livro-card-breve h4 { color: #9AACBF; }
-    .livro-card-breve p  { color: #B0BDCA; }
+    .livro-card-breve:hover .livro-capa { transform: none; box-shadow: none; }
 
     /* card com imagem real */
     .livro-capa-img {
@@ -1117,17 +1191,23 @@
       border-radius: 12px;
     }
     .livro-card-clicavel { cursor: pointer; }
+    /* os livros "descansam" na mesma linha de base, mesmo com capas de proporções diferentes */
     .livro-card-clicavel .livro-capa {
       padding: 0;
-      overflow: hidden;
-      aspect-ratio: unset;
-      height: auto;
-      box-shadow: 0 8px 24px rgba(26, 53, 96, 0.15), 0 2px 4px rgba(0,0,0,0.1);
+      overflow: visible;
+      align-items: flex-end;
+      box-shadow: none;
     }
-    .livro-card:hover .livro-capa {
-      transform: rotateY(-8deg) translateY(-8px);
-      box-shadow: -8px 12px 28px rgba(26, 53, 96, 0.22);
+    .livro-card-clicavel .livro-capa::after { display: none; }
+    .livro-card-clicavel .livro-capa-img {
+      box-shadow: 0 14px 28px rgba(26, 53, 96, 0.2), 0 2px 4px rgba(26, 53, 96, 0.12);
+      transition: var(--transition);
     }
+    .livro-card-clicavel:hover .livro-capa-img {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 36px rgba(26, 53, 96, 0.26), 0 2px 4px rgba(26, 53, 96, 0.12);
+    }
+    .livro-card-clicavel:hover h4 { color: var(--laranja); }
 
     /* ── ENTREVISTAS ── */
     .entrevistas {
@@ -1169,16 +1249,14 @@
     }
 
     .entrev-painel h2 {
-      font-size: 1.5rem;
-      font-weight: 900;
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      line-height: 1.12;
       color: var(--navy);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
+    .entrev-painel h2 svg { display: inline-block; width: 0.8em; height: 0.8em; color: var(--laranja); fill: currentColor; vertical-align: -0.05em; margin-left: 4px; }
 
     .entrev-textos p {
-      font-size: 0.92rem;
+      font-size: 1rem;
       color: var(--texto-leve);
       line-height: 1.7;
       max-width: 380px;
@@ -1201,6 +1279,7 @@
       align-self: flex-start;
     }
     .btn-teal:hover { background: #155F51; transform: translateY(-1px); }
+    .btn-teal:focus-visible, .btn-newsletter:focus-visible { outline: 3px solid var(--laranja); outline-offset: 3px; }
 
     .btn-amarelo-solid {
       display: inline-flex;
@@ -1261,12 +1340,14 @@
     }
 
     .entrev-label {
-      font-size: 0.72rem;
+      display: inline-block;
+      font-size: 0.78rem;
       font-weight: 700;
-      color: var(--teal);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
+      color: #155F51;
+      background: var(--verde-menta);
+      padding: 2px 10px;
+      border-radius: 50px;
+      margin-bottom: 8px;
     }
 
     .entrev-destaque-info h4 {
@@ -1287,8 +1368,8 @@
 
     /* ── NEWSLETTER ── */
     .newsletter {
-      background: linear-gradient(135deg, #C9E4F5 0%, #D8EEF7 40%, #C5DDED 100%);
-      padding: 72px 40px;
+      background: var(--navy);
+      padding: 88px 40px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -1302,16 +1383,15 @@
     }
 
     .newsletter h2 {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--navy);
-      line-height: 1.2;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: #fff;
+      line-height: 1.12;
       margin-bottom: 16px;
     }
 
     .newsletter p {
-      font-size: 0.95rem;
-      color: var(--texto-leve);
+      font-size: 1.05rem;
+      color: #D5E1F2;
       line-height: 1.7;
       margin-bottom: 32px;
       max-width: 440px;
@@ -1323,27 +1403,31 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--navy-btn);
-      color: white;
+      background: var(--amarelo-btn);
+      color: var(--navy);
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
-      font-size: 1rem;
-      padding: 14px 36px;
+      font-size: 1.05rem;
+      padding: 16px 36px;
       border-radius: 50px;
       border: none;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-newsletter:hover { background: #0F2050; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,46,107,0.3); }
+    .btn-newsletter svg { width: 18px; height: 18px; }
+    .btn-newsletter:hover { background: #FFD45E; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.25); }
 
+    /* céu estrelado: o fechamento da página */
     .newsletter-deco {
       position: absolute;
       pointer-events: none;
-      opacity: 0.4;
+      color: var(--amarelo);
     }
-    .nl-aviao { top: 20%; right: 8%; font-size: 2.5rem; transform: rotate(-20deg); }
-    .nl-estrela1 { bottom: 25%; left: 6%; font-size: 1.5rem; color: var(--amarelo); }
-    .nl-estrela2 { top: 15%; left: 15%; font-size: 1rem; color: var(--navy); }
+    .newsletter-deco.nl-estrela1 { bottom: 22%; left: 8%; width: 28px; height: 28px; }
+    .newsletter-deco.nl-estrela2 { top: 18%; left: 20%; width: 14px; height: 14px; color: #fff; opacity: 0.8; }
+    .newsletter-deco.nl-estrela3 { top: 22%; right: 12%; width: 22px; height: 22px; }
+    .newsletter-deco.nl-estrela4 { bottom: 20%; right: 22%; width: 12px; height: 12px; color: #fff; opacity: 0.7; }
+    .newsletter-deco.nl-estrela5 { top: 60%; left: 34%; width: 10px; height: 10px; color: #fff; opacity: 0.6; }
 
     /* ── FOOTER ── */
     footer {
@@ -1411,8 +1495,8 @@
 
     .footer-bottom {
       text-align: center;
-      font-size: 0.82rem;
-      color: #9AA5B8;
+      font-size: 0.85rem;
+      color: #5D6F88;
     }
 
     /* ── RESPONSIVO ── */
@@ -1438,8 +1522,9 @@
         max-width: 100%;
       }
       .livros-inner { flex-direction: column; }
-      .livros-texto { flex: none; width: 100%; text-align: center; margin-bottom: 32px; }
       .livros-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-acoes { justify-content: center; }
+      .hero-deco.estrela1, .hero-deco.estrela2 { display: none; }
       .hero-inner { flex-direction: column; text-align: center; align-items: center; padding: 40px 0; }
       .hero-text { padding: 40px 0 20px; display: flex; flex-direction: column; align-items: center; }
       .hero-text p { max-width: 100%; }
@@ -1461,7 +1546,8 @@
       .hero-text h1 { font-size: 2rem; }
       .features-grid { grid-template-columns: 1fr; }
       .livros { padding: 60px 20px; }
-      .livros-grid { grid-template-columns: 1fr; gap: 32px; }
+      .livros-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
+      .livros-cab { align-items: flex-start; }
       .entrevistas { margin: 32px auto; }
       .entrev-painel { padding: 40px 20px; }
       .newsletter { padding: 56px 20px; }
@@ -1487,8 +1573,14 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="identidade.css">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="estrela" viewBox="-10 -10 20 20"><path d="M0-10C1-3 3-1 10 0 3 1 1 3 0 10-1 3-3 1-10 0-3-1-1-3 0-10Z"/></symbol>
+  <symbol id="nuvem" viewBox="0 0 54 40"><path d="M12 34a10 10 0 0 1-1-19.9A14 14 0 0 1 38 10a12 12 0 0 1 4 23.9z"/></symbol>
+  <symbol id="coracao" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.8C20 15.8 12 21 12 21z"/></symbol>
+</svg>
 <header>
   <div class="header-inner">
     <a href="#inicio" class="logo" aria-label="Voltar para a página inicial">
@@ -1563,9 +1655,9 @@
     
     <!-- Nuvens do céu do Hero -->
     <div class="hero-clouds">
-      <span class="cloud cloud-1">☁️</span>
-      <span class="cloud cloud-2">☁️</span>
-      <span class="cloud cloud-3">☁️</span>
+      <svg class="cloud cloud-1 nuvem-svg" aria-hidden="true"><use href="#nuvem"/></svg>
+      <svg class="cloud cloud-2 nuvem-svg" aria-hidden="true"><use href="#nuvem"/></svg>
+      <svg class="cloud cloud-3 nuvem-svg" aria-hidden="true"><use href="#nuvem"/></svg>
     </div>
 
     <!-- Estrelas brilhantes piscando no céu -->
@@ -1581,20 +1673,31 @@
     </div>
   </div>
 
-  <span class="hero-deco estrela1 float-anim">✦</span>
-  <span class="hero-deco estrela2 magical-float-anim">★</span>
-  <span class="hero-deco estrela3 float-anim-reverse">✦</span>
+  <span class="hero-deco estrela1 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="hero-deco estrela2 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="hero-deco estrela3 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
   
   <div class="hero-inner">
     <div class="hero-text">
       <h1>Histórias que inspiram, acolhem e <span class="destaque-laranja">transformam</span>.</h1>
-      <p>Um lugar onde perguntas viram histórias, descobertas ganham vida e a imaginação encontra espaço para crescer.</p>
+      <p class="hero-lead">Um lugar onde perguntas viram histórias, descobertas ganham vida e a imaginação encontra espaço para crescer.</p>
       <p>Por meio dos livros, atividades, jogos e conteúdos educativos, criamos experiências que aproximam crianças, famílias, educadores e profissionais, fortalecendo vínculos e despertando novas formas de aprender e sonhar.</p>
       <p>Explore nosso universo e descubra como cada história pode abrir portas para conversas, reflexões, grandes aventuras e diversão.</p>
-      <button class="btn-hero" onclick="window.location.href='sobre.html'" aria-haspopup="dialog" aria-controls="sobre-overlay">Sobre Nós</button>
+      <div class="hero-acoes">
+        <a href="loja.html" class="btn-hero">Conhecer os livros</a>
+        <a href="sobre.html" class="btn-hero-sec">Sobre Nós</a>
+      </div>
     </div>
     <div class="hero-image">
-      <img src="Imagens/ChatGPT Image 3 de jul. de 2026, 20_24_05.png" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
+      <div class="hero-cena">
+        <svg class="hero-orbita" viewBox="0 0 560 560" aria-hidden="true" focusable="false">
+          <circle cx="285" cy="330" r="200" fill="#FFE08F"/>
+          <ellipse cx="285" cy="330" rx="272" ry="86" transform="rotate(-16 285 330)" fill="none" stroke="#1A3560" stroke-opacity=".4" stroke-width="2.5" stroke-dasharray="1 11" stroke-linecap="round"/>
+          <g fill="#E8792A" class="orbita-estrela"><use href="#estrela" x="508" y="226" width="26" height="26"/></g>
+          <g fill="#1A3560" opacity=".5" class="orbita-estrela"><use href="#estrela" x="34" y="394" width="18" height="18"/></g>
+        </svg>
+        <img src="Imagens/ChatGPT Image 3 de jul. de 2026, 20_24_05.png" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
+      </div>
     </div>
   </div>
 </section>
@@ -1602,34 +1705,42 @@
 
 
 <!-- ═══ LIVROS ═══ -->
-<section class="livros" id="livros">
+<section class="livros" id="livros" aria-labelledby="livros-titulo">
   <div class="livros-inner">
+    <div class="livros-cab">
+      <div>
+        <h2 id="livros-titulo">Nossos livros</h2>
+        <p>Histórias criadas com carinho para conversar sobre temas importantes da infância.</p>
+      </div>
+      <a href="loja.html" class="livros-ver-todos">Ver todos os livros
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
     <div class="livros-grid">
-      <div class="livro-card livro-card-clicavel reveal" onclick="window.location.href='loja.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='loja.html'">
+      <a href="loja.html" class="livro-card livro-card-clicavel reveal">
         <div class="livro-capa">
           <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="220" height="293" loading="lazy" decoding="async">
         </div>
         <h4>Entendendo Como Sou</h4>
         <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
-      </div>
-      <div class="livro-card livro-card-clicavel reveal delay-100" onclick="window.location.href='a-casa-dos-3-ventos.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='a-casa-dos-3-ventos.html'">
+      </a>
+      <a href="a-casa-dos-3-ventos.html" class="livro-card livro-card-clicavel reveal delay-100">
         <div class="livro-capa">
           <img src="Imagens/A_Casa_dos_3_Ventos_capa.jpg" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" class="livro-capa-img" width="220" height="217" loading="lazy" decoding="async">
         </div>
         <h4>A Casa dos 3 Ventos</h4>
         <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
-      </div>
-
-      <div class="livro-card livro-card-breve reveal delay-200" tabindex="0">
-        <div class="livro-capa capa-2">
+      </a>
+      <div class="livro-card livro-card-breve reveal delay-200">
+        <div class="livro-capa">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
         </div>
         <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
         <p>Imaginação, curiosidade e descobertas que transformam o mundo.</p>
       </div>
-<div class="livro-card livro-card-breve reveal delay-300" tabindex="0">
-        <div class="livro-capa capa-4">
+      <div class="livro-card livro-card-breve reveal delay-300">
+        <div class="livro-capa">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">A Saudade do Papai</span>
         </div>
@@ -1647,9 +1758,9 @@
   <!-- Painel esquerdo — verde menta -->
   <div class="entrev-painel ep-esq reveal">
     <div class="entrev-textos">
-      <h2>Entrevistas que inspiram <span>♡</span></h2>
+      <h2>Entrevistas que inspiram <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#coracao"/></svg></h2>
       <p>Conversas com especialistas, educadores e pessoas que fazem a diferença na vida de muitas crianças.</p>
-      <a href="entrevistas.html" class="btn-teal">Ver entrevistas →</a>
+      <a href="entrevistas.html" class="btn-teal">Ver entrevistas <span aria-hidden="true">→</span></a>
     </div>
 
     <div class="entrev-destaque-card">
@@ -1666,16 +1777,19 @@
 
 <!-- ═══ NEWSLETTER ═══ -->
 <section class="newsletter">
-  <span class="newsletter-deco nl-aviao float-anim" aria-hidden="true">✈</span>
-  <span class="newsletter-deco nl-estrela1 magical-float-anim" aria-hidden="true">✦</span>
-  <span class="newsletter-deco nl-estrela2 float-anim-reverse" aria-hidden="true">★</span>
+  <span class="newsletter-deco nl-estrela1 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela2 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela3 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela4 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela5 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
 
   <div class="newsletter-inner">
     <h2>Vamos juntos explorar o mundo?</h2>
     <p>Acompanhe novidades, conteúdos e lançamentos do No Mundo de Vicente.</p>
-    <button class="btn-newsletter">
-      Quero receber novidades ♡
-    </button>
+    <a href="contato.html" class="btn-newsletter">
+      Quero receber novidades
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </section>
 
@@ -1758,7 +1872,7 @@
 
       <div class="livro-detalhe-acoes">
         <button onclick="adicionarAoCarrinho('entendendo-como-sou', 'Entendendo Como Sou', 38.90, 'Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg')" class="btn-comprar" aria-label="Adicionar o livro Entendendo Como Sou ao carrinho" style="border: none; cursor: pointer;">
-          🛒 Adicionar ao Carrinho
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Adicionar ao Carrinho
         </button>
       </div>
     </div>
@@ -1809,7 +1923,7 @@
     </div>
 
     <div class="footer-bottom">
-      © 2024 No Mundo de Vicente. Todos os direitos reservados.
+      © 2026 No Mundo de Vicente. Todos os direitos reservados.
     </div>
   </div>
 </footer>

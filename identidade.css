@@ -1,0 +1,35 @@
+/* Identidade compartilhada — No Mundo de Vicente
+   Carregada depois do <style> de cada página para refinar tipografia e
+   superfícies do navegador sem tocar na lógica de cada tela. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap');
+
+:root {
+  --papel: #FFFBF2;
+  --tinta: #1A3560;
+  --sol:   #F5C440;
+  --fonte-titulo: 'Fredoka', 'Nunito', sans-serif;
+}
+
+html { scroll-padding-top: 92px; }
+
+/* Voz dos títulos: arredondada, de livro ilustrado */
+h1, h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+h3, h4 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Superfícies do navegador */
+::selection { background: var(--sol); color: var(--tinta); }
+::placeholder { color: #6B7A92; opacity: 1; }
+:focus-visible { outline-color: #E8792A; }
+* { scrollbar-width: thin; scrollbar-color: rgba(26, 53, 96, 0.28) transparent; }
+html { scrollbar-color: rgba(26, 53, 96, 0.35) #F4F6F9; }
+input, textarea, select { caret-color: #E8792A; accent-color: #1E7F6E; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+}
