@@ -116,7 +116,6 @@
       border-radius: var(--radius-sm);
       white-space: nowrap;
     }
-    nav a:hover { color: #C85A0F; }
     nav a:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
     nav a.ativo::after {
       content: '';
@@ -133,7 +132,7 @@
       gap: 8px;
       background: var(--navy-btn);
       color: white !important;
-      padding: 10px 24px;
+      padding: 11px 24px;
       border-radius: var(--radius-round);
       font-family: 'Nunito', sans-serif;
       font-weight: 700;
@@ -227,7 +226,6 @@
     }
     .nav-mobile-content a:hover, .nav-mobile-content a.ativo {
       background: var(--azul-hero);
-      color: var(--laranja);
     }
     .nav-mobile-content a:focus-visible { outline: 3px solid var(--laranja); }
     .nav-mobile-content .nav-fale-mobile {
@@ -828,12 +826,12 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 2px solid var(--amarelo);
       transition: var(--transition);
     }
     .livros-ver-todos svg { width: 18px; height: 18px; transition: transform 0.25s; }
-    .livros-ver-todos:hover { color: var(--laranja); }
+    .livros-ver-todos:hover { color: var(--laranja-texto); }
     .livros-ver-todos:hover svg { transform: translateX(4px); }
     .livros-ver-todos:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
 
@@ -1076,7 +1074,7 @@
       margin-bottom: 10px;
     }
     .vitrine-info h3 a { transition: color 0.2s; }
-    .vitrine-info h3 a:hover { color: #C85A0F; }
+    .vitrine-info h3 a:hover { color: var(--laranja-texto); }
     .vitrine-info h3 a:focus-visible,
     .vitrine-link:focus-visible,
     .btn-comprar-vitrine:focus-visible { outline: 3px solid var(--laranja); outline-offset: 3px; border-radius: var(--radius-sm); }
@@ -1111,10 +1109,10 @@
       font-weight: 800;
       color: var(--navy);
       border-bottom: 2px solid var(--amarelo);
-      padding: 4px 0;
+      padding: 12px 0;
       transition: color 0.2s;
     }
-    .vitrine-link:hover { color: #C85A0F; }
+    .vitrine-link:hover { color: var(--laranja-texto); }
 
     .em-breve {
       list-style: none;
@@ -1153,12 +1151,6 @@
       gap: 48px;
       position: relative;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      border: 1px solid rgba(26, 53, 96, 0.05);
-    }
-    .entrev-painel:hover {
-      box-shadow: var(--shadow-lg);
     }
 
     .ep-esq { background: var(--verde-menta); border-radius: 32px; width: 100%; }
@@ -1199,7 +1191,7 @@
       font-family: 'Nunito', sans-serif;
       font-weight: 700;
       font-size: 0.88rem;
-      padding: 10px 22px;
+      padding: 12px 22px;
       border-radius: 50px;
       border: none;
       cursor: pointer;
