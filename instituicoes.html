@@ -788,9 +788,43 @@
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      gap: 64px;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 44px;
     }
+
+    .livros-cab {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .livros-cab h2 {
+      font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+      line-height: 1.1;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .livros-cab p {
+      font-size: 1rem;
+      color: var(--texto-leve);
+      max-width: 46ch;
+    }
+    .livros-ver-todos {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 2px solid var(--amarelo);
+      transition: var(--transition);
+    }
+    .livros-ver-todos svg { width: 18px; height: 18px; transition: transform 0.25s; }
+    .livros-ver-todos:hover { color: #C85A0F; }
+    .livros-ver-todos:hover svg { transform: translateX(4px); }
+    .livros-ver-todos:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-sm); }
 
     .livros-texto {
       flex: 0 0 260px;
@@ -1437,8 +1471,6 @@
       .ep-esq .entrev-destaque-card {
         max-width: 100%;
       }
-      .livros-inner { flex-direction: column; }
-      .livros-texto { flex: none; width: 100%; text-align: center; margin-bottom: 32px; }
       .livros-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-inner { flex-direction: column; text-align: center; align-items: center; padding: 40px 0; }
       .hero-text { padding: 40px 0 20px; display: flex; flex-direction: column; align-items: center; }
@@ -1460,6 +1492,7 @@
       .hero-text h1 { font-size: 2rem; }
       .features-grid { grid-template-columns: 1fr; }
       .livros { padding: 60px 20px; }
+      .livros-cab { align-items: flex-start; }
       .livros-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
       .entrevistas { margin: 32px auto; }
       .entrev-painel { padding: 40px 20px; }
@@ -1597,8 +1630,17 @@
 
 
 <!-- ═══ LIVROS ═══ -->
-<section class="livros" id="livros">
+<section class="livros" id="livros" aria-labelledby="livros-titulo">
   <div class="livros-inner">
+    <div class="livros-cab">
+      <div>
+        <h2 id="livros-titulo">Nossos livros</h2>
+        <p>Histórias criadas com carinho para conversar sobre temas importantes da infância.</p>
+      </div>
+      <a href="loja.html" class="livros-ver-todos">Ver todos os livros
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
     <div class="livros-grid">
       <a href="loja.html" class="livro-card livro-card-clicavel reveal">
         <div class="livro-capa">
