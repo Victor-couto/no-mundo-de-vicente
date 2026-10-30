@@ -250,7 +250,7 @@
 
     /* ── SEÇÃO DE LIVROS EM GRADE ── */
     .loja-livros-secao {
-      background: white;
+      background: var(--papel);
       padding: 80px 40px;
     }
 
@@ -329,61 +329,56 @@
       line-height: 1.6;
     }
 
-    /* Estilo Clicável e Hover */
-    .livro-card-clicavel {
-      cursor: pointer;
-    }
+    /* Estilo Clicável e Hover: os livros "descansam" na mesma linha de base */
+    .livro-card-clicavel { cursor: pointer; }
     .livro-card-clicavel .livro-capa {
       padding: 0;
-      overflow: hidden;
-      aspect-ratio: unset;
-      height: auto;
+      overflow: visible;
+      align-items: flex-end;
+      box-shadow: none;
     }
-    .livro-card-clicavel:hover .livro-capa {
-      transform: rotateY(-8deg) translateY(-8px);
-      box-shadow: -8px 15px 32px rgba(26, 53, 96, 0.2);
-    }
+    .livro-card-clicavel .livro-capa::after { display: none; }
     .livro-capa-img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: var(--radius-md);
+      box-shadow: 0 14px 28px rgba(26, 53, 96, 0.2), 0 2px 4px rgba(26, 53, 96, 0.12);
+      transition: var(--transition);
     }
+    .livro-card-clicavel:hover .livro-capa-img {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 36px rgba(26, 53, 96, 0.26), 0 2px 4px rgba(26, 53, 96, 0.12);
+    }
+    .livro-card-clicavel:hover h4 { color: #C85A0F; }
+    .livro-card:focus-visible { outline: 3px solid var(--laranja); outline-offset: 4px; border-radius: var(--radius-md); }
 
-    /* Estilo "Em Breve" Transparente / Opaco */
-    .livro-card-breve {
-      opacity: 0.45;
-      pointer-events: none;
-    }
+    /* "Em breve": legível, só não é clicável */
+    .livro-card-breve { cursor: default; }
     .livro-card-breve .livro-capa {
-      background: #D8E0EA !important;
+      background: #EDF2F8 !important;
+      border: 2px dashed #A9B8CD;
       box-shadow: none;
-      border: 1px solid rgba(26, 53, 96, 0.08);
+      flex-direction: column;
+      gap: 14px;
     }
+    .livro-card-breve .livro-capa::after { display: none; }
     .livro-capa-breve-tag {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: #7A8AA0;
+      background: var(--navy);
+      color: #fff;
       font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 16px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 14px;
       border-radius: var(--radius-round);
       white-space: nowrap;
     }
     .livro-card-breve .livro-capa-titulo {
-      color: #9AACBF;
+      color: var(--navy);
       text-shadow: none;
-      margin-top: 24px;
-      padding: 0 16px;
+      padding: 0 8px;
     }
-    .livro-card-breve h4 { color: #9AACBF; }
-    .livro-card-breve p  { color: #B0BDCA; }
+    .livro-card-breve:hover .livro-capa { transform: none; box-shadow: none; }
 
     /* ── FOOTER ── */
     footer {
@@ -477,7 +472,7 @@
 
     @media (max-width: 600px) {
       .header-inner { padding: 0 20px; }
-      .loja-grid { grid-template-columns: 1fr; gap: 36px; }
+      .loja-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
       .footer-nav { display: none; }
     }
 
@@ -576,24 +571,25 @@
   <div class="loja-livros-inner">
     <div class="loja-grid">
       <!-- Entendendo Como Sou — lançado e clicável -->
-      <div class="livro-card livro-card-clicavel reveal" onclick="window.location.href='vendas.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='vendas.html'">
+      <a href="vendas.html" class="livro-card livro-card-clicavel reveal">
         <div class="livro-capa">
           <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="280" height="373" loading="eager">
         </div>
         <h4>Entendendo Como Sou</h4>
         <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
-      </div>
+      </a>
 
-      <!-- Vicente, os Bichinhos — em breve -->
-      <div class="livro-card livro-card-clicavel reveal delay-100" onclick="window.location.href='a-casa-dos-3-ventos.html'" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='a-casa-dos-3-ventos.html'">
+      <!-- A Casa dos 3 Ventos — lançado -->
+      <a href="a-casa-dos-3-ventos.html" class="livro-card livro-card-clicavel reveal delay-100">
         <div class="livro-capa">
           <img src="Imagens/A_Casa_dos_3_Ventos_capa.jpg" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" class="livro-capa-img" width="280" height="277" loading="eager" decoding="async">
         </div>
         <h4>A Casa dos 3 Ventos</h4>
         <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
-      </div>
+      </a>
 
-      <div class="livro-card livro-card-breve reveal delay-200" tabindex="0">
+      <!-- Vicente, os Bichinhos — em breve -->
+      <div class="livro-card livro-card-breve reveal delay-200">
         <div class="livro-capa capa-2">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
@@ -603,7 +599,7 @@
       </div>
 
 <!-- A Saudade do Papai — em breve -->
-      <div class="livro-card livro-card-breve reveal delay-300" tabindex="0">
+      <div class="livro-card livro-card-breve reveal delay-300">
         <div class="livro-capa capa-4">
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">A Saudade do Papai</span>
