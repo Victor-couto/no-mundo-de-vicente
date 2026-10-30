@@ -356,7 +356,6 @@
       height: 100%;
       overflow: visible;
     }
-    .hero-orbita .orbita-estrela { animation: piscarEstrela 4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 
     .hero-image img {
       position: relative;
@@ -365,13 +364,8 @@
       object-fit: contain;
       object-position: bottom center;
       filter: drop-shadow(0 16px 32px rgba(26, 53, 96, 0.12));
-      animation: heroImageFloat 7s ease-in-out infinite;
     }
 
-    @keyframes heroImageFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
 
     .hero-deco {
       position: absolute;
@@ -379,7 +373,7 @@
       z-index: 6;
     }
     .hero-deco { width: 20px; height: 20px; }
-    .hero-deco.estrela1 { top: 12%; right: 58%; color: var(--navy); opacity: 0.45; }
+    .hero-deco.estrela1 { top: 22%; right: 44%; color: var(--navy); opacity: 0.45; }
     .hero-deco.estrela2 { top: 20%; right: 12%; width: 26px; height: 26px; color: var(--amarelo); }
     .hero-deco.estrela3 { bottom: 24%; left: 4%; width: 16px; height: 16px; color: var(--laranja); opacity: 0.8; }
     .estrela-svg, .nuvem-svg { display: block; width: 100%; height: 100%; fill: currentColor; }
@@ -403,7 +397,8 @@
       width: 130px;
       height: 130px;
       z-index: 3;
-      animation: voarFoguete 24s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      /* um único voo, logo após a página carregar; depois o céu fica parado */
+      animation: voarFoguete 16s cubic-bezier(0.4, 0, 0.2, 1) 2s 1 both;
       transform-origin: center;
     }
 
@@ -431,29 +426,19 @@
       height: 10px;
       background: var(--amarelo);
       border-radius: 50%;
-      opacity: 0.8;
-      box-shadow: 0 0 8px var(--amarelo);
-      animation: rastroFumaca 0.8s ease-out infinite alternate;
+      opacity: 0.85;
     }
     .rastro-particula:nth-child(2) {
       background: var(--laranja);
-      box-shadow: 0 0 8px var(--laranja);
-      animation-delay: 0.25s;
       width: 7px;
       height: 7px;
     }
     .rastro-particula:nth-child(3) {
       background: #fff;
-      box-shadow: 0 0 6px #fff;
-      animation-delay: 0.5s;
       width: 9px;
       height: 9px;
     }
 
-    @keyframes rastroFumaca {
-      0% { transform: scale(0.6); opacity: 0.4; }
-      100% { transform: scale(1.3); opacity: 1; }
-    }
 
     @keyframes voarFoguete {
       0% {
@@ -510,20 +495,16 @@
       height: 70px;
       opacity: 0.85;
       color: #fff;
-      animation: moverNuvem 60s linear infinite;
     }
 
     .cloud-1 {
       top: 5%;
       left: 38%;
-      animation-duration: 75s;
     }
 
     .cloud-2 {
       top: 52%;
       right: 15%;
-      animation-duration: 90s;
-      animation-delay: -30s;
       width: 72px;
       height: 53px;
       opacity: 0.7;
@@ -532,16 +513,10 @@
     .cloud-3 {
       bottom: 46%;
       left: 52%;
-      animation-duration: 110s;
-      animation-delay: -15s;
       width: 130px;
       height: 96px;
     }
 
-    @keyframes moverNuvem {
-      0% { transform: translateX(-150%); }
-      100% { transform: translateX(300%); }
-    }
 
     .stars-bg {
       position: absolute;
@@ -557,19 +532,13 @@
       position: absolute;
       background: var(--amarelo);
       border-radius: 50%;
-      opacity: 0.15;
-      animation: piscarEstrela 4s ease-in-out infinite;
+      opacity: 0.55;
     }
 
     .star-twinkle:nth-child(even) {
       background: #fff;
-      animation-delay: 2s;
     }
 
-    @keyframes piscarEstrela {
-      0%, 100% { opacity: 0.15; transform: scale(0.8); }
-      50% { opacity: 0.7; transform: scale(1.3); }
-    }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -600,34 +569,26 @@
     .delay-500 { transition-delay: 0.5s; }
 
     /* Flutuação (Floating) */
-    .float-anim {
-      animation: float 6s ease-in-out infinite;
-    }
-    .float-anim-reverse {
-      animation: floatReverse 7s ease-in-out infinite;
-    }
+    /* decorações do céu ficam paradas (movimento calmo para quem é sensível a estímulo) */
 
-    /* Rotação lenta + Flutuação conjunta */
-    .rotate-slow-anim {
-      animation: rotateSlow 25s linear infinite;
-    }
-    .magical-float-anim {
-      animation: float 6s ease-in-out infinite, rotateSlow 30s linear infinite;
-    }
 
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
+    /* ── APRESENTAÇÃO: continuação calma do hero ── */
+    .apresentacao {
+      background: #fff;
+      padding: 64px 40px;
     }
-    @keyframes floatReverse {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(8px); }
-      100% { transform: translateY(0px); }
+    .apresentacao-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
     }
-    @keyframes rotateSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .apresentacao p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--texto-leve);
+      max-width: 60ch;
     }
 
     /* ── ESTRUTURA GERAL DE MODAIS (OVERLAYS) ── */
@@ -1525,6 +1486,10 @@
       .livros-inner { flex-direction: column; }
       .livros-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-acoes { justify-content: center; }
+      .hero, .hero-inner { min-height: 0; }
+      .hero-cena { margin-top: -56px; }
+      .apresentacao { padding: 48px 20px; }
+      .apresentacao-inner { grid-template-columns: 1fr; gap: 20px; }
       .hero-deco.estrela1, .hero-deco.estrela2 { display: none; }
       .hero-inner { flex-direction: column; text-align: center; align-items: center; padding: 40px 0; }
       .hero-text { padding: 40px 0 20px; display: flex; flex-direction: column; align-items: center; }
@@ -1558,14 +1523,8 @@
 
     /* Acessibilidade: Respeito a prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce) {
-      .foguete-container,
-      .cloud,
+      .foguete-container { display: none; }
       .hero-image img,
-      .star-twinkle,
-      .rastro-particula,
-      .float-anim,
-      .float-anim-reverse,
-      .magical-float-anim,
       .reveal {
         animation: none !important;
         transition: none !important;
@@ -1674,16 +1633,14 @@
     </div>
   </div>
 
-  <span class="hero-deco estrela1 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="hero-deco estrela2 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="hero-deco estrela3 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="hero-deco estrela1" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="hero-deco estrela2" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="hero-deco estrela3" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
   
   <div class="hero-inner">
     <div class="hero-text">
       <h1>Histórias que inspiram, acolhem e <span class="destaque-laranja">transformam</span>.</h1>
       <p class="hero-lead">Um lugar onde perguntas viram histórias, descobertas ganham vida e a imaginação encontra espaço para crescer.</p>
-      <p>Por meio dos livros, atividades, jogos e conteúdos educativos, criamos experiências que aproximam crianças, famílias, educadores e profissionais, fortalecendo vínculos e despertando novas formas de aprender e sonhar.</p>
-      <p>Explore nosso universo e descubra como cada história pode abrir portas para conversas, reflexões, grandes aventuras e diversão.</p>
       <div class="hero-acoes">
         <a href="loja.html" class="btn-hero">Conhecer os livros</a>
         <a href="sobre.html" class="btn-hero-sec">Sobre Nós</a>
@@ -1697,13 +1654,21 @@
           <g fill="#E8792A" class="orbita-estrela"><use href="#estrela" x="508" y="226" width="26" height="26"/></g>
           <g fill="#1A3560" opacity=".5" class="orbita-estrela"><use href="#estrela" x="34" y="394" width="18" height="18"/></g>
         </svg>
-        <img src="Imagens/web/vicente-hero.webp" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
+        <img src="Imagens/web/vicente-hero.webp" alt="Vicente sorrindo, de camisa verde com um coração vermelho, cercado por balões de pensamento com interrogações e exclamações." width="560" height="560" fetchpriority="high" decoding="async">
       </div>
     </div>
   </div>
 </section>
 
 
+
+<!-- ═══ APRESENTAÇÃO (continuação do hero) ═══ -->
+<section class="apresentacao" aria-label="Sobre o projeto">
+  <div class="apresentacao-inner">
+    <p>Por meio dos livros, atividades, jogos e conteúdos educativos, criamos experiências que aproximam crianças, famílias, educadores e profissionais, fortalecendo vínculos e despertando novas formas de aprender e sonhar.</p>
+    <p>Explore nosso universo e descubra como cada história pode abrir portas para conversas, reflexões, grandes aventuras e diversão.</p>
+  </div>
+</section>
 
 <!-- ═══ LIVROS ═══ -->
 <section class="livros" id="livros" aria-labelledby="livros-titulo">
@@ -1778,11 +1743,11 @@
 
 <!-- ═══ NEWSLETTER ═══ -->
 <section class="newsletter">
-  <span class="newsletter-deco nl-estrela1 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="newsletter-deco nl-estrela2 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="newsletter-deco nl-estrela3 float-anim-reverse" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="newsletter-deco nl-estrela4 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
-  <span class="newsletter-deco nl-estrela5 float-anim" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela1" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela2" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela3" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela4" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
+  <span class="newsletter-deco nl-estrela5" aria-hidden="true"><svg class="estrela-svg"><use href="#estrela"/></svg></span>
 
   <div class="newsletter-inner">
     <h2>Vamos juntos explorar o mundo?</h2>
