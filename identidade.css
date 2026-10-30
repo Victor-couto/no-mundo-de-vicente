@@ -7,6 +7,7 @@
   --papel: #FFFBF2;
   --tinta: #1A3560;
   --sol:   #F5C440;
+  --laranja-texto: #B84F0A; /* laranja para texto pequeno e ícones: 5:1 no branco, 4,5:1 no azul claro */
   --fonte-titulo: 'Fredoka', 'Nunito', sans-serif;
 }
 
@@ -56,6 +57,17 @@ input, textarea, select { caret-color: #E8792A; accent-color: #1E7F6E; }
 }
 .pular-conteudo:focus { transform: translateY(0); }
 main:focus { outline: none; }
+
+/* Alvos de toque de 44px (WCAG 2.5.5) sem mudar o desenho */
+.menu-toggle { width: 44px; height: 44px; padding: 13px 9px; box-sizing: border-box; }
+.social-btn { width: 44px; height: 44px; }
+.footer-nav a { padding-top: 12px; padding-bottom: 12px; }
+
+/* Menu móvel: item ativo/hover sem laranja claro sobre azul claro (2,6:1) e sem apagar o botão "Fale Conosco" */
+nav a:hover { color: var(--laranja-texto); }
+.nav-mobile-content a:not(.nav-fale-mobile):hover,
+.nav-mobile-content a.ativo:not(.nav-fale-mobile) { color: var(--navy, #1A3560); font-weight: 800; }
+.nav-mobile-content a.nav-fale-mobile:hover { background: #0F2050; color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }

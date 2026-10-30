@@ -229,7 +229,7 @@
   font-family: 'Nunito', sans-serif;
   font-weight: 900;
   font-size: 1.4rem;
-  color: var(--laranja);
+  color: var(--laranja-texto, #B84F0A);
 }
 
 .btn-finalizar-compra {
@@ -265,14 +265,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 10px;
   color: var(--navy);
   transition: var(--transition);
   border-radius: 50%;
 }
 .menu-carrinho-btn:hover {
   background: rgba(26, 53, 96, 0.05);
-  color: var(--laranja);
+  color: var(--laranja-texto, #B84F0A);
 }
 .menu-carrinho-btn svg {
   width: 24px;
@@ -283,7 +283,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  background: var(--laranja);
+  background: var(--laranja-texto, #B84F0A);
   color: white;
   font-size: 0.72rem;
   font-weight: bold;
