@@ -30,6 +30,33 @@ p { text-wrap: pretty; }
 html { scrollbar-color: rgba(26, 53, 96, 0.35) #F4F6F9; }
 input, textarea, select { caret-color: #E8792A; accent-color: #1E7F6E; }
 
+/* Painéis fechados (menu móvel, modais, carrinho) saem da ordem de foco e do leitor de tela.
+   A transição "all" já existente nesses elementos mantém a animação de fechar. */
+.nav-mobile-overlay:not(.ativo),
+.nav-mobile-content:not(.ativo),
+.sobre-nos-overlay:not(.ativo),
+.todos-livros-overlay:not(.ativo),
+.livro-detalhe-overlay:not(.ativo),
+.carrinho-overlay:not(.ativo) { visibility: hidden; }
+
+/* Link para pular direto ao conteúdo (aparece só com o foco do teclado) */
+.pular-conteudo {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1100;
+  padding: 12px 20px;
+  background: var(--tinta);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  border-radius: 50px;
+  transform: translateY(-200%);
+  transition: transform 0.2s;
+}
+.pular-conteudo:focus { transform: translateY(0); }
+main:focus { outline: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
 }

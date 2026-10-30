@@ -24,6 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <!-- Estilos e Lógica do Carrinho de Compras -->
+  <link rel="icon" href="Imagens/web/logo-header.webp" type="image/webp">
   <link rel="stylesheet" href="carrinho.css">
   <script src="carrinho.js" defer></script>
   
@@ -969,7 +970,7 @@
     .capa-3 { background: linear-gradient(135deg, #8D6E4A, #5D4037); }
     .capa-4 { background: linear-gradient(135deg, #1976D2, #0D47A1); }
 
-    .livro-card h4 {
+    .livro-card h3 {
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
       font-size: 1.05rem;
@@ -1058,7 +1059,7 @@
       line-height: 1.35;
     }
 
-    .tl-card h4 {
+    .tl-card h3 {
       font-family: 'Nunito', sans-serif;
       font-weight: 800;
       font-size: 0.95rem;
@@ -1066,7 +1067,7 @@
       line-height: 1.35;
     }
 
-    .tl-card-breve h4 { color: #9AACBF; }
+    .tl-card-breve h3 { color: #9AACBF; }
     .tl-card-breve .tl-capa { opacity: 0.5; cursor: default; pointer-events: none; }
 
     @media (max-width: 768px) {
@@ -1207,7 +1208,7 @@
       transform: translateY(-8px);
       box-shadow: 0 22px 36px rgba(26, 53, 96, 0.26), 0 2px 4px rgba(26, 53, 96, 0.12);
     }
-    .livro-card-clicavel:hover h4 { color: var(--laranja); }
+    .livro-card-clicavel:hover h3 { color: var(--laranja); }
 
     /* ── ENTREVISTAS ── */
     .entrevistas {
@@ -1350,7 +1351,7 @@
       margin-bottom: 8px;
     }
 
-    .entrev-destaque-info h4 {
+    .entrev-destaque-info h3 {
       font-size: 0.95rem;
       font-weight: 800;
       color: var(--navy);
@@ -1576,6 +1577,7 @@
   <link rel="stylesheet" href="identidade.css">
 </head>
 <body>
+<a href="#conteudo" class="pular-conteudo">Pular para o conteúdo</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="estrela" viewBox="-10 -10 20 20"><path d="M0-10C1-3 3-1 10 0 3 1 1 3 0 10-1 3-3 1-10 0-3-1-1-3 0-10Z"/></symbol>
   <symbol id="nuvem" viewBox="0 0 54 40"><path d="M12 34a10 10 0 0 1-1-19.9A14 14 0 0 1 38 10a12 12 0 0 1 4 23.9z"/></symbol>
@@ -1584,16 +1586,15 @@
 <header>
   <div class="header-inner">
     <a href="#inicio" class="logo" aria-label="Voltar para a página inicial">
-      <img src="Imagens/02bzAnders (1).png" alt="Logo No Mundo de Vicente" height="72" fetchpriority="high" decoding="async">
+      <img src="Imagens/web/logo-header.webp" alt="Logo No Mundo de Vicente" height="72" fetchpriority="high" decoding="async">
     </a>
-    <nav>
+    <nav aria-label="Principal">
       <a href="#inicio" class="ativo">Início</a>
       <a href="sobre.html">Sobre o Projeto</a>
       <a href="loja.html">Livros</a>
       <a href="entrevistas.html">Entrevistas</a>
       <a href="recursos.html">Recursos</a>
       <a href="instituicoes.html">Parcerias e Projetos</a>
-      <a href="#blog">Blog</a>
     </nav>
     <div class="header-actions">
       <a href="contato.html" class="nav-fale">
@@ -1629,7 +1630,6 @@
   <a href="entrevistas.html" onclick="toggleMenuMobile()">Entrevistas</a>
   <a href="recursos.html" onclick="toggleMenuMobile()">Recursos</a>
       <a href="instituicoes.html">Parcerias e Projetos</a>
-  <a href="#blog" onclick="toggleMenuMobile()">Blog</a>
   <a href="contato.html" class="nav-fale nav-fale-mobile" onclick="toggleMenuMobile()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;">
       <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
@@ -1639,13 +1639,14 @@
 </div>
 
 
+<main id="conteudo" tabindex="-1">
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="inicio">
   <!-- Céu de fundo interativo (foguete, estrelas e nuvens) -->
   <div class="hero-sky">
     <!-- Foguete de Vicente voando -->
     <div class="foguete-container">
-      <img src="Imagens/Vicente_No_Foguete.png" alt="Desenho lúdico de Vicente sorridente viajando em seu foguete espacial azul e amarelo" width="130" height="130" loading="eager" decoding="async">
+      <img src="Imagens/web/vicente-foguete.webp" alt="Desenho lúdico de Vicente sorridente viajando em seu foguete espacial azul e amarelo" width="130" height="130" loading="eager" decoding="async">
       <div class="foguete-rastro">
         <span class="rastro-particula"></span>
         <span class="rastro-particula"></span>
@@ -1696,7 +1697,7 @@
           <g fill="#E8792A" class="orbita-estrela"><use href="#estrela" x="508" y="226" width="26" height="26"/></g>
           <g fill="#1A3560" opacity=".5" class="orbita-estrela"><use href="#estrela" x="34" y="394" width="18" height="18"/></g>
         </svg>
-        <img src="Imagens/ChatGPT Image 3 de jul. de 2026, 20_24_05.png" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
+        <img src="Imagens/web/vicente-hero.webp" alt="Desenho lúdico e colorido do Vicente sorrindo com um olhar alegre, vestindo uma camisa vermelha." width="560" height="560" fetchpriority="high" decoding="async">
       </div>
     </div>
   </div>
@@ -1719,16 +1720,16 @@
     <div class="livros-grid">
       <a href="loja.html" class="livro-card livro-card-clicavel reveal">
         <div class="livro-capa">
-          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="220" height="293" loading="lazy" decoding="async">
+          <img src="Imagens/web/capa-entendendo-como-sou.webp" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" class="livro-capa-img" width="220" height="293" loading="lazy" decoding="async">
         </div>
-        <h4>Entendendo Como Sou</h4>
+        <h3>Entendendo Como Sou</h3>
         <p>Uma jornada de autoconhecimento, emoções e autoestima.</p>
       </a>
       <a href="a-casa-dos-3-ventos.html" class="livro-card livro-card-clicavel reveal delay-100">
         <div class="livro-capa">
-          <img src="Imagens/A_Casa_dos_3_Ventos_capa.jpg" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" class="livro-capa-img" width="220" height="217" loading="lazy" decoding="async">
+          <img src="Imagens/web/capa-a-casa-dos-3-ventos.webp" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" class="livro-capa-img" width="220" height="217" loading="lazy" decoding="async">
         </div>
-        <h4>A Casa dos 3 Ventos</h4>
+        <h3>A Casa dos 3 Ventos</h3>
         <p>Uma história sobre diferenças, respeito e convivência em harmonia.</p>
       </a>
       <div class="livro-card livro-card-breve reveal delay-200">
@@ -1736,7 +1737,7 @@
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">Vicente, os Bichinhos e o Poder da Imaginação</span>
         </div>
-        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
+        <h3>Vicente, os Bichinhos e o Poder da Imaginação</h3>
         <p>Imaginação, curiosidade e descobertas que transformam o mundo.</p>
       </div>
       <div class="livro-card livro-card-breve reveal delay-300">
@@ -1744,7 +1745,7 @@
           <span class="livro-capa-breve-tag">Em breve</span>
           <span class="livro-capa-titulo">A Saudade do Papai</span>
         </div>
-        <h4>A Saudade do Papai</h4>
+        <h3>A Saudade do Papai</h3>
         <p>Saudade, amor e conexão que atravessam distâncias.</p>
       </div>
     </div>
@@ -1764,10 +1765,10 @@
     </div>
 
     <div class="entrev-destaque-card">
-      <div class="entrev-foto"><img src="entrevista/Fernanda Tavares.jpeg" alt="Foto de Fernanda Tavares" loading="lazy" decoding="async"></div>
+      <div class="entrev-foto"><img src="Imagens/web/fernanda-tavares.webp" alt="Foto de Fernanda Tavares" loading="lazy" decoding="async"></div>
       <div class="entrev-destaque-info">
         <p class="entrev-label">Nossa entrevistada</p>
-        <h4>Conversas sobre infância com Fernanda Tavares</h4>
+        <h3>Conversas sobre infância com Fernanda Tavares</h3>
         <p>Psicopedagoga, mãe atípica e autora do prefácio de "Vicente, os Bichinhos e o Poder da Imaginação".</p>
       </div>
     </div>
@@ -1794,6 +1795,8 @@
 </section>
 
 
+</main>
+
 <!-- ═══ TODOS OS LIVROS (overlay) ═══ -->
 <div id="todos-livros-overlay" class="todos-livros-overlay" role="dialog" aria-modal="true" aria-label="Todos os Livros do No Mundo de Vicente">
   <div class="todos-livros-inner">
@@ -1807,17 +1810,17 @@
       <!-- Entendendo Como Sou — lançado -->
       <div class="tl-card">
         <div class="tl-capa" onclick="fecharTodosLivros(); abrirLivro('entendendo')" tabindex="0" onkeydown="if(event.key==='Enter') { fecharTodosLivros(); abrirLivro('entendendo'); }" aria-haspopup="dialog" aria-controls="livro-entendendo">
-          <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" width="180" height="240" loading="lazy" decoding="async">
+          <img src="Imagens/web/capa-entendendo-como-sou.webp" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" width="180" height="240" loading="lazy" decoding="async">
         </div>
-        <h4>Entendendo Como Sou</h4>
+        <h3>Entendendo Como Sou</h3>
       </div>
 
       <!-- A Casa dos 3 Ventos — lançado -->
       <div class="tl-card">
         <div class="tl-capa" onclick="window.location.href='a-casa-dos-3-ventos.html'" tabindex="0" onkeydown="if(event.key==='Enter') { window.location.href='a-casa-dos-3-ventos.html' }">
-          <img src="Imagens/A_Casa_dos_3_Ventos_capa.jpg" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" width="180" height="178" loading="lazy" decoding="async">
+          <img src="Imagens/web/capa-a-casa-dos-3-ventos.webp" alt="Capa ilustrada do livro A Casa dos 3 Ventos, com a família de ventos de mãos dadas em frente à casa" width="180" height="178" loading="lazy" decoding="async">
         </div>
-        <h4>A Casa dos 3 Ventos</h4>
+        <h3>A Casa dos 3 Ventos</h3>
       </div>
 
       <!-- Vicente, os Bichinhos — em breve -->
@@ -1828,7 +1831,7 @@
             <span class="titulo-placeholder">Vicente, os Bichinhos e o Poder da Imaginação</span>
           </div>
         </div>
-        <h4>Vicente, os Bichinhos e o Poder da Imaginação</h4>
+        <h3>Vicente, os Bichinhos e o Poder da Imaginação</h3>
       </div>
 
       <!-- A Saudade do Papai — em breve -->
@@ -1839,7 +1842,7 @@
             <span class="titulo-placeholder">A Saudade do Papai</span>
           </div>
         </div>
-        <h4>A Saudade do Papai</h4>
+        <h3>A Saudade do Papai</h3>
       </div>
 
     </div>
@@ -1853,7 +1856,7 @@
     <button class="livro-detalhe-fechar" onclick="fecharLivro()" aria-label="Fechar modal de detalhes do livro">✕ Voltar</button>
 
     <div class="livro-detalhe-capa">
-      <img src="Imagens/WhatsApp Image 2026-06-28 at 23.19.30.jpeg" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" width="300" height="400" loading="lazy" decoding="async">
+      <img src="Imagens/web/capa-entendendo-como-sou.webp" alt="Capa ilustrada do livro Entendendo Como Sou, mostrando o cérebro lúdico e estrelas coloridas" width="300" height="400" loading="lazy" decoding="async">
     </div>
 
     <div class="livro-detalhe-info">
@@ -1884,8 +1887,8 @@
 <footer id="contato">
   <div class="footer-inner">
     <div class="footer-top">
-      <a href="#" class="footer-logo" aria-label="Voltar para o início">
-        <img src="Imagens/Logo 2.png" alt="No Mundo de Vicente" width="160" height="71" loading="lazy" decoding="async">
+      <a href="#inicio" class="footer-logo" aria-label="Voltar para o início">
+        <img src="Imagens/web/logo-rodape.webp" alt="No Mundo de Vicente" width="160" height="71" loading="lazy" decoding="async">
       </a>
 
       <nav class="footer-nav" aria-label="Navegação do Rodapé">
@@ -1895,23 +1898,12 @@
         <a href="entrevistas.html">Entrevistas</a>
         <a href="recursos.html">Recursos</a>
       <a href="instituicoes.html">Parcerias e Projetos</a>
-        <a href="#blog">Blog</a>
       </nav>
 
       <div class="footer-social">
         <a href="https://www.instagram.com/nomundodevicente?igsh=endhNnQyZjd3dm5m" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-          </svg>
-        </a>
-        <a href="#" class="social-btn" aria-label="Facebook">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-          </svg>
-        </a>
-        <a href="#" class="social-btn" aria-label="YouTube">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
           </svg>
         </a>
         <a href="https://wa.me/5521998823365?text=Ol%C3%A1%2C%20quero%20muito%20conhecer%20mais%20sobre%20o%20Mundo%20de%20Vicente" target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp">
@@ -1952,31 +1944,52 @@
 
 
 
+  // Foco: ao abrir um painel o foco vai para o botão de fechar; ao fechar, volta para quem abriu
+  var focoAnterior = null;
+  function focarPainel(overlay) {
+    focoAnterior = document.activeElement;
+    var fechar = overlay.querySelector('[class$="-fechar"]');
+    // o painel só fica visível após o primeiro quadro da transição; focar antes é ignorado
+    if (fechar) setTimeout(function() { fechar.focus(); }, 60);
+  }
+  function devolverFoco() {
+    if (focoAnterior && document.contains(focoAnterior)) focoAnterior.focus();
+    focoAnterior = null;
+  }
+
   function abrirLivro(id) {
-    document.getElementById('livro-' + id).classList.add('ativo');
+    var overlay = document.getElementById('livro-' + id);
+    overlay.classList.add('ativo');
     document.body.style.overflow = 'hidden';
+    focarPainel(overlay);
   }
   function fecharLivro() {
+    var aberto = document.querySelector('.livro-detalhe-overlay.ativo');
     document.querySelectorAll('.livro-detalhe-overlay').forEach(function(el) {
       el.classList.remove('ativo');
     });
     document.body.style.overflow = '';
+    if (aberto) devolverFoco();
   }
 
   function abrirTodosLivros() {
-    document.getElementById('todos-livros-overlay').classList.add('ativo');
+    var overlay = document.getElementById('todos-livros-overlay');
+    overlay.classList.add('ativo');
     document.body.style.overflow = 'hidden';
+    focarPainel(overlay);
   }
   function fecharTodosLivros() {
-    document.getElementById('todos-livros-overlay').classList.remove('ativo');
+    var overlay = document.getElementById('todos-livros-overlay');
+    var estavaAberto = overlay.classList.contains('ativo');
+    overlay.classList.remove('ativo');
     document.body.style.overflow = '';
+    if (estavaAberto) devolverFoco();
   }
 
   // Fechamento de Modais ao clicar fora (no backdrop)
   document.querySelectorAll('.sobre-nos-overlay, .todos-livros-overlay, .livro-detalhe-overlay').forEach(function(overlay) {
     overlay.addEventListener('click', function(e) {
       if (e.target === this) {
-        fecharSobre();
         fecharLivro();
         fecharTodosLivros();
       }
@@ -1986,9 +1999,13 @@
   // Fechamento com tecla Escape
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      fecharSobre();
       fecharLivro();
       fecharTodosLivros();
+      var toggle = document.querySelector('.menu-toggle');
+      if (toggle && toggle.classList.contains('ativo')) {
+        toggleMenuMobile();
+        toggle.focus();
+      }
     }
   });
 
