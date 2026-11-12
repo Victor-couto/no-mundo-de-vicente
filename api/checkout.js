@@ -5,11 +5,11 @@ const { db } = require('./utils/firebase-admin');
 const PRODUTOS_OFICIAIS = {
   'entendendo-como-sou': {
     name: 'Livro Entendendo Como Sou',
-    price: 38.90 // R$ 38,90
+    price: 35.90 // R$ 35,90
   },
   'a-casa-dos-3-ventos': {
     name: 'Livro A Casa dos 3 Ventos',
-    price: 38.90 // R$ 38,90
+    price: 32.90 // R$ 32,90
   }
 };
 

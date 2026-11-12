@@ -32,7 +32,7 @@ O projeto nasceu dentro de casa, na família da autora, e Vicente é a inspiraç
 
 ## Capabilities and Constraints
 
-- Livros lançados: "Entendendo Como Sou" e "A Casa dos 3 Ventos" (ambos R$ 38,90). Em breve: "Vicente, os Bichinhos e o Poder da Imaginação" e "A Saudade do Papai".
+- Livros lançados: "Entendendo Como Sou" e "A Casa dos 3 Ventos" (R$ 35,90 e R$ 32,90, respectivamente). Em breve: "Vicente, os Bichinhos e o Poder da Imaginação" e "A Saudade do Papai".
 - Recursos gratuitos para imprimir: Caça-Palavras das Emoções e Diário das Emoções. Em preparação: fichas de leitura, desenhos para colorir e novos jogos.
 - Cada livro novo precisa ter o id cadastrado em `PRODUTOS_OFICIAIS` de `api/checkout.js`.
 - Frete (`FRETE_PADRAO`) está duplicado em `checkout.html` e `api/checkout.js`.
